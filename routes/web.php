@@ -23,7 +23,7 @@ Route::get('/home', 'HomeController@index');
 Route::get('/edit-profile', ['middleware' => ['auth'], 'uses' => 'MottoController@index', function() {
 return view('users.editprofile');
 }])->name('edit-profile');
-Route::get('/profile', ['middleware' => ['auth'], 'uses' => 'MottoController@view', function() {
+Route::get('/profile1', ['middleware' => ['auth'], 'uses' => 'MottoController@view', function() {
 return view('users.profile');
 }])->name('profile');
 
