@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-	Itweetup :: Activities
+Itweetup :: Activities
 @endsection
 @section('content')
 <div class="flex-item updates-block">
@@ -42,46 +42,22 @@
         </div>
     </div>
     <div class="box pad">
-        <div class="thick-text">Recent Activity</div>
+        <div class="thick-text">Search Result</div>
+        @if(!empty($result))
+        @foreach($result as $val)
         <div class="activity">
             <img src="../assets/user2.jpg" class="user-icon">
             <div class="activity-text">
-                <div class="bold-text">Shay Laren</div>
-                <div class="activity-details">has sent a date request</div>
-                <div class="timestamp">11:32 PM</div>
+                <div class="bold-text"> <a href="{{ url('/logout') }}"  onclick="event.preventDefault();document.getElementById('user_profile').submit();">{{$val->name}}</a></div>                
+                {!! Form::open(array('url'=>'profile/user','id'=>'user_profile','method'=>'post')) !!} 
+                {{ Form::hidden("user_id",$val->id)}}
+                {!! Form::close() !!}
+                <!--                <div class="activity-details">has sent a date request</div>
+                                <div class="timestamp">11:32 PM</div>-->
             </div>
         </div>
-        <div class="activity">
-            <img src="../assets/user3.jpg" class="user-icon">
-            <div class="activity-text">
-                <div class="bold-text">Shay Laren</div>
-                <div class="activity-details">has sent a hangout request</div>
-                <div class="timestamp">10:24 PM</div>
-            </div>
-        </div>
-        <div class="activity">
-            <img src="../assets/user4.jpg" class="user-icon">
-            <div class="activity-text">
-                <div class="activity-details">You have sent a hangout request to</div>
-                <div class="bold-text">Veronica Zamenova</div>
-                <div class="timestamp">08:32 AM</div>
-            </div>
-        </div>
-        <div class="activity">
-            <img src="../assets/user2.jpg" class="user-icon">
-            <div class="activity-text">
-                <div class="bold-text">Shay Laren</div>
-                <div class="activity-details">has sent a date request</div>
-                <div class="timestamp">11:14 PM</div>
-            </div>
-        </div>
-        <div class="activity">
-            <img src="../assets/user1.jpg" class="user-icon">
-            <div class="activity-text">
-                <div class="activity-details">You updated your profile data</div>
-                <div class="timestamp">02:45 PM</div>
-            </div>
-        </div>
+        @endforeach
+        @endif
     </div>
 </div>
 @endsection

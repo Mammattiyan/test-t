@@ -180,6 +180,7 @@ return [
 //      Jrean\UserVerification\UserVerificationServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Caffeinated\Modules\ModulesServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
 
     ],
 
@@ -230,6 +231,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 	'Image' => Intervention\Image\Facades\Image::class,
         'Module' => Caffeinated\Modules\Facades\Module::class,
+        
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
 
     ],
 

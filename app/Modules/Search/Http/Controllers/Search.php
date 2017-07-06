@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
+use App\User;
 
 class Search extends Controller
 {
@@ -18,6 +20,14 @@ class Search extends Controller
      */
 
     public function searchAction() {
-        return view('search::search_result');
+        
+        $name = Input::get('name');
+        $users = User::select()->where(function($sql) use ($name){
+            $sql->where('name', 'like', $name.'%');
+        })
+        ->get();
+        $data = [];
+        $data['result'] = $users;
+        return view('search::search_result')->with($data);
     }
 }

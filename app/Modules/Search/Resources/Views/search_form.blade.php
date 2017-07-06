@@ -1,4 +1,4 @@
-{!! Form::open(array('url'=>'search/result','id'=>'search_form')) !!} 
+{!! Form::open(array('url'=>'search/result','id'=>'search_form','method'=>'post')) !!} 
 <div class="pad">
     <div class="search-field">
         <input type="text" name="name" placeholder="Search">
