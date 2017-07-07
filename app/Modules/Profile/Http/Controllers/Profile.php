@@ -48,6 +48,7 @@ class Profile extends Controller {
 
     public function userMessageViewAction(Request $request, $token) {
         $userId = Core::decodeIdAction($token);
+        dd($userId);
     }
 
 }
