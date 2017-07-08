@@ -5,12 +5,7 @@
 @section('content')
 <div class="flex-item updates-block">
     <div class="box">
-        <div class="pad">
-            <div class="search-field">
-                <input type="text" name="search-stuff" placeholder="Search">
-                <a href="#"></a>
-            </div>
-        </div>
+       @include('search::search_form')
         <hr>
         <div class="pad">
             <div class="thick-text">Profile Completion</div>

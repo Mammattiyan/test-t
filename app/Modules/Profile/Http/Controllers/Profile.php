@@ -76,6 +76,7 @@ class Profile extends Controller {
         $receiver = Input::get('receiver');
         $receiver = Core::decodeIdAction($receiver);
         $message = Input::get('message');
+        Messages::where(['sender' =>Auth::user()->id,'receiver'=>$receiver])->orWhere(['sender'=>$receiver,'receiver'=>Auth::user()->id])->update(['last_status'=>0]);
         Messages::create(['sender' => Auth::user()->id, 'receiver' => $receiver, 'message' => $message]);
         $user = User::find(Auth::user()->id)->toArray();
         $data = ['message' => $message, 'name' => $user['name']];

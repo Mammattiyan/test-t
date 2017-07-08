@@ -39,7 +39,7 @@ Itweetup :: Activities
                     @if(!empty($message))
                     @foreach($message as $val)
                     <li class="{{$val->position}} clearfix"><span class="chat-img pull-{{$val->position}}">
-                            <img src="{{$val->profileimage or 'http://placehold.it/50/55C1E7/fff&text=U'}}" alt="User Avatar" class="img-circle" />
+                            <img src="{{ URL::to($val->profileimage)}}" alt="User Avatar" class="img-circle" />
                         </span>
                         <div class="chat-body clearfix">
                             <div class="header_msg">
@@ -51,7 +51,11 @@ Itweetup :: Activities
                                 <strong class="pull-right primary-font">{{$val->name}}</strong>
                                 @endif
                             </div>
-                            <p>{{$val->message}}</p>
+                            @if($val->position == "left")
+                            <p class="text-left">{{$val->message}}</p>
+                            @else
+                            <p class="text-right">{{$val->message}}</p>
+                            @endif
                         </div>
                     </li>
                     @endforeach
@@ -99,14 +103,14 @@ Itweetup :: Activities
 
 @section('js')
 <script>
-    
-    $(document).ready(function() {
-        $("#sendMessage").submit(function( event ) {
-        sendMessage()
-        event.preventDefault();
-      });
+
+    $(document).ready(function () {
+        $("#sendMessage").submit(function (event) {
+            sendMessage()
+            event.preventDefault();
+        });
     });
-    
+
     function sendMessage() {
         $.ajax({
             url: '{!! URL::to("profile/sendMessage") !!}',
@@ -116,22 +120,22 @@ Itweetup :: Activities
             success: function (data) {
                 $('#message').val('');
                 var msg = '<li class="right clearfix"><span class="chat-img pull-right">\n\
-                            <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />\n\
+                            <img src="{{ URL::to($val->profileimage)}}" alt="User Avatar" class="img-circle" />\n\
                         </span>\n\
                         <div class="chat-body clearfix">\n\
                             <div class="header_msg">\n\
                                 <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>Just now</small>\n\
-                                <strong class="pull-right primary-font">'+data.name+'</strong>\n\
+                                <strong class="pull-right primary-font">' + data.name + '</strong>\n\
                             </div> \n\
-                            <p>'+data.message+'</p> \n\
+                            <p class="text-right">' + data.message + '</p> \n\
                         </div> \n\
                     </li>';
                 $('.chat').append(msg);
-                $(".message-height").animate({ scrollTop: $('.message-height').prop("scrollHeight")}, 1000);
+                $(".message-height").animate({scrollTop: $('.message-height').prop("scrollHeight")}, 1000);
             }
         });
     }
-    
-    
+
+
 </script>
 @endsection

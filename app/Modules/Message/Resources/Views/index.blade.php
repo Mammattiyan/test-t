@@ -9,9 +9,9 @@ Itweetup :: Message
         <div class="thick-text">Messages</div>
         @foreach($messages as $key =>$value)
         <div class="activity">
-            <img src="{{asset($value['profileimage'])}}" class="user-icon">
+            <img src="{{ $value['receiver_profileimage'] or $value['sender_profileimage']}}" class="user-icon">
             <div class="activity-text">
-                <div class="bold-text">{{$value['messager_name']}}</div>
+                <div class="bold-text">{{ $value['messager_receiver'] or  $value['messager_sender']}}</div>
                 <div class="activity-details">{{$value['message']}}</div>
                 <div class="timestamp"> {{$value['created_at']}}</div>
             </div>

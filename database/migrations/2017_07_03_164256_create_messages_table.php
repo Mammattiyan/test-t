@@ -19,6 +19,7 @@ class CreateMessagesTable extends Migration
             $table->integer('sender');
             $table->integer('receiver');
             $table->integer('read_status');
+            $table->integer('last_status')->default(1);
             $table->string('message');
             $table->timestamps();
         });
