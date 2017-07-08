@@ -13,6 +13,7 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('css/default.date.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('css/multiselect.min.css') }}">
         <!-- Scripts -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script>
             window.Laravel = <?php echo json_encode(['csrfToken' => csrf_token(),]); ?>
         </script>

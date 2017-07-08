@@ -28,7 +28,7 @@ class Core extends Controller {
      */
 
     public static function decodeIdAction($data) {
-        return explode("#",base64_decode($data))[0];
+        return intval(explode("#",base64_decode($data))[0]);
     }
 
 }
