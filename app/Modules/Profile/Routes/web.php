@@ -10,7 +10,7 @@
   | to using a Closure or controller method. Build something great!
   |
  */
-
+ Route::get('/', 'Profile@indexAction');
 Route::group(['prefix' => 'profile'], function () {
     Route::get('/', 'Profile@indexAction');
     Route::post('/user', 'Profile@userProfileViewAction');

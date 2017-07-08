@@ -16,7 +16,7 @@ class Activity extends Controller {
      */
 
     public function indexAction() {
-        return view('message::index');
+        return view('activity::index');
     }
 
 }

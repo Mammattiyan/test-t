@@ -11,9 +11,7 @@
   |
  */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Auth::routes();
 
@@ -32,11 +30,8 @@ return view('users.profile');
 }])->name('view-profile');
 
 Route::post('/edit-profile-pic', ['middleware' => ['auth'], 'uses' => 'UserController@store']);
-Route::get('/', [
-    'uses' => 'MottoController@view',
-    'as' => 'petboard',
-    'middleware' => 'auth'
-]);
+
+
 
 Route::get('resizeImage', 'ImageController@resizeImage');
 Route::post('resizeImagePost', ['as' => 'resizeImagePost', 'uses' => 'ImageController@resizeImagePost']);
