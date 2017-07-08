@@ -46,7 +46,7 @@ Itweetup :: Activities
         @if(!empty($result))
         @foreach($result as $val)
         <div class="activity">
-            <img src="../assets/user2.jpg" class="user-icon">
+            <img src="{{asset($val['profileimage'])}}" class="user-icon">
             <div class="activity-text">
                 <div class="bold-text"> <a href="{{ url('/logout') }}"  onclick="event.preventDefault();document.getElementById('user_profile').submit();">{{$val->name}}</a></div>                
                 {!! Form::open(array('url'=>'profile/user','id'=>'user_profile','method'=>'post')) !!} 

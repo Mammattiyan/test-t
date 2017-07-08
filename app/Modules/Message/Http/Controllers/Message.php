@@ -23,22 +23,21 @@ class Message extends Controller {
 
         $useId = Auth::User()->id;
 //
-        $receiver = Messages::select('messages.*', DB::raw('(SELECT name FROM users wHERE users.id =messages.sender) AS messager_name'),DB::raw('(SELECT profileimage FROM users wHERE users.id =messages.sender) AS profileimage'))
+        $receiver = Messages::select('messages.*', 'users.id as user_id', DB::raw('(SELECT name FROM users wHERE users.id =messages.sender) AS messager_name'), DB::raw('(SELECT profileimage FROM users wHERE users.id =messages.sender) AS profileimage'))
                         ->join('users', 'users.id', 'messages.receiver')
                         ->where('messages.receiver', $useId)
-                        ->orderBY('messages.id', 'desc')
                         ->get()->toArray();
-        $sender = Messages::select('messages.*',DB::raw('(SELECT name FROM users wHERE users.id =messages.receiver) AS messager_name'),DB::raw('(SELECT profileimage FROM users wHERE users.id =messages.receiver) AS profileimage'))
-                        ->join('users', 'users.id', 'messages.sender')
-                        ->where('messages.sender', $useId)
-                        ->orderBY('messages.id', 'desc')
-                        ->get()->toArray();  
-        
-        dd($receiver,$sender);
-        $allMessage = collect(array_merge($receiver, $sender));
+
+        dd($receiver);
+//        $sender = Messages::select('messages.*',DB::raw('(SELECT name FROM users wHERE users.id =messages.sender) AS messager_name'),DB::raw('(SELECT profileimage FROM users wHERE users.id =messages.sender) AS profileimage'))
+//                        ->join('users', 'users.id', 'messages.sender')
+//                        ->where('messages.sender', $useId)
+//                        ->orderBY('messages.id', 'desc')
+//                        ->get()->toArray();
+        $allMessage = collect(array_merge($receiver));
         $keyed = $allMessage->sortByDesc('id');
         $final = $keyed->all();
-        return view('message::index')->with(['messages'=>$final]);
+        return view('message::index')->with(['messages' => $final]);
     }
 
 }
