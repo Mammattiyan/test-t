@@ -1,8 +1,9 @@
 <div class="flex-item userdata-block">
     <div class="box userinfo-tile">
-        <img src="{{ asset('assets/user1.jpg')}}" class="user-photo">
+        <div id="cropContainerModal"  class="user-photo" style="height:270px;width: 100%;background-image: url('{{ URL::to(Auth::user()->profileimage) }}') "></div>
+   
         <div class="pad">
-            <div class="thick-text">{{ ucfirst(Auth::user()->name )}}</div>
+            <div class="thick-text">{{ ucfirst(Auth::user()->name )}} </div>
             <div class="user-motto">Live and let live</div>
             <br>
             <a href="#">Verify Profile</a>

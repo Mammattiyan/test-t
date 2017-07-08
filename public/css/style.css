@@ -26,7 +26,12 @@ img {
   max-width: 100%;
   height: auto;
   vertical-align: middle; }
-
+.cropImgWrapper img{
+    max-width: none !important;
+}
+.cropControlRemoveCroppedImage{
+    display: none;
+}
 a {
   color: #B9121B;
   text-decoration: none;
