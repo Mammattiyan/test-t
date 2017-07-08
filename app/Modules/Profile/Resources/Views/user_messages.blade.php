@@ -39,7 +39,7 @@ Itweetup :: Activities
                     @if(!empty($message))
                     @foreach($message as $val)
                     <li class="{{$val->position}} clearfix"><span class="chat-img pull-{{$val->position}}">
-                            <img src="{{$val->profileimage or 'http://placehold.it/50/55C1E7/fff&text=U'}}" alt="User Avatar" class="img-circle" />
+                            <img src="{{ URL::to($val->profileimage)}}" alt="User Avatar" class="img-circle" />
                         </span>
                         <div class="chat-body clearfix">
                             <div class="header_msg">
@@ -61,7 +61,7 @@ Itweetup :: Activities
             </div>
             <div class="box">
                 <div class="pad">
-                    {!! Form::open(array('url'=>'','id'=>'sendMessage')) !!} 
+                    {!! Form::open(array('url'=>'#','id'=>'sendMessage')) !!} 
                     <div class="message-field">
                         <input type="hidden" name="receiver" value="{{$user['id']}}">
                         <input type="text" name="message" id="message" placeholder="Message">
@@ -105,7 +105,7 @@ Itweetup :: Activities
             success: function (data) {
                 $('#message').val('');
                 var msg = '<li class="right clearfix"><span class="chat-img pull-right">\n\
-                            <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />\n\
+                            <img src="{{ URL::to($val->profileimage)}}" alt="User Avatar" class="img-circle" />\n\
                         </span>\n\
                         <div class="chat-body clearfix">\n\
                             <div class="header_msg">\n\

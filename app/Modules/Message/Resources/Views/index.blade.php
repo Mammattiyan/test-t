@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('title')
-	Itweetup :: Message
+Itweetup :: Message
 @endsection
 @section('content')
 <div class="flex-item updates-block">
-  
+    @include('search::search_form')
     <div class="box pad">
         <div class="thick-text">Messages</div>
         @foreach($messages as $key =>$value)
