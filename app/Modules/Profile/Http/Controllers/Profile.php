@@ -40,6 +40,7 @@ class Profile extends Controller {
         $userId = Input::get('user_id');
         $user = User::find($userId)->toArray();
         $user['id'] = Core::encodeIdAction($userId);
+      
         return view('profile::user_profile')->with('user', $user);
     }
 

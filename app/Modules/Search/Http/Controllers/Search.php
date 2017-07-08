@@ -26,8 +26,9 @@ class Search extends Controller
             $sql->where('name', 'like', $name.'%');
         })
         ->get();
+      
         $data = [];
-        $data['result'] = $users;
+        $data['result'] = $users;        
         return view('search::search_result')->with($data);
     }
 }

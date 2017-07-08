@@ -8,7 +8,7 @@
             <div class="container flex-box fd-col fd-lg-row equisized-lg-items">
                 <div class="flex-item userdata-block">
                     <div class="box userinfo-tile">
-                        <img src="../assets/user3.jpg" class="user-photo">
+                        <img src="{{asset($user['profileimage'])}}" class="user-photo">
                         <div class="pad">
                             <div class="thick-text">{{ ucfirst($user['name'])}}</div>
                             <div class="user-motto">Real beauty is always inside</div>
