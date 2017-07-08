@@ -32,11 +32,9 @@ class Message extends Controller {
                         ->join('users', 'users.id', 'messages.sender')
                         ->where('messages.sender', $useId)
                         ->orderBY('messages.id', 'desc')
-                        ->get()->toArray();
+                        ->get()->toArray();  
         
-      
-      
-       
+        dd($receiver,$sender);
         $allMessage = collect(array_merge($receiver, $sender));
         $keyed = $allMessage->sortByDesc('id');
         $final = $keyed->all();
