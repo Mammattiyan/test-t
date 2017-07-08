@@ -33,7 +33,7 @@ Itweetup :: Activities
                     </div>
                 </div>
             </div>
-            <div class="box pad message-height">
+            <div class="box pad message-height" id="message-container">
                 <div class="thick-text">Messages</div>
                 <ul class="chat">
                     @if(!empty($message))
@@ -110,7 +110,7 @@ Itweetup :: Activities
             event.preventDefault();
         });
     });
-
+    $('#message-container').scrollTop($('#message-container').prop("scrollHeight"));
     function sendMessage() {
         $.ajax({
             url: '{!! URL::to("profile/sendMessage") !!}',
