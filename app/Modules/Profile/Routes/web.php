@@ -15,4 +15,5 @@ Route::group(['prefix' => 'profile'], function () {
     Route::get('/', 'Profile@indexAction');
     Route::post('/user', 'Profile@userProfileViewAction');
     Route::get('/message/{token}', 'Profile@userMessageViewAction');
+    Route::post('/sendMessage', 'Profile@sendMessageAction');
 });
