@@ -11,6 +11,6 @@
 |
 */
 
-Route::group(['prefix' => 'activity'], function () {
+Route::group(['prefix' => 'activity','middleware' => 'auth'], function () {
      Route::get('/', 'Activity@indexAction');
 });

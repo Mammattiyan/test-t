@@ -12,7 +12,7 @@
  */
 
 // Route::get('/', 'Profile@indexAction');
-Route::group(['prefix' => 'profile'], function () {
+Route::group(['prefix' => 'profile','middleware' => 'auth'], function () {
     Route::get('/', 'Profile@indexAction');
     Route::post('/user', 'Profile@userProfileViewAction');
     Route::get('/message/{token}', 'Profile@userMessageViewAction');
