@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(['prefix' => 'search'], function () {
+Route::group(['prefix' => 'search','middleware' => 'auth'], function () {
     Route::get('/', function () {
         dd('This is the Search module index page. Build something great!');
     });
