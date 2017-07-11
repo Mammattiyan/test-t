@@ -11,6 +11,6 @@
 |
 */
 
-Route::group(['prefix' => 'message'], function () {
+Route::group(['prefix' => 'message','middleware' => 'auth'], function () {
     Route::get('/', 'Message@indexAction');
 });
