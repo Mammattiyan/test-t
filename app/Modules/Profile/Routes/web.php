@@ -16,6 +16,7 @@ Route::group(['prefix' => 'profile','middleware' => 'auth'], function () {
     Route::get('/', 'Profile@indexAction');
     Route::post('/user', 'Profile@userProfileViewAction');
     Route::get('/message/{token}', 'Profile@userMessageViewAction');
+    Route::get('/message', 'Profile@allMessageViewAction');
     Route::post('/profileImageUpload', 'Profile@profileImageUploadAction');
     Route::post('/profileImageCrop', 'Profile@profileImageCropAction');
     Route::post('/sendMessage', 'Profile@sendMessageAction');

@@ -39,7 +39,7 @@ class Profile extends Controller {
     public function userProfileViewAction() {
         $userId = Input::get('user_id');
         $user = User::find($userId)->toArray();
-        $user['id'] = Core::encodeIdAction($userId);      
+        $user['id'] = Core::encodeIdAction($userId);
         return view('profile::user_profile')->with('user', $user);
     }
 
@@ -52,16 +52,32 @@ class Profile extends Controller {
      */
 
     public function userMessageViewAction(Request $request, $token) {
-        $userId = Core::decodeIdAction($token);
-        $user = User::find($userId)->toArray();
-        $user['id'] = Core::encodeIdAction($userId);
-        $message = Messages::select('messages.*', 'users.name', 'users.profileimage', DB::raw('IF(sender=' . Auth::user()->id . ',"right","left") as position'))
-                ->join('users', 'users.id', 'messages.sender')
-                ->where(['sender' => Auth::user()->id, 'receiver' => $userId])
-                ->orWhere(['receiver' => Auth::user()->id, 'sender' => $userId])
-                ->orderBy('messages.id', 'asc')
-                ->get();
-        return view('profile::user_messages')->with(['user' => $user, 'message' => $message, 'my' => Auth::user()->id]);
+        if (isset($token)) {
+            $userId = Core::decodeIdAction($token);
+            $user = User::find($userId)->toArray();
+            $user['id'] = Core::encodeIdAction($userId);
+            $message = Messages::select('messages.*', 'users.name', 'users.profileimage', DB::raw('IF(sender=' . Auth::user()->id . ',"right","left") as position'))
+                    ->join('users', 'users.id', 'messages.sender')
+                    ->where(['sender' => Auth::user()->id, 'receiver' => $userId])
+                    ->orWhere(['receiver' => Auth::user()->id, 'sender' => $userId])
+                    ->orderBy('messages.id', 'asc')
+                    ->get();
+            return view('profile::user_messages')->with(['user' => $user, 'message' => $message, 'my' => Auth::user()->id]);
+        } else {
+            return redirect('message');
+        }
+    }
+
+    /*
+     * 
+     * function allMessageViewAction
+     * 
+     * return selected user message view
+     * param null
+     */
+
+    public function allMessageViewAction(Request $request) {
+        return redirect('message');
     }
 
     /*
@@ -76,7 +92,7 @@ class Profile extends Controller {
         $receiver = Input::get('receiver');
         $receiver = Core::decodeIdAction($receiver);
         $message = Input::get('message');
-        Messages::where(['sender' =>Auth::user()->id,'receiver'=>$receiver])->orWhere(['sender'=>$receiver,'receiver'=>Auth::user()->id])->update(['last_status'=>0]);
+        Messages::where(['sender' => Auth::user()->id, 'receiver' => $receiver])->orWhere(['sender' => $receiver, 'receiver' => Auth::user()->id])->update(['last_status' => 0]);
         Messages::create(['sender' => Auth::user()->id, 'receiver' => $receiver, 'message' => $message]);
         $user = User::find(Auth::user()->id)->toArray();
         $data = ['message' => $message, 'name' => $user['name']];
