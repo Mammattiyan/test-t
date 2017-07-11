@@ -120,7 +120,7 @@ Itweetup :: Activities
             success: function (data) {
                 $('#message').val('');
                 var msg = '<li class="right clearfix"><span class="chat-img pull-right">\n\
-                            <img src="{{ URL::to($val->profileimage)}}" alt="User Avatar" class="img-circle" />\n\
+                            <img src="{{ URL::to(Auth::user()->profileimage)}}" alt="User Avatar" class="img-circle" />\n\
                         </span>\n\
                         <div class="chat-body clearfix">\n\
                             <div class="header_msg">\n\
