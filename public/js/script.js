@@ -133,6 +133,16 @@ $('#age').pickadate({
 	formatSubmit: 'yyyy-mm-dd'
    
   });
+  
+$('#hangoutDate').pickadate({
+  selectYears: true,
+  selectMonths: true,
+	format: 'dd-mm-yyyy',
+   
+  });
+  $('#hangoutTime').pickatime({
+      format: 'h:i A',
+  })
 
 function selectValues(classname) {
 	var valu = [];

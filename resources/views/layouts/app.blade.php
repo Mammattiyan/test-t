@@ -11,7 +11,8 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('css/default.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('css/default.date.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/multiselect.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/multiselect.min.css') }}">       
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/default.time.css') }}">
 
 
 
@@ -62,12 +63,16 @@
         <script type="text/javascript" src="{{ asset('js/picker.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/picker.date.js') }}"></script>
 
+         <script src="{{ asset('js/picker.time.js') }}"></script>
+         
         <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
         <script src=" https://code.jquery.com/jquery-2.1.3.min.js"></script>
         <script src="{{ asset('croppic/assets/js/bootstrap.min.js') }}"></script>
         <script src="{{ asset('croppic/assets/js/jquery.mousewheel.min.js') }}"></script>
         <script src="{{ asset('croppic/croppic.min.js') }}"></script>
         <script src="{{ asset('croppic/assets/js/main.js') }}"></script>
+       
+      
         <script>
 
 

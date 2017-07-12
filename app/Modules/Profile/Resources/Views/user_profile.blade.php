@@ -18,7 +18,7 @@
                         <div class="thick-text">Links</div>
                         <ul class="nav-links">
                             <li class="nav nav-message"><a href="{{ URL::to('profile/message').'/'.$user['id']}}">Message</a></li>
-                            <li class="nav nav-hangout"><a href="#">Hangout</a></li>
+                            <li class="nav nav-hangout"><a href="{{asset('hangout').'/'.$user['id']}}">Hangout</a></li>
                             <li class="nav nav-chat"><a href="#">Chat</a></li>
                             <li class="nav nav-dining"><a href="#">Dine</a></li>
                         </ul>
