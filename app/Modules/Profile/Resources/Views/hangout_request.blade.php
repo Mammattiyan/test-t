@@ -33,46 +33,54 @@ Itweetup :: Activities
                     </div>
                 </div>
             </div>
+            <div class="alert alert-success text-center" id="success" style="display: none">
+                <strong>Success</strong>
+                <p>Hangout status updated!</p>
+            </div>
+            
             <div class="box pad ">
                 <div class="thick-text">Send Hangout Request</div>
                 <div class="accordion-group">
-                    <div class="accordion">
+                    <div class="accordion"> 
+
+                        {{ Form::hidden('hangId', $hangout['id'], array('id' => 'hangId')) }}
                         <div class="row">
                             <div class="col col-md-6">                                
                                 <label>Event <span class="text text-danger">*</span></label>
                             </div>
 
                             <div class="col col-md-6">                                
-                                <input type="text" name="event" value="{{ $data['event']  or "" }}" required >                        
+                                <input type="text" name="event" value="{{ $hangout['event']  or "" }}" readonly >                        
                             </div>
                         </div>
                         <div class="row">
                             <label>Location <span class="text text-danger">*</span></label>
-                            <input type="text" name="location" value="{{ $data['location']  or "" }}" required >                      
+                            <input type="text" name="location" value="{{ $hangout['location']  or "" }}" readonly >                      
                         </div>
 
                         <div class="row">
                             <label>Date <span class="text text-danger">*</span></label>
-                            <input type="text" name="date"  value="{{ $data['date']  or "" }}" id="hangoutDate" required >
+                            <input type="text" name="date"  value="{{ $hangout['date']  or "" }}" readonly >
                         </div>
                         <div class="row">
                             <label>Time <span class="text text-danger">*</span></label>
-                            <input type="text" name="time" value="{{ $data['time']  or "" }}" id="hangoutTime" required>
+                            <input type="text" name="time" value="{{ $hangout['time']  or "" }}" readonly>
                         </div>
                         <div class="row">
                             <label>Private <span class="text text-danger">*</span></label>
-                            <input type="text" name="private" value="{{ $data['private']  or "" }}" required>
+                            <input type="text" name="private" value="{{ $hangout['private']  or "" }}" readonly>
                         </div>
                         <div class="row">
                             <label>Accompany <span class="text text-danger">*</span></label>
-                            <input type="text" name="accompany" value="{{ $data['accompany']  or "" }}" required >
+                            <input type="text" name="accompany" value="{{ $hangout['accompany']  or "" }}" readonly >
                         </div>
                         <div class="row">
                             <label>Family Member <span class="text text-danger">*</span></label>
-                            <input type="text" name="family_member" value="{{ $data['family_member']  or "" }}" required>
+                            <input type="text" name="family_member" value="{{ $hangout['family_member']  or "" }}" readonly>
                         </div>
                         <div class="flex-item text-right">
-                            <input type="submit" name="submit" class="button" value="Submit">
+                            <input type="button"  class="button buttonHang" value="accept">
+                            <input type="button"  class=" button buttonHang" value="reject">
                         </div>
                         {{ Form::close() }}
                     </div>
@@ -109,37 +117,31 @@ Itweetup :: Activities
 @section('js')
 <script>
 
+
     $(document).ready(function () {
-        $("#sendMessage").submit(function (event) {
-            sendMessage()
-            event.preventDefault();
+
+        $('.buttonHang').click(function () {
+
+            var status = $(this).val();
+            var hangId = $('#hangId').val();
+            $.ajax({
+                url: '{!! URL::to("profile/hangoutStatus") !!}',
+                data: {hangId: hangId, status: status, _token: '{{{csrf_token()}}}'},
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (data) {
+
+                    if (data.status == '1') {
+
+                        $('#success').show();
+                    }else{
+                        $('#notSuccess').show();
+                    }
+                }
+            });
         });
     });
-    $('#message-container').scrollTop($('#message-container').prop("scrollHeight"));
-    function sendMessage() {
-        $.ajax({
-            url: '{!! URL::to("profile/sendMessage") !!}',
-            data: $('#sendMessage').serialize(),
-            type: 'POST',
-            dataType: 'JSON',
-            success: function (data) {
-                $('#message').val('');
-                var msg = '<li class="right clearfix"><span class="chat-img pull-right">\n\
-                            <img src="{{ URL::to(Auth::user()->profileimage)}}" alt="User Avatar" class="img-circle" />\n\
-                        </span>\n\
-                        <div class="chat-body clearfix">\n\
-                            <div class="header_msg">\n\
-                                <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>Just now</small>\n\
-                                <strong class="pull-right primary-font">' + data.name + '</strong>\n\
-                            </div> \n\
-                            <p class="text-right">' + data.message + '</p> \n\
-                        </div> \n\
-                    </li>';
-                $('.chat').append(msg);
-                $(".message-height").animate({scrollTop: $('.message-height').prop("scrollHeight")}, 1000);
-            }
-        });
-    }
+
 
 
 </script>

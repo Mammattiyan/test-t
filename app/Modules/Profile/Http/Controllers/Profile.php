@@ -15,6 +15,7 @@ use App\Modules\Message\Models\Messages;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use App\Modules\Hangout\Models\Hangouts;
+
 class Profile extends Controller {
     /*
      * 
@@ -225,18 +226,42 @@ class Profile extends Controller {
 
     public function hangoutRequestDetailsAction(Request $request, $token) {
         if (isset($token)) {
-            $userId = Core::decodeIdAction($token);
-            $user = User::find($userId)->toArray();
-            $user['id'] = Core::encodeIdAction($userId);
-            $message = Hangouts::select('hangouts.*', 'users.name', 'users.profileimage'    )
-                    ->join('users', 'users.id', 'hangouts.sender_id')
-                    ->where(['sender_id' => Auth::user()->id, 'receiver_id' => $userId])
-                    ->orWhere(['receiver_id' => Auth::user()->id, 'sender_id' => $userId])
-                    ->orderBy('hangouts.id', 'asc')
-                    ->get();
+
+            $hangId = Core::decodeIdAction($token);
+            $user = User::find(Auth::user()->id)->toArray();
+            $user['id'] = Core::encodeIdAction(Auth::user()->id);
+            $message = Hangouts::select('hangouts.*', 'users.name', 'users.profileimage')
+                            ->join('users', 'users.id', 'hangouts.sender_id')
+//                    ->where(['sender_id' => Auth::user()->id])
+//                    ->orWhere(['receiver_id' => Auth::user()->id])
+                            ->where('hangouts.id', $hangId)
+                            ->orderBy('hangouts.id', 'asc')
+                            ->first()->toArray();
             return view('profile::hangout_request')->with(['user' => $user, 'hangout' => $message, 'my' => Auth::user()->id]);
         } else {
             return redirect('hangout');
+        }
+    }
+
+    /*
+     * 
+     * function hangoutStatusAction
+     * 
+     * return hangoutRequestDetailsview
+     * param null
+     */
+
+    public function hangoutStatusAction() {
+
+        $hangId = Input::get('hangId');
+        $status = Input::get('status');
+
+        if (!empty($hangId) && !empty($status)) {
+
+            $data = Hangouts::where('id', $hangId)->update(['hangout_status' => $status]);
+            if(!empty($data)){                
+                return response()->json(['status'=>'1']);
+            }
         }
     }
 

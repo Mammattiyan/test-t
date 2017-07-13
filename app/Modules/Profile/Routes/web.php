@@ -21,4 +21,5 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth'], function () {
     Route::post('/profileImageCrop', 'Profile@profileImageCropAction');
     Route::post('/sendMessage', 'Profile@sendMessageAction');
     Route::get('/hangout/{token}', 'Profile@hangoutRequestDetailsAction');
+    Route::post('/hangoutStatus', 'Profile@hangoutStatusAction');
 });

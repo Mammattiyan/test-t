@@ -34,9 +34,7 @@ Itweetup :: Activities
 
 
         <div class="box pad">
-
             {{ Form::open(array('url' => 'hangout/sent'.'/'.$token)) }}
-
             <div class="thick-text">Send Hangout Request</div>
             <div class="accordion-group">
                 <div class="accordion">
