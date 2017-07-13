@@ -14,7 +14,7 @@
         <ul class="nav-links">
             <li class="nav nav-activity"><a href="{{ URL::to('activity')}}">Activity</a></li>
             <li class="nav nav-message"><a href="{{ URL::to('message')}}">Message</a></li>
-            <li class="nav nav-hangout"><a href="#">Hangout</a></li>
+            <li class="nav nav-hangout"><a href="{{ URL::to('hangout')}}">Hangout</a></li>
             <li class="nav nav-chat"><a href="#">Chat</a></li>
             <li class="nav nav-matches"><a href="#">Matches</a></li>
             <li class="nav nav-date-alert"><a href="#">Date Alert</a></li>

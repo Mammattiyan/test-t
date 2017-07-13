@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Modules\Message\Models\Messages;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
-
+use App\Modules\Hangout\Models\Hangouts;
 class Profile extends Controller {
     /*
      * 
@@ -213,6 +213,31 @@ class Profile extends Controller {
         );
         User::where('id', Auth::user()->id)->update(['profileimage' => $fileName . $type]);
         return response()->json($response);
+    }
+
+    /*
+     * 
+     * function hangoutRequestDetailsAction
+     * 
+     * return hangoutRequestDetailsview
+     * param null
+     */
+
+    public function hangoutRequestDetailsAction(Request $request, $token) {
+        if (isset($token)) {
+            $userId = Core::decodeIdAction($token);
+            $user = User::find($userId)->toArray();
+            $user['id'] = Core::encodeIdAction($userId);
+            $message = Hangouts::select('hangouts.*', 'users.name', 'users.profileimage'    )
+                    ->join('users', 'users.id', 'hangouts.sender_id')
+                    ->where(['sender_id' => Auth::user()->id, 'receiver_id' => $userId])
+                    ->orWhere(['receiver_id' => Auth::user()->id, 'sender_id' => $userId])
+                    ->orderBy('hangouts.id', 'asc')
+                    ->get();
+            return view('profile::hangout_request')->with(['user' => $user, 'hangout' => $message, 'my' => Auth::user()->id]);
+        } else {
+            return redirect('hangout');
+        }
     }
 
 }

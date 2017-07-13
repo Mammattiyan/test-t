@@ -13,5 +13,6 @@
 
 Route::group(['prefix' => 'hangout'], function () {
     Route::get('/{token}','Hangouts@indexAction');
+    Route::get('/','Hangouts@hangoutRequestListAction');  
     Route::post('sent/{token}','Hangouts@sentAction');
 });
