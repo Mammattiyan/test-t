@@ -1056,5 +1056,31 @@ text-align:center;
     font-style: italic;
 }
 .activity-details{
-    padding-left: 20px;
+  
+}
+.table-center{
+    margin: auto;
+}
+.table-center span{
+    margin-left: 20px;
+}
+.table-center td{
+    margin:5px 20px;
+}
+.alert-danger{
+    color:#a94442;
+    background-color:#f2dede;
+    border-color:#ebccd1
+}
+.alert-danger hr{
+    border-top-color:#e4b9c0
+}
+.alert-danger .alert-link{
+    color:#843534
+}
+.timestamp span{
+    font-size: 10px;
+}
+.activity-details span{
+    font-size: 12px;
 }

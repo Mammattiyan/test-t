@@ -35,52 +35,104 @@ Itweetup :: Activities
             </div>
             <div class="alert alert-success text-center" id="success" style="display: none">
                 <strong>Success</strong>
-                <p>Hangout status updated!</p>
+                <p>Hangout Request Accepted!</p>
             </div>
-            
-            <div class="box pad ">
-                <div class="thick-text">Send Hangout Request</div>
+            <div class="alert alert-danger text-center" id="notSuccess" style="display: none">
+                <strong>Rejected</strong>
+                <p>Hangout Request Rejected!</p>
+            </div>
+
+            <div class="box pad " id="request-container">
+                <div class="thick-text text-center">Hangout Request</div>
                 <div class="accordion-group">
                     <div class="accordion"> 
 
                         {{ Form::hidden('hangId', $hangout['id'], array('id' => 'hangId')) }}
                         <div class="row">
-                            <div class="col col-md-6">                                
-                                <label>Event <span class="text text-danger">*</span></label>
-                            </div>
-
-                            <div class="col col-md-6">                                
-                                <input type="text" name="event" value="{{ $hangout['event']  or "" }}" readonly >                        
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label>Location <span class="text text-danger">*</span></label>
-                            <input type="text" name="location" value="{{ $hangout['location']  or "" }}" readonly >                      
-                        </div>
-
-                        <div class="row">
-                            <label>Date <span class="text text-danger">*</span></label>
-                            <input type="text" name="date"  value="{{ $hangout['date']  or "" }}" readonly >
-                        </div>
-                        <div class="row">
-                            <label>Time <span class="text text-danger">*</span></label>
-                            <input type="text" name="time" value="{{ $hangout['time']  or "" }}" readonly>
-                        </div>
-                        <div class="row">
-                            <label>Private <span class="text text-danger">*</span></label>
-                            <input type="text" name="private" value="{{ $hangout['private']  or "" }}" readonly>
-                        </div>
-                        <div class="row">
-                            <label>Accompany <span class="text text-danger">*</span></label>
-                            <input type="text" name="accompany" value="{{ $hangout['accompany']  or "" }}" readonly >
-                        </div>
-                        <div class="row">
-                            <label>Family Member <span class="text text-danger">*</span></label>
-                            <input type="text" name="family_member" value="{{ $hangout['family_member']  or "" }}" readonly>
-                        </div>
+                            <table class="table-center">
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>Event </strong>
+                                    </td>
+                                    <td>:</td>
+                                    <td>
+                                        <span>{{ $hangout['event']  or "" }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>Location </strong>
+                                    </td>
+                                    <td>:</td>
+                                    <td>
+                                        <span>{{ $hangout['location']  or "" }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>Date </strong>
+                                    </td>
+                                    <td>:</td>
+                                    <td>
+                                        <span>{{ $hangout['date']  or "" }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>Time </strong>
+                                    </td>
+                                    <td>:</td>
+                                    <td>
+                                        <span>{{ $hangout['time']  or "" }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>Private </strong>
+                                    </td>
+                                    <td>:</td>
+                                    <td>
+                                        <span>{{ $hangout['private']  or "" }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>Accompany </strong>
+                                    </td>
+                                    <td>:</td>
+                                    <td>
+                                        <span>{{ $hangout['accompany']  or "" }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>Family Member </strong>
+                                    </td>
+                                    <td>:</td>
+                                    <td>
+                                        <span>{{ $hangout['family_member']  or "" }}</span>
+                                    </td>
+                                </tr>
+                                @if($hangout['hangout_status']!='sent')
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>Status</strong>
+                                    </td>
+                                    <td>:</td>
+                                    <td>
+                                        <span>{{ ucfirst($hangout['hangout_status'])}}</span>
+                                    </td>
+                                </tr>
+                                @endif
+                            </table>                            
+                        </div>   
                         <div class="flex-item text-right">
+                            @if($hangout['hangout_status']=='sent' || $hangout['hangout_status']=='requested')
                             <input type="button"  class="button buttonHang" value="accept">
                             <input type="button"  class=" button buttonHang" value="reject">
+
+                            @endif
+                            <a href="{{ URL::to('hangout')}}"  class=" button buttonHang" > Back</a>
                         </div>
                         {{ Form::close() }}
                     </div>
@@ -116,13 +168,10 @@ Itweetup :: Activities
 
 @section('js')
 <script>
-
-
     $(document).ready(function () {
-
         $('.buttonHang').click(function () {
-
             var status = $(this).val();
+            $('#request-container').hide();
             var hangId = $('#hangId').val();
             $.ajax({
                 url: '{!! URL::to("profile/hangoutStatus") !!}',
@@ -130,12 +179,16 @@ Itweetup :: Activities
                 type: 'POST',
                 dataType: 'JSON',
                 success: function (data) {
-
                     if (data.status == '1') {
-
-                        $('#success').show();
-                    }else{
-                        $('#notSuccess').show();
+                        if (status == 'reject') {
+                            $('#notSuccess').show();
+                        } else {
+                            $('#success').show();
+                        }
+                        window.setTimeout(function () {
+                            window.location = "{{ URL::to('/hangout') }}";
+                        }, 1000);
+                    } else {
                     }
                 }
             });

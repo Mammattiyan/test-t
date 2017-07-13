@@ -27,7 +27,7 @@ Itweetup :: Activities
         <script type="text/javascript">
             //here double curly bracket
             window.setTimeout(function () {
-                window.location = "{{ asset('/profile') }}";
+                window.location = "{{ URL::to('/profile') }}";
             }, 1000);
         </script>
         @endif

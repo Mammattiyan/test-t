@@ -226,17 +226,20 @@ class Profile extends Controller {
 
     public function hangoutRequestDetailsAction(Request $request, $token) {
         if (isset($token)) {
-
             $hangId = Core::decodeIdAction($token);
-            $user = User::find(Auth::user()->id)->toArray();
-            $user['id'] = Core::encodeIdAction(Auth::user()->id);
             $message = Hangouts::select('hangouts.*', 'users.name', 'users.profileimage')
-                            ->join('users', 'users.id', 'hangouts.sender_id')
-//                    ->where(['sender_id' => Auth::user()->id])
-//                    ->orWhere(['receiver_id' => Auth::user()->id])
+                            ->join('users', function($sql) {
+                                $sql->on('users.id', 'hangouts.sender_id');
+                                $sql->orOn('users.id', 'hangouts.receiver_id');
+                            })
                             ->where('hangouts.id', $hangId)
                             ->orderBy('hangouts.id', 'asc')
                             ->first()->toArray();
+            if ($message['sender_id'] == Auth::user()->id) {
+                $user = User::find($message['receiver_id'])->toArray();
+            } else {
+                $user = User::find($message['sender_id'])->toArray();
+            }
             return view('profile::hangout_request')->with(['user' => $user, 'hangout' => $message, 'my' => Auth::user()->id]);
         } else {
             return redirect('hangout');
@@ -255,12 +258,16 @@ class Profile extends Controller {
 
         $hangId = Input::get('hangId');
         $status = Input::get('status');
-
+        if ($status == 'accept') {
+            $status = 'accepted';
+        } else {
+            $status = 'accepted';
+        }
         if (!empty($hangId) && !empty($status)) {
 
             $data = Hangouts::where('id', $hangId)->update(['hangout_status' => $status]);
-            if(!empty($data)){                
-                return response()->json(['status'=>'1']);
+            if (!empty($data)) {
+                return response()->json(['status' => '1']);
             }
         }
     }
