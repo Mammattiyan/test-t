@@ -113,6 +113,17 @@ Itweetup :: Activities
                                         <span>{{ $hangout['family_member']  or "" }}</span>
                                     </td>
                                 </tr>
+                                @if($hangout['sender_id']==Auth::user()->id)
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>Status</strong>
+                                    </td>
+                                    <td>:</td>
+                                    <td>
+                                        <span>Request {{ ucfirst($hangout['hangout_status'])}}</span>
+                                    </td>
+                                </tr>
+                                @else
                                 @if($hangout['hangout_status']!='sent')
                                 <tr>
                                     <td class="text-right">
@@ -120,19 +131,22 @@ Itweetup :: Activities
                                     </td>
                                     <td>:</td>
                                     <td>
-                                        <span>{{ ucfirst($hangout['hangout_status'])}}</span>
+                                        <span>Request {{ ucfirst($hangout['hangout_status'])}}</span>
                                     </td>
                                 </tr>
+                                @endif
                                 @endif
                             </table>                            
                         </div>   
                         <div class="flex-item text-right">
+                            @if($hangout['sender_id']!=Auth::user()->id)
                             @if($hangout['hangout_status']=='sent' || $hangout['hangout_status']=='requested')
                             <input type="button"  class="button buttonHang" value="accept">
                             <input type="button"  class=" button buttonHang" value="reject">
 
                             @endif
-                            <a href="{{ URL::to('hangout')}}"  class=" button buttonHang" > Back</a>
+                            @endif
+                            <a href="{{ URL::to('hangout')}}"  class=" button" > Back</a>
                         </div>
                         {{ Form::close() }}
                     </div>

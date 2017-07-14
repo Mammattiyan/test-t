@@ -101,7 +101,7 @@ class Hangouts extends Controller {
                                     $sql->where('hangouts.receiver_id', $userId);
                                 })
                                 ->distinct('id')
-                                ->orderBY('hangouts.id', 'desc'))->orderBY('id', 'desc')->get()->toArray();
+                                ->orderBY('hangouts.id', 'desc'))->orderBY('id', 'desc')->get()->toArray();                                
         return view('hangout::index')->with(['hangouts' => $hangouts]);
     }
     /*
@@ -126,6 +126,7 @@ class Hangouts extends Controller {
                                 })
                                 ->distinct('id')
                                 ->orderBY('hangouts.id', 'desc'))->orderBY('id', 'desc')->get()->toArray();
+                                
         return view('hangout::index')->with(['hangouts' => $hangouts]);
     }
 
