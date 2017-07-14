@@ -110,6 +110,8 @@ class Dine extends Controller {
                                 ->distinct('id')
                                 ->orderBY('dines.id', 'desc'))->orderBY('id', 'desc')->get()->toArray();
                                 
-        return view('dine::index')->with(['dines' => $dines]);
+                            
+                                
+        return view('dine::dineList')->with(['dines' => $dines]);
     }
 }
