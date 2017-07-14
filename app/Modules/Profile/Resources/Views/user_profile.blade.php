@@ -20,7 +20,7 @@
                             <li class="nav nav-message"><a href="{{ URL::to('profile/message').'/'.$user['id']}}">Message</a></li>
                             <li class="nav nav-hangout"><a href="{{asset('hangout').'/'.$user['id']}}">Hangout</a></li>
                             <li class="nav nav-chat"><a href="#">Chat</a></li>
-                            <li class="nav nav-dining"><a href="#">Dine</a></li>
+                            <li class="nav nav-dining"><a href="{{asset('dine').'/'.$user['id']}}">Dine</a></li>
                         </ul>
                     </div>
                 </div>

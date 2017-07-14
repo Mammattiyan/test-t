@@ -22,4 +22,6 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth'], function () {
     Route::post('/sendMessage', 'Profile@sendMessageAction');
     Route::get('/hangout/{token}', 'Profile@hangoutRequestDetailsAction');
     Route::post('/hangoutStatus', 'Profile@hangoutStatusAction');
+    Route::post('/diningStatus', 'Profile@diningStatusAction');
+    Route::get('/dine/{token}', 'Profile@dineRequestDetailsAction');
 });

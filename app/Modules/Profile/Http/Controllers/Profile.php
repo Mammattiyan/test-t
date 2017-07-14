@@ -15,6 +15,7 @@ use App\Modules\Message\Models\Messages;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use App\Modules\Hangout\Models\Hangouts;
+use App\Modules\Message\Models\Dine;
 
 class Profile extends Controller {
     /*
@@ -245,6 +246,35 @@ class Profile extends Controller {
             return redirect('hangout');
         }
     }
+    /*
+     * 
+     * function hangoutRequestDetailsAction
+     * 
+     * return hangoutRequestDetailsview
+     * param null
+     */
+
+    public function dineRequestDetailsAction(Request $request, $token) {
+        if (isset($token)) {
+            $hangId = Core::decodeIdAction($token);
+            $message = Dine::select('dines.*', 'users.name', 'users.profileimage')
+                            ->join('users', function($sql) {
+                                $sql->on('users.id', 'dines.sender_id');
+                                $sql->orOn('users.id', 'dines.receiver_id');
+                            })
+                            ->where('dines.id', $hangId)
+                            ->orderBy('dines.id', 'asc')
+                            ->first()->toArray();
+            if ($message['sender_id'] == Auth::user()->id) {
+                $user = User::find($message['receiver_id'])->toArray();
+            } else {
+                $user = User::find($message['sender_id'])->toArray();
+            }
+            return view('profile::dine_request')->with(['user' => $user, 'dine' => $message, 'my' => Auth::user()->id]);
+        } else {
+            return redirect('dine');
+        }
+    }
 
     /*
      * 
@@ -266,6 +296,31 @@ class Profile extends Controller {
         if (!empty($hangId) && !empty($status)) {
 
             $data = Hangouts::where('id', $hangId)->update(['hangout_status' => $status]);
+            if (!empty($data)) {
+                return response()->json(['status' => '1']);
+            }
+        }
+    }
+    /*
+     * 
+     * function diningStatusAction
+     * 
+     * return hangoutRequestDetailsview
+     * param null
+     */
+
+    public function diningStatusAction() {
+
+        $dineId = Input::get('dineId');
+        $status = Input::get('status');
+        if ($status == 'accept') {
+            $status = 'accepted';
+        } else {
+            $status = 'rejected';
+        }
+        if (!empty($dineId) && !empty($status)) {
+
+            $data = Dine::where('id', $dineId)->update(['dine_status' => $status]);
             if (!empty($data)) {
                 return response()->json(['status' => '1']);
             }
