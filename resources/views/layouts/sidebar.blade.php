@@ -19,8 +19,8 @@
             <li class="nav nav-matches"><a href="#">Matches</a></li>
             <li class="nav nav-date-alert"><a href="#">Date Alert</a></li>
             <li class="nav nav-dining"><a href="#">Dining</a></li>
-            <li class="nav nav-upload-photo"><a href="#">Photos</a></li>
-            <li class="nav nav-upload-video"><a href="#">Videos</a></li>
+            <li class="nav nav-upload-photo"><a href="{{ URL::to('photos')}}">Photos</a></li>
+            <li class="nav nav-upload-video"><a href="{{ URL::to('videos')}}">Videos</a></li>
         </ul>
     </div>
 </div>
