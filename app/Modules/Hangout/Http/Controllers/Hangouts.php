@@ -23,7 +23,9 @@ class Hangouts extends Controller {
      */
 
     public function indexAction(Request $request, $token) {
-        return view('hangout::hangout')->with(['token' => $token]);
+        $userId = Core::decodeIdAction($token);
+        $user = User::find($userId)->toArray();
+        return view('hangout::hangout')->with(['user'=> $user,'token'=>$token]);
     }
 
     /*

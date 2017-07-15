@@ -7,33 +7,9 @@ Itweetup :: Activities
 
 <div class="main-section">
     <div class="container flex-box fd-col fd-lg-row equisized-lg-items">
-        <div class="flex-item userdata-block">
-            <div class="box userinfo-tile">
-                <img src="{{ URL::to($user['profileimage'])}}" class="user-photo">
-                <div class="pad">
-                    <div class="thick-text">{{ ucfirst($user['name'])}}</div>
-                    <div class="user-motto">Real beauty is always inside</div>
-                </div>
-            </div>
-            <div class="box pad nav-tile">
-                <div class="thick-text">Links</div>
-                <ul class="nav-links">
-                    <li class="nav nav-message"><a href="{{ URL::to('profile/message').'/'.$user['id']}}">Message</a></li>
-                    <li class="nav nav-hangout"><a href="#">Dining</a></li>
-                    <li class="nav nav-chat"><a href="#">Chat</a></li>
-                    <li class="nav nav-dining"><a href="#">Dine</a></li>
-                </ul>
-            </div>
-        </div>
+        @include('profile::profile_side')
         <div class="flex-item updates-block">
-            <div class="box">
-                <div class="pad">
-                    <div class="search-field">
-                        <input type="text" name="search-stuff" placeholder="Search">
-                        <a href="#"></a>
-                    </div>
-                </div>
-            </div>
+            @include('search::search_form')
             <div class="alert alert-success text-center" id="success" style="display: none">
                 <strong>Success</strong>
                 <p>Dining Request Accepted!</p>
@@ -155,17 +131,7 @@ Itweetup :: Activities
             </div>
 
         </div>
-        <div class="flex-item">
-            <div class="box pad">
-                <div class="thick-text">Chat</div>
-                <div>Chatbox here</div>
-            </div>
-            <div class="box pad">
-                <div class="thick-text">Advertisement</div>
-                <div>Promotions here</div>
-            </div>
-            <div class="copyright">itweetup &copy; 2016</div>
-        </div>
+        @include('profile::right_side')
     </div>
 </div>
 <div class="modal-glass hide">
