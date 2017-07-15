@@ -29,13 +29,29 @@ class Profile extends Controller {
     public function indexAction() {
         $userId = Auth::User()->id;
 
-        $messageCount = '25';
-        $hangoutCount = Hangouts::where('hangouts.receiver_id', $userId)->get()->count();
-        $dineCount = Dine::where('dines.receiver_id', $userId)->get()->count();
-        
-        dd($hangoutCount,$dineCount);
+        $data = [];
+        $data['hangoutCount'] = count(Hangouts::select('sender_id')->where('hangouts.receiver_id', $userId)->groupBy('sender_id')->get());
+        $data['dineCount'] = count(Dine::select('sender_id')->where('dines.receiver_id', $userId)->groupBy('sender_id')->get());
+        $data['messageCount'] = count(Messages::select('sender')->where('messages.receiver', $userId)->groupBy('sender')->get());
 
-        return view('profile::profile');
+
+       
+        $hangoutsData = HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage')
+                        ->join('users', function($sql) use($userId) {
+                            $sql->on('users.id', 'hangouts.receiver_id');
+                            $sql->where('hangouts.sender_id', $userId);
+                        })
+                        ->distinct('id')                        
+                        ->union(HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage')
+                                ->join('users', function($sql) use($userId) {
+                                    $sql->on('users.id', 'hangouts.sender_id');
+                                    $sql->where('hangouts.receiver_id', $userId);
+                                })
+                                ->distinct('id')
+                                ->orderBY('hangouts.id', 'desc'))->orderBY('id', 'desc')->get()->toArray(); 
+        
+
+        return view('profile::profile')->with(['data'=>$data]);;
     }
 
     /*
