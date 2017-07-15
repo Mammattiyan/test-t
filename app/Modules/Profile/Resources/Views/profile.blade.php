@@ -19,7 +19,7 @@
             <div class="thick-text">Notifications</div>
             <div class="notifications-wrap">
                 <div class="notification">
-                    <div class="noti-count">37</div>
+                    <div class="noti-count">{{$data['messageCount']}}</div>
                     <div class="noti-name">Message</div>
                 </div>
                 <div class="notification">
@@ -27,11 +27,11 @@
                     <div class="noti-name">Notification</div>
                 </div>
                 <div class="notification">
-                    <div class="noti-count">12</div>
+                    <div class="noti-count">{{$data['dineCount']}}</div>
                     <div class="noti-name">Dining</div>
                 </div>
                 <div class="notification">
-                    <div class="noti-count">127</div>
+                    <div class="noti-count">{{$data['hangoutCount']}}</div>
                     <div class="noti-name">Hangout</div>
                 </div>
                 <div class="notification">

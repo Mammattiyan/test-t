@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Modules\Message\Models\Messages;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+<<<<<<< HEAD
 use App\Modules\Profile\Models\Relationhistory;
 use App\Modules\Profile\Models\Education;
 use App\Modules\Profile\Models\Profession;
@@ -36,6 +37,10 @@ use App\Modules\Profile\Models\Motto;
 use App\Modules\Profile\Models\Uservid;
 use App\Modules\Profile\Models\Userpic;
 use App\Modules\Profile\Models\Userprofile;
+=======
+use App\Modules\Hangout\Models\Hangouts;
+use App\Modules\Message\Models\Dine;
+>>>>>>> c44546809c6e86e012db60d026d8635a07444423
 
 class Profile extends Controller {
     /*
@@ -47,7 +52,31 @@ class Profile extends Controller {
      */
 
     public function indexAction() {
-        return view('profile::profile');
+        $userId = Auth::User()->id;
+
+        $data = [];
+        $data['hangoutCount'] = count(Hangouts::select('sender_id')->where('hangouts.receiver_id', $userId)->groupBy('sender_id')->get());
+        $data['dineCount'] = count(Dine::select('sender_id')->where('dines.receiver_id', $userId)->groupBy('sender_id')->get());
+        $data['messageCount'] = count(Messages::select('sender')->where('messages.receiver', $userId)->groupBy('sender')->get());
+
+
+       
+        $hangoutsData = HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage')
+                        ->join('users', function($sql) use($userId) {
+                            $sql->on('users.id', 'hangouts.receiver_id');
+                            $sql->where('hangouts.sender_id', $userId);
+                        })
+                        ->distinct('id')                        
+                        ->union(HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage')
+                                ->join('users', function($sql) use($userId) {
+                                    $sql->on('users.id', 'hangouts.sender_id');
+                                    $sql->where('hangouts.receiver_id', $userId);
+                                })
+                                ->distinct('id')
+                                ->orderBY('hangouts.id', 'desc'))->orderBY('id', 'desc')->get()->toArray(); 
+        
+
+        return view('profile::profile')->with(['data'=>$data]);;
     }
 
     /*
@@ -277,6 +306,118 @@ class Profile extends Controller {
         $data['user'] = User::where('id', $user)->first();
         $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
         return view('profile::editprofile')->with('data', $data);
+    }
+
+    /*
+     * 
+     * function hangoutRequestDetailsAction
+     * 
+     * return hangoutRequestDetailsview
+     * param null
+     */
+
+    public function hangoutRequestDetailsAction(Request $request, $token) {
+        if (isset($token)) {
+            $hangId = Core::decodeIdAction($token);
+            $message = Hangouts::select('hangouts.*', 'users.name', 'users.profileimage')
+                            ->join('users', function($sql) {
+                                $sql->on('users.id', 'hangouts.sender_id');
+                                $sql->orOn('users.id', 'hangouts.receiver_id');
+                            })
+                            ->where('hangouts.id', $hangId)
+                            ->orderBy('hangouts.id', 'asc')
+                            ->first()->toArray();
+            if ($message['sender_id'] == Auth::user()->id) {
+                $user = User::find($message['receiver_id'])->toArray();
+            } else {
+                $user = User::find($message['sender_id'])->toArray();
+            }
+            return view('profile::hangout_request')->with(['user' => $user, 'hangout' => $message, 'my' => Auth::user()->id]);
+        } else {
+            return redirect('hangout');
+        }
+    }
+
+    /*
+     * 
+     * function hangoutRequestDetailsAction
+     * 
+     * return hangoutRequestDetailsview
+     * param null
+     */
+
+    public function dineRequestDetailsAction(Request $request, $token) {
+        if (isset($token)) {
+            $hangId = Core::decodeIdAction($token);
+            $message = Dine::select('dines.*', 'users.name', 'users.profileimage')
+                            ->join('users', function($sql) {
+                                $sql->on('users.id', 'dines.sender_id');
+                                $sql->orOn('users.id', 'dines.receiver_id');
+                            })
+                            ->where('dines.id', $hangId)
+                            ->orderBy('dines.id', 'asc')
+                            ->first()->toArray();
+            if ($message['sender_id'] == Auth::user()->id) {
+                $user = User::find($message['receiver_id'])->toArray();
+            } else {
+                $user = User::find($message['sender_id'])->toArray();
+            }
+            return view('profile::dine_request')->with(['user' => $user, 'dine' => $message, 'my' => Auth::user()->id]);
+        } else {
+            return redirect('dine');
+        }
+    }
+
+    /*
+     * 
+     * function hangoutStatusAction
+     * 
+     * return hangoutRequestDetailsview
+     * param null
+     */
+
+    public function hangoutStatusAction() {
+
+        $hangId = Input::get('hangId');
+        $status = Input::get('status');
+        if ($status == 'accept') {
+            $status = 'accepted';
+        } else {
+            $status = 'accepted';
+        }
+        if (!empty($hangId) && !empty($status)) {
+
+            $data = Hangouts::where('id', $hangId)->update(['hangout_status' => $status]);
+            if (!empty($data)) {
+                return response()->json(['status' => '1']);
+            }
+        }
+    }
+
+    /*
+     * 
+     * function diningStatusAction
+     * 
+     * return hangoutRequestDetailsview
+     * param null
+     */
+
+    public function diningStatusAction() {
+
+        $dineId = Input::get('dineId');
+        $status = Input::get('status');
+        if ($status == 'accept') {
+            $status = 'accepted';
+        } else {
+            $status = 'rejected';
+        }
+        if (!empty($dineId) && !empty($status)) {
+
+            $data = Dine::where('id', $dineId)->update(['dine_status' => $status]);
+            if (!empty($data)) {
+                return response()->json(['status' => '1']);
+            }
+        }
     }
 
 }

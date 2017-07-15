@@ -12,7 +12,7 @@
  */
 
 // Route::get('/', 'Profile@indexAction');
-Route::group(['prefix' => 'profile','middleware' => 'auth'], function () {
+Route::group(['prefix' => 'profile', 'middleware' => 'auth'], function () {
     Route::get('/', 'Profile@indexAction');
     Route::post('/user', 'Profile@userProfileViewAction');
     Route::get('/message/{token}', 'Profile@userMessageViewAction');
@@ -21,4 +21,8 @@ Route::group(['prefix' => 'profile','middleware' => 'auth'], function () {
     Route::post('/profileImageUpload', 'Profile@profileImageUploadAction');
     Route::post('/profileImageCrop', 'Profile@profileImageCropAction');
     Route::post('/sendMessage', 'Profile@sendMessageAction');
+    Route::get('/hangout/{token}', 'Profile@hangoutRequestDetailsAction');
+    Route::post('/hangoutStatus', 'Profile@hangoutStatusAction');
+    Route::post('/diningStatus', 'Profile@diningStatusAction');
+    Route::get('/dine/{token}', 'Profile@dineRequestDetailsAction');
 });

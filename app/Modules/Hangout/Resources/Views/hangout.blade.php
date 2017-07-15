@@ -6,14 +6,8 @@ Itweetup :: Activities
 <?php //dd($token,$errors); ?>
 <div class="flex-item updates-block">
     <div class="box">
-        <div class="pad">
-            <div class="thick-text">Profile Completion</div>
-            <div class="progress-bar">
-                <div class="perc-text">70%</div>
-                <div class="perc-bar"></div>
-            </div>
-        </div>
-        <hr>
+
+        @include('search::search_form')
 
 
         @if (count($errors)>0)
@@ -26,49 +20,55 @@ Itweetup :: Activities
         </div>
         @endif
         @if(isset($status) == 1)
-        <div class="alert alert-success">
-            <strong>Success!</strong> Successful sent hangout message.
+        <div class="alert alert-success text-center">
+            <strong>Success!</strong>
+            <p>Successful sent hangout Request.</p>
         </div>
         <script type="text/javascript">
             //here double curly bracket
             window.setTimeout(function () {
-                window.location = "{{ asset('/profile') }}";
+                window.location = "{{ URL::to('/profile') }}";
             }, 1000);
         </script>
         @endif
 
 
         <div class="box pad">
-
             {{ Form::open(array('url' => 'hangout/sent'.'/'.$token)) }}
-
-            <div class="thick-text">Hangout</div>
+            <div class="thick-text">Send Hangout Request</div>
             <div class="accordion-group">
                 <div class="accordion">
+                    <div class="row">
+                        <label>Event <span class="text text-danger">*</span></label>
+                        <input type="text" name="event" value="{{ $data['event']  or "" }}" required >                        
+                    </div>
+                    <div class="row">
+                        <label>Location <span class="text text-danger">*</span></label>
+                        <input type="text" name="location" value="{{ $data['location']  or "" }}" required >                      
+                    </div>
 
-                    <label>Event</label>
-                    <input type="text" name="event" required >
-                    <br>
-                    <label>Location</label>
-                    <input type="text" name="location" required >
-                    <br>
-                    <label>Date</label>
-                    <input type="text" name="dob" id="hangoutDate" required >
-                    <br>
-                    <label>Time</label>
-                    <input type="text" name="time" id="hangoutTime" required>
-                    <br>
-                    <label>Private</label>
-                    <input type="text" name="private" required>
-                    <br>
-                    <label>Accompany</label>
-                    <input type="text" name="accompany">
-                    <br>
-                    <label>Family Member</label>
-                    <input type="text" name="family_member">
-                    <br>
+                    <div class="row">
+                        <label>Date <span class="text text-danger">*</span></label>
+                        <input type="text" name="date"  value="{{ $data['date']  or "" }}" id="hangoutDate" required >
+                    </div>
+                    <div class="row">
+                        <label>Time <span class="text text-danger">*</span></label>
+                        <input type="text" name="time" value="{{ $data['time']  or "" }}" id="hangoutTime" required>
+                    </div>
+                    <div class="row">
+                        <label>Private <span class="text text-danger">*</span></label>
+                        <input type="text" name="private" value="{{ $data['private']  or "" }}" required>
+                    </div>
+                    <div class="row">
+                        <label>Accompany <span class="text text-danger">*</span></label>
+                        <input type="text" name="accompany" value="{{ $data['accompany']  or "" }}" required >
+                    </div>
+                    <div class="row">
+                        <label>Family Member <span class="text text-danger">*</span></label>
+                        <input type="text" name="family_member" value="{{ $data['family_member']  or "" }}" required>
+                    </div>
                     <div class="flex-item text-right">
-                        <input type="submit" name="editpic" class="button" value="Submit">
+                        <input type="submit" name="submit" class="button" value="Submit">
                     </div>
                     {{ Form::close() }}
                 </div>
