@@ -27,6 +27,14 @@ class Profile extends Controller {
      */
 
     public function indexAction() {
+        $userId = Auth::User()->id;
+
+        $messageCount = '25';
+        $hangoutCount = Hangouts::where('hangouts.receiver_id', $userId)->get()->count();
+        $dineCount = Dine::where('dines.receiver_id', $userId)->get()->count();
+        
+        dd($hangoutCount,$dineCount);
+
         return view('profile::profile');
     }
 
@@ -246,6 +254,7 @@ class Profile extends Controller {
             return redirect('hangout');
         }
     }
+
     /*
      * 
      * function hangoutRequestDetailsAction
@@ -301,6 +310,7 @@ class Profile extends Controller {
             }
         }
     }
+
     /*
      * 
      * function diningStatusAction
