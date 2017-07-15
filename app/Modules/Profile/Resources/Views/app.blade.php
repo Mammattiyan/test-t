@@ -17,6 +17,7 @@
         <!-- Custom styles for this template -->
         <link href="{{ asset('croppic/assets/css/main.css')}}" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ asset('select2/css/select2.css') }}">
         <script>
             window.Laravel = <?php echo json_encode(['csrfToken' => csrf_token(),]); ?>
         </script>
@@ -47,6 +48,7 @@
         <script type="text/javascript" src="{{ asset('js/picker.date.js') }}"></script>
 
         <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
+
         <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/picker.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/picker.date.js') }}"></script>
@@ -57,6 +59,9 @@
         <script src="{{ asset('croppic/assets/js/jquery.mousewheel.min.js') }}"></script>
         <script src="{{ asset('croppic/croppic.min.js') }}"></script>
         <script src="{{ asset('croppic/assets/js/main.js') }}"></script>
+
+        <script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>
+
         @yield('js')
     </body>
 </html>
