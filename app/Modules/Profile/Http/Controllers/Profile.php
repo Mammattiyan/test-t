@@ -319,7 +319,7 @@ class Profile extends Controller {
     
     public function profileUpdateAction(Request $request) {
         $data = Input::all();
-        unset($data[]);
+//        unset($data[]);
         dd($data);
     }
 
