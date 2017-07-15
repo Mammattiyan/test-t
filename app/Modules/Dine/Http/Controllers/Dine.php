@@ -15,33 +15,31 @@ use Illuminate\Support\Facades\DB;
 use App\Modules\Message\Models\Dine as DineModel;
 
 class Dine extends Controller {
-    
-    
-    
-      /*
+    /*
      * 
      * function indexAction
      * 
      * Dine html view
      * param null
      */
-    
+
     public function indexAction(Request $request, $token) {
-        
-        return view('dine::index')->with(['token' => $token]);
+        $userId = Core::decodeIdAction($token);
+        $user = User::find($userId)->toArray();
+        return view('dine::index')->with(['user' => $user, 'token' => $token]);
     }
-    
-      /*
+
+    /*
      * 
      * function dineAction
      * 
      * dine sent Action
      * param null
      */
-    
+
     public function dineSentAction(Request $request, $token) {
-        
-         $data = array(
+
+        $data = array(
             'receiver_id' => Core::decodeIdAction($token),
             'sender_id' => Auth::user()->id,
             'event' => strip_tags(input::get('event')),
@@ -61,20 +59,22 @@ class Dine extends Controller {
                     'accompany' => 'required',
                     'family_member' => 'required|integer',
         ]);
-
+        $user = User::find(Auth::user()->id)->toArray();
         if ($validator->fails()) {
 
             foreach (array_values($validator->messages()->toArray()) as $msg) {
                 $error = implode(' ', $msg) . '<br>';
             }
-            return view('dine::index')->with(['token' => $token, 'data' => $data, 'errors' => $validator->errors()->all()]);
+            return view('dine::index')->with(['token' => $token, 'user'=>$user,'data' => $data, 'errors' => $validator->errors()->all()]);
         } else {
-           
-                $query = DineModel::create($data);
-                if (!empty($query)) {
-                    return view('dine::index')->with(['token' => $token, 'status' => '1']);
-                }
-           try {  } catch (\PDOException $e) {
+
+            $query = DineModel::create($data);
+            if (!empty($query)) {
+                return view('dine::index')->with(['token' => $token, 'user'=>$user, 'status' => '1']);
+            }
+            try {
+                
+            } catch (\PDOException $e) {
 
                 $error[0] = "Not sent dine message!";
                 return view('dine::index')->with(['token' => $token, 'errors' => $error]);
@@ -84,24 +84,23 @@ class Dine extends Controller {
             }
         }
     }
-    
-    
-      /*
+
+    /*
      * 
      * function dineListAction
      * 
      * dine List Action
      * param null
      */
-    
+
     public function dineListAction() {
-         $userId = Auth::User()->id;
+        $userId = Auth::User()->id;
         $dines = DineModel::select("dines.*", "users.name", 'users.profileimage')
                         ->join('users', function($sql) use($userId) {
                             $sql->on('users.id', 'dines.receiver_id');
                             $sql->where('dines.sender_id', $userId);
                         })
-                        ->distinct('id')                        
+                        ->distinct('id')
                         ->union(DineModel::select("dines.*", "users.name", 'users.profileimage')
                                 ->join('users', function($sql) use($userId) {
                                     $sql->on('users.id', 'dines.sender_id');
@@ -109,9 +108,7 @@ class Dine extends Controller {
                                 })
                                 ->distinct('id')
                                 ->orderBY('dines.id', 'desc'))->orderBY('id', 'desc')->get()->toArray();
-                                
-                            
-                                
-        return view('dine::dineList')->with(['dines' => $dines]);
+        return view('dine::dineList')->with(['dines' => $dines, 'token' => Core::encodeIdAction($userId)]);
     }
+
 }

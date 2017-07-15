@@ -55,25 +55,8 @@ class Profile extends Controller {
         $data['hangoutCount'] = count(Hangouts::select('sender_id')->where('hangouts.receiver_id', $userId)->groupBy('sender_id')->get());
         $data['dineCount'] = count(Dine::select('sender_id')->where('dines.receiver_id', $userId)->groupBy('sender_id')->get());
         $data['messageCount'] = count(Messages::select('sender')->where('messages.receiver', $userId)->groupBy('sender')->get());
-
-
-       
-        $hangoutsData = HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage')
-                        ->join('users', function($sql) use($userId) {
-                            $sql->on('users.id', 'hangouts.receiver_id');
-                            $sql->where('hangouts.sender_id', $userId);
-                        })
-                        ->distinct('id')                        
-                        ->union(HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage')
-                                ->join('users', function($sql) use($userId) {
-                                    $sql->on('users.id', 'hangouts.sender_id');
-                                    $sql->where('hangouts.receiver_id', $userId);
-                                })
-                                ->distinct('id')
-                                ->orderBY('hangouts.id', 'desc'))->orderBY('id', 'desc')->get()->toArray(); 
-        
-
-        return view('profile::profile')->with(['data'=>$data]);;
+        return view('profile::profile')->with(['data' => $data, 'token' => Core::encodeIdAction($userId)]);
+        ;
     }
 
     /*
@@ -88,7 +71,36 @@ class Profile extends Controller {
         $userId = Input::get('user_id');
         $user = User::find($userId)->toArray();
         $user['id'] = Core::encodeIdAction($userId);
-        return view('profile::user_profile')->with('user', $user);
+        return view('profile::user_profile')->with(['user' => $user, 'token' => Core::encodeIdAction($userId)]);
+    }
+
+    /*
+     * 
+     * function userProfileViewAction
+     * 
+     * return selected user profile view
+     * param null
+     */
+
+    public function userProfileViewByTokenAction($token) {
+        $userId = Core::decodeIdAction($token);
+        $user = User::find($userId)->toArray();
+        $user['id'] = $token;
+        return view('profile::user_profile')->with(['user' => $user, 'token' => $token]);
+    }
+
+    /*
+     * 
+     * function hangoutRequestViewAction
+     * 
+     * return selected user profile view
+     * param null
+     */
+
+    public function hangoutRequestViewAction($token) {
+        $userId = Core::decodeIdAction($token);
+        $user = User::find($userId)->toArray();
+        return view('profile::hangout_send_request')->with(['user' => $user, 'token' => $token]);
     }
 
     /*
@@ -113,7 +125,7 @@ class Profile extends Controller {
                     ->orWhere(['receiver' => Auth::user()->id, 'sender' => $userId])
                     ->orderBy('messages.id', 'asc')
                     ->get();
-            return view('profile::user_messages')->with(['user' => $user, 'message' => $message, 'my' => Auth::user()->id]);
+            return view('profile::user_messages')->with(['user' => $user, 'token' => $token, 'message' => $message, 'my' => Auth::user()->id]);
         } else {
             return redirect('message');
         }
@@ -265,11 +277,11 @@ class Profile extends Controller {
         User::where('id', Auth::user()->id)->update(['profileimage' => $fileName . $type]);
         return response()->json($response);
     }
-    
-    public function selectData($list, $label){
+
+    public function selectData($list, $label) {
         $data = [];
-        if(count($list) > 0){
-            foreach($list as $val){
+        if (count($list) > 0) {
+            foreach ($list as $val) {
                 $data[$val->id] = $val->$label;
             }
         }
@@ -335,7 +347,7 @@ class Profile extends Controller {
             } else {
                 $user = User::find($message['sender_id'])->toArray();
             }
-            return view('profile::hangout_request')->with(['user' => $user, 'hangout' => $message, 'my' => Auth::user()->id]);
+            return view('profile::hangout_request')->with(['user' => $user, 'hangout' => $message, 'my' => Auth::user()->id, 'token' => $token]);
         } else {
             return redirect('hangout');
         }
@@ -365,7 +377,7 @@ class Profile extends Controller {
             } else {
                 $user = User::find($message['sender_id'])->toArray();
             }
-            return view('profile::dine_request')->with(['user' => $user, 'dine' => $message, 'my' => Auth::user()->id]);
+            return view('profile::dine_request')->with(['user' => $user, 'dine' => $message, 'my' => Auth::user()->id, 'token' => $token]);
         } else {
             return redirect('dine');
         }
@@ -386,7 +398,7 @@ class Profile extends Controller {
         if ($status == 'accept') {
             $status = 'accepted';
         } else {
-            $status = 'accepted';
+            $status = 'rejected';
         }
         if (!empty($hangId) && !empty($status)) {
 
@@ -406,7 +418,6 @@ class Profile extends Controller {
      */
 
     public function diningStatusAction() {
-
         $dineId = Input::get('dineId');
         $status = Input::get('status');
         if ($status == 'accept') {
@@ -415,7 +426,6 @@ class Profile extends Controller {
             $status = 'rejected';
         }
         if (!empty($dineId) && !empty($status)) {
-
             $data = Dine::where('id', $dineId)->update(['dine_status' => $status]);
             if (!empty($data)) {
                 return response()->json(['status' => '1']);
