@@ -13,6 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/dine', function (Request $request) {
-    // return $request->dine();
+Route::get('/videos', function (Request $request) {
+    // return $request->videos();
 })->middleware('auth:api');

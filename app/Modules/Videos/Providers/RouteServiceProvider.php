@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Dine\Providers;
+namespace App\Modules\Videos\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
@@ -14,7 +14,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'App\Modules\Dine\Http\Controllers';
+    protected $namespace = 'App\Modules\Videos\Http\Controllers';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -55,7 +55,7 @@ class RouteServiceProvider extends ServiceProvider
             'middleware' => 'web',
             'namespace'  => $this->namespace,
         ], function ($router) {
-            require module_path('dine', 'Routes/web.php');
+            require module_path('videos', 'Routes/web.php');
         });
     }
 
@@ -73,7 +73,7 @@ class RouteServiceProvider extends ServiceProvider
             'namespace'  => $this->namespace,
             'prefix'     => 'api',
         ], function ($router) {
-            require module_path('dine', 'Routes/api.php');
+            require module_path('videos', 'Routes/api.php');
         });
     }
 }

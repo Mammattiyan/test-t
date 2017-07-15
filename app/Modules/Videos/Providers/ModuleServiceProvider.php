@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Dine\Providers;
+namespace App\Modules\Videos\Providers;
 
 use Caffeinated\Modules\Support\ServiceProvider;
 
@@ -13,9 +13,9 @@ class ModuleServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadTranslationsFrom(__DIR__.'/../Resources/Lang', 'dine');
-        $this->loadViewsFrom(__DIR__.'/../Resources/Views', 'dine');
-        $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations', 'dine');
+        $this->loadTranslationsFrom(__DIR__.'/../Resources/Lang', 'videos');
+        $this->loadViewsFrom(__DIR__.'/../Resources/Views', 'videos');
+        $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations', 'videos');
     }
 
     /**
