@@ -19,7 +19,7 @@
         <!-- Custom styles for this template -->
         <link href="{{ asset('croppic/assets/css/main.css')}}" rel="stylesheet">
         <link href="{{ asset('croppic/assets/css/croppic.css')}}" rel="stylesheet">
-
+        <link rel="stylesheet" type="text/css" href="{{ asset('select2/css/select2.css') }}">
         <!-- Scripts -->
         <script>
             window.Laravel = <?php echo json_encode(['csrfToken' => csrf_token(),]); ?>
@@ -71,7 +71,7 @@
         <script src="{{ asset('croppic/assets/js/jquery.mousewheel.min.js') }}"></script>
         <script src="{{ asset('croppic/croppic.min.js') }}"></script>
         <script src="{{ asset('croppic/assets/js/main.js') }}"></script>
-       
+       <script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>
       
         <script>
 

@@ -14,6 +14,28 @@ use Illuminate\Support\Facades\Auth;
 use App\Modules\Message\Models\Messages;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use App\Modules\Profile\Models\Relationhistory;
+use App\Modules\Profile\Models\Education;
+use App\Modules\Profile\Models\Profession;
+use App\Modules\Profile\Models\Bodytype;
+use App\Modules\Profile\Models\Zodiac;
+use App\Modules\Profile\Models\Disability;
+use App\Modules\Profile\Models\Languages;
+use App\Modules\Profile\Models\Currency;
+use App\Modules\Profile\Models\Color;
+use App\Modules\Profile\Models\Hairapp;
+use App\Modules\Profile\Models\Eyewear;
+use App\Modules\Profile\Models\Appearance;
+use App\Modules\Profile\Models\Pets;
+use App\Modules\Profile\Models\Marital;
+use App\Modules\Profile\Models\Countries;
+use App\Modules\Profile\Models\Smoketype;
+use App\Modules\Profile\Models\Drinktype;
+use App\Modules\Profile\Models\Relationfor;
+use App\Modules\Profile\Models\Motto;
+use App\Modules\Profile\Models\Uservid;
+use App\Modules\Profile\Models\Userpic;
+use App\Modules\Profile\Models\Userprofile;
 
 class Profile extends Controller {
     /*
@@ -52,6 +74,9 @@ class Profile extends Controller {
      */
 
     public function userMessageViewAction(Request $request, $token) {
+
+
+
         if (isset($token)) {
             $userId = Core::decodeIdAction($token);
             $user = User::find($userId)->toArray();
@@ -213,6 +238,45 @@ class Profile extends Controller {
         );
         User::where('id', Auth::user()->id)->update(['profileimage' => $fileName . $type]);
         return response()->json($response);
+    }
+    
+    public function selectData($list, $label){
+        $data = [];
+        if(count($list) > 0){
+            foreach($list as $val){
+                $data[$val->id] = $val->$label;
+            }
+        }
+        return $data;
+    }
+
+    public function profileEditAction(Request $request) {
+        $user = Auth::user()->id;
+        $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
+        $data = [];
+        $data['mottos'] = $this->selectData(Motto::all(), 'motto');
+        $data['pets'] = $this->selectData(Pets::all(), 'name');
+        $data['relationhistory'] = $this->selectData(Relationhistory::all(), 'rel_hist');
+        $data['education'] = $this->selectData(Education::all(), 'education');
+        $data['profession'] = $this->selectData(Profession::all(), 'profession');
+        $data['bodytype'] = $this->selectData(Bodytype::all(), 'body_type');
+        $data['zodiac'] = $this->selectData(Zodiac::all(), 'zodiac');
+        $data['languages'] = $this->selectData(Languages::all(), 'languages');
+        $data['currency'] = $this->selectData(Currency::all(), 'name');
+        $data['color'] = $this->selectData(Color::all(), 'name');
+        $data['hairapp'] = $this->selectData(Hairapp::all(), 'type');
+        $data['eyewear'] = $this->selectData(Eyewear::all(), 'type');
+        $data['appearance'] = $this->selectData(Appearance::all(), 'type');
+        $data['marital'] = $this->selectData(Marital::all(), 'status');
+        $data['countries'] = $this->selectData(Countries::all(), 'name');
+        $data['smoketype'] = $this->selectData(Smoketype::all(), 'type');
+        $data['drinktype'] = $this->selectData(Drinktype::all(), 'type');
+        $data['relationfor'] = $this->selectData(Relationfor::all(), 'rel_for');
+        $data['uservid'] = Uservid::where('user_id', $user);
+        $data['userpic'] = Userpic::where('user_id', $user);
+        $data['user'] = User::where('id', $user)->first();
+        $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
+        return view('profile::editprofile')->with('data', $data);
     }
 
 }
