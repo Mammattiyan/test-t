@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Modules\Message\Models\Messages;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
-<<<<<<< HEAD
 use App\Modules\Profile\Models\Relationhistory;
 use App\Modules\Profile\Models\Education;
 use App\Modules\Profile\Models\Profession;
@@ -37,10 +36,8 @@ use App\Modules\Profile\Models\Motto;
 use App\Modules\Profile\Models\Uservid;
 use App\Modules\Profile\Models\Userpic;
 use App\Modules\Profile\Models\Userprofile;
-=======
 use App\Modules\Hangout\Models\Hangouts;
 use App\Modules\Message\Models\Dine;
->>>>>>> c44546809c6e86e012db60d026d8635a07444423
 
 class Profile extends Controller {
     /*
@@ -306,6 +303,12 @@ class Profile extends Controller {
         $data['user'] = User::where('id', $user)->first();
         $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
         return view('profile::editprofile')->with('data', $data);
+    }
+    
+    public function profileUpdateAction(Request $request) {
+        $data = Input::all();
+        unset($data[]);
+        dd($data);
     }
 
     /*

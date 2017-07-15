@@ -46,6 +46,7 @@
 
         <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
         <script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/parsley.js') }}"></script>
         @yield('js')
     </body>
 </html>
