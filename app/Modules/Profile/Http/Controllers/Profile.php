@@ -320,6 +320,7 @@ class Profile extends Controller {
     public function profileUpdateAction(Request $request) {
         $user = Auth::user()->id;
         $data = Input::all();
+<<<<<<< HEAD
         $values = [];
         $values['motto'] = $data['motto'];
         $values['about'] = $data['motto'];
@@ -360,6 +361,10 @@ class Profile extends Controller {
         $userData['birthday'] = $data['age_submit'];
         User::where('id', $user)->update($userData);
         echo json_encode(['response' => 1, 'msg' => 'Profile updated successfully']);
+=======
+//        unset($data[]);
+        dd($data);
+>>>>>>> 744f7bdaf27c102c3e6d1df96dc01d7a90159058
     }
 
     /*
