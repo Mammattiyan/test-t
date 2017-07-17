@@ -318,9 +318,48 @@ class Profile extends Controller {
     }
     
     public function profileUpdateAction(Request $request) {
+        $user = Auth::user()->id;
         $data = Input::all();
-        unset($data[]);
-        dd($data);
+        $values = [];
+        $values['motto'] = $data['motto'];
+        $values['about'] = $data['motto'];
+        $values['height'] = $data['motto'];
+        $values['htunit'] = $data['motto'];
+        $values['weight'] = $data['motto'];
+        $values['wtunit'] = $data['motto'];
+        $values['relationhist'] = $data['motto'];
+        $values['education'] = $data['motto'];
+        $values['profession'] = $data['motto'];
+        $values['bodytype'] = $data['motto'];
+        $values['zodiac'] = $data['motto'];
+        $values['disability'] = $data['motto'];
+        $values['fluency'] = $data['motto'];
+        $values['haircolor'] = $data['motto'];
+        $values['hairapp'] = $data['motto'];
+        $values['eyecolor'] = $data['motto'];
+        $values['eyewear'] = $data['motto'];
+        $values['ethinicity'] = $data['motto'];
+        $values['tatoo'] = $data['motto'];
+        $values['appearance'] = $data['motto'];
+        $values['smoke'] = $data['motto'];
+        $values['drink'] = $data['motto'];
+        $values['pets'] = $data['motto'];
+        $values['countries_visit'] = $data['motto'];
+        $values['marital'] = $data['motto'];
+        $values['children'] = $data['motto'];
+        $values['relationlooking'] = $data['motto'];
+        $values['relmarital'] = $data['motto'];
+        $values['relethinicity'] = $data['motto'];
+        $values['reltatoo'] = $data['motto'];
+        $values['relappearance'] = $data['motto'];
+        $values['relsmoke'] = $data['motto'];
+        $values['reldrink'] = $data['motto'];
+        $values['relpets'] = $data['motto'];
+        Userprofile::where('user_id', $user)->update($values);
+        $userData = [];
+        $userData['birthday'] = $data['age_submit'];
+        User::where('id', $user)->update($userData);
+        echo json_encode(['response' => 1, 'msg' => 'Profile updated successfully']);
     }
 
     /*

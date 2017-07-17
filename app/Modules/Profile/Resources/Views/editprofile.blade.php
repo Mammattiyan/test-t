@@ -201,6 +201,7 @@ Itweetup :: Activities
                     </div>
                 </div>
             <div class="flex-item text-right">
+                <label id="result"></label>
                 <input type="button" name="editpic" class="button" value="Submit" onclick="updateProfile()">
             </div>
             </div>
@@ -224,8 +225,9 @@ Itweetup :: Activities
                 type: "POST",
                 dataType: "json",
                 data: $('#editProfile').serialize(),
-                success: function (html) {
-                    $("#results").append(html);
+                success: function (data) {
+                    $("#result").html(data.msg);
+                    setTimeout(function(){ $("#result").hide('slow'); }, 6000);
                 }
             });
         }
