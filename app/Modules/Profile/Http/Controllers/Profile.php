@@ -14,6 +14,28 @@ use Illuminate\Support\Facades\Auth;
 use App\Modules\Message\Models\Messages;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use App\Modules\Profile\Models\Relationhistory;
+use App\Modules\Profile\Models\Education;
+use App\Modules\Profile\Models\Profession;
+use App\Modules\Profile\Models\Bodytype;
+use App\Modules\Profile\Models\Zodiac;
+use App\Modules\Profile\Models\Disability;
+use App\Modules\Profile\Models\Languages;
+use App\Modules\Profile\Models\Currency;
+use App\Modules\Profile\Models\Color;
+use App\Modules\Profile\Models\Hairapp;
+use App\Modules\Profile\Models\Eyewear;
+use App\Modules\Profile\Models\Appearance;
+use App\Modules\Profile\Models\Pets;
+use App\Modules\Profile\Models\Marital;
+use App\Modules\Profile\Models\Countries;
+use App\Modules\Profile\Models\Smoketype;
+use App\Modules\Profile\Models\Drinktype;
+use App\Modules\Profile\Models\Relationfor;
+use App\Modules\Profile\Models\Motto;
+use App\Modules\Profile\Models\Uservid;
+use App\Modules\Profile\Models\Userpic;
+use App\Modules\Profile\Models\Userprofile;
 use App\Modules\Hangout\Models\Hangouts;
 use App\Modules\Message\Models\Dine;
 use App\Modules\Hangout\Models\Recent_activity;
@@ -34,7 +56,6 @@ class Profile extends Controller {
         $data['hangoutCount'] = count(Hangouts::select('sender_id')->where('hangouts.receiver_id', $userId)->groupBy('sender_id')->get());
         $data['dineCount'] = count(Dine::select('sender_id')->where('dines.receiver_id', $userId)->groupBy('sender_id')->get());
         $data['messageCount'] = count(Messages::select('sender')->where('messages.receiver', $userId)->groupBy('sender')->get());
-
         $recentData = Recent_activity::select('recent_activities.*', 'users.name AS user_name','users.profileimage AS user_profile_pic', DB::raw('(SELECT name FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_name'),DB::raw('(SELECT profileimage FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_profile_pic'))
                 ->join('users', 'users.id', 'recent_activities.user_id')
                 ->where('recent_activities.user_id', $userId)
@@ -43,7 +64,8 @@ class Profile extends Controller {
                 ->get()
                 ->toArray();
        
-        return view('profile::profile')->with(['data' => $data, 'recentData' => $recentData, 'userId' => $userId]);
+        return view('profile::profile')->with(['data' => $data, 'recentData' => $recentData, 'userId' => $userId, 'token' => Core::encodeIdAction($userId)]);
+
     }
 
     /*
@@ -58,7 +80,36 @@ class Profile extends Controller {
         $userId = Input::get('user_id');
         $user = User::find($userId)->toArray();
         $user['id'] = Core::encodeIdAction($userId);
-        return view('profile::user_profile')->with('user', $user);
+        return view('profile::user_profile')->with(['user' => $user, 'token' => Core::encodeIdAction($userId)]);
+    }
+
+    /*
+     * 
+     * function userProfileViewAction
+     * 
+     * return selected user profile view
+     * param null
+     */
+
+    public function userProfileViewByTokenAction($token) {
+        $userId = Core::decodeIdAction($token);
+        $user = User::find($userId)->toArray();
+        $user['id'] = $token;
+        return view('profile::user_profile')->with(['user' => $user, 'token' => $token]);
+    }
+
+    /*
+     * 
+     * function hangoutRequestViewAction
+     * 
+     * return selected user profile view
+     * param null
+     */
+
+    public function hangoutRequestViewAction($token) {
+        $userId = Core::decodeIdAction($token);
+        $user = User::find($userId)->toArray();
+        return view('profile::hangout_send_request')->with(['user' => $user, 'token' => $token]);
     }
 
     /*
@@ -70,6 +121,9 @@ class Profile extends Controller {
      */
 
     public function userMessageViewAction(Request $request, $token) {
+
+
+
         if (isset($token)) {
             $userId = Core::decodeIdAction($token);
             $user = User::find($userId)->toArray();
@@ -80,7 +134,7 @@ class Profile extends Controller {
                     ->orWhere(['receiver' => Auth::user()->id, 'sender' => $userId])
                     ->orderBy('messages.id', 'asc')
                     ->get();
-            return view('profile::user_messages')->with(['user' => $user, 'message' => $message, 'my' => Auth::user()->id]);
+            return view('profile::user_messages')->with(['user' => $user, 'token' => $token, 'message' => $message, 'my' => Auth::user()->id]);
         } else {
             return redirect('message');
         }
@@ -233,6 +287,90 @@ class Profile extends Controller {
         return response()->json($response);
     }
 
+    public function selectData($list, $label) {
+        $data = [];
+        if (count($list) > 0) {
+            foreach ($list as $val) {
+                $data[$val->id] = $val->$label;
+            }
+        }
+        return $data;
+    }
+
+    public function profileEditAction(Request $request) {
+        $user = Auth::user()->id;
+        $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
+        $data = [];
+        $data['mottos'] = $this->selectData(Motto::all(), 'motto');
+        $data['pets'] = $this->selectData(Pets::all(), 'name');
+        $data['relationhistory'] = $this->selectData(Relationhistory::all(), 'rel_hist');
+        $data['education'] = $this->selectData(Education::all(), 'education');
+        $data['profession'] = $this->selectData(Profession::all(), 'profession');
+        $data['bodytype'] = $this->selectData(Bodytype::all(), 'body_type');
+        $data['zodiac'] = $this->selectData(Zodiac::all(), 'zodiac');
+        $data['languages'] = $this->selectData(Languages::all(), 'languages');
+        $data['currency'] = $this->selectData(Currency::all(), 'name');
+        $data['color'] = $this->selectData(Color::all(), 'name');
+        $data['hairapp'] = $this->selectData(Hairapp::all(), 'type');
+        $data['eyewear'] = $this->selectData(Eyewear::all(), 'type');
+        $data['appearance'] = $this->selectData(Appearance::all(), 'type');
+        $data['marital'] = $this->selectData(Marital::all(), 'status');
+        $data['countries'] = $this->selectData(Countries::all(), 'name');
+        $data['smoketype'] = $this->selectData(Smoketype::all(), 'type');
+        $data['drinktype'] = $this->selectData(Drinktype::all(), 'type');
+        $data['relationfor'] = $this->selectData(Relationfor::all(), 'rel_for');
+        $data['uservid'] = Uservid::where('user_id', $user);
+        $data['userpic'] = Userpic::where('user_id', $user);
+        $data['user'] = User::where('id', $user)->first();
+        $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
+        return view('profile::editprofile')->with('data', $data);
+    }
+    
+    public function profileUpdateAction(Request $request) {
+        $user = Auth::user()->id;
+        $data = Input::all();
+        $values = [];
+        $values['motto'] = $data['motto'];
+        $values['about'] = $data['motto'];
+        $values['height'] = $data['motto'];
+        $values['htunit'] = $data['motto'];
+        $values['weight'] = $data['motto'];
+        $values['wtunit'] = $data['motto'];
+        $values['relationhist'] = $data['motto'];
+        $values['education'] = $data['motto'];
+        $values['profession'] = $data['motto'];
+        $values['bodytype'] = $data['motto'];
+        $values['zodiac'] = $data['motto'];
+        $values['disability'] = $data['motto'];
+        $values['fluency'] = $data['motto'];
+        $values['haircolor'] = $data['motto'];
+        $values['hairapp'] = $data['motto'];
+        $values['eyecolor'] = $data['motto'];
+        $values['eyewear'] = $data['motto'];
+        $values['ethinicity'] = $data['motto'];
+        $values['tatoo'] = $data['motto'];
+        $values['appearance'] = $data['motto'];
+        $values['smoke'] = $data['motto'];
+        $values['drink'] = $data['motto'];
+        $values['pets'] = $data['motto'];
+        $values['countries_visit'] = $data['motto'];
+        $values['marital'] = $data['motto'];
+        $values['children'] = $data['motto'];
+        $values['relationlooking'] = $data['motto'];
+        $values['relmarital'] = $data['motto'];
+        $values['relethinicity'] = $data['motto'];
+        $values['reltatoo'] = $data['motto'];
+        $values['relappearance'] = $data['motto'];
+        $values['relsmoke'] = $data['motto'];
+        $values['reldrink'] = $data['motto'];
+        $values['relpets'] = $data['motto'];
+        Userprofile::where('user_id', $user)->update($values);
+        $userData = [];
+        $userData['birthday'] = $data['age_submit'];
+        User::where('id', $user)->update($userData);
+        echo json_encode(['response' => 1, 'msg' => 'Profile updated successfully']);
+    }
+
     /*
      * 
      * function hangoutRequestDetailsAction
@@ -257,7 +395,7 @@ class Profile extends Controller {
             } else {
                 $user = User::find($message['sender_id'])->toArray();
             }
-            return view('profile::hangout_request')->with(['user' => $user, 'hangout' => $message, 'my' => Auth::user()->id]);
+            return view('profile::hangout_request')->with(['user' => $user, 'hangout' => $message, 'my' => Auth::user()->id, 'token' => $token]);
         } else {
             return redirect('hangout');
         }
@@ -287,7 +425,7 @@ class Profile extends Controller {
             } else {
                 $user = User::find($message['sender_id'])->toArray();
             }
-            return view('profile::dine_request')->with(['user' => $user, 'dine' => $message, 'my' => Auth::user()->id]);
+            return view('profile::dine_request')->with(['user' => $user, 'dine' => $message, 'my' => Auth::user()->id, 'token' => $token]);
         } else {
             return redirect('dine');
         }
@@ -308,7 +446,7 @@ class Profile extends Controller {
         if ($status == 'accept') {
             $status = 'accepted';
         } else {
-            $status = 'accepted';
+            $status = 'rejected';
         }
         if (!empty($hangId) && !empty($status)) {
 
@@ -328,7 +466,6 @@ class Profile extends Controller {
      */
 
     public function diningStatusAction() {
-
         $dineId = Input::get('dineId');
         $status = Input::get('status');
         if ($status == 'accept') {
@@ -337,7 +474,6 @@ class Profile extends Controller {
             $status = 'rejected';
         }
         if (!empty($dineId) && !empty($status)) {
-
             $data = Dine::where('id', $dineId)->update(['dine_status' => $status]);
             if (!empty($data)) {
                 return response()->json(['status' => '1']);
