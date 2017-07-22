@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use App\Modules\Hangout\Models\Hangouts;
 use App\Modules\Message\Models\Dine;
+use App\Modules\Hangout\Models\Recent_activity;
 
 class Profile extends Controller {
     /*
@@ -34,24 +35,15 @@ class Profile extends Controller {
         $data['dineCount'] = count(Dine::select('sender_id')->where('dines.receiver_id', $userId)->groupBy('sender_id')->get());
         $data['messageCount'] = count(Messages::select('sender')->where('messages.receiver', $userId)->groupBy('sender')->get());
 
-
+        $recentData = Recent_activity::select('recent_activities.*', 'users.name AS user_name','users.profileimage AS user_profile_pic', DB::raw('(SELECT name FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_name'),DB::raw('(SELECT profileimage FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_profile_pic'))
+                ->join('users', 'users.id', 'recent_activities.user_id')
+                ->where('recent_activities.user_id', $userId)
+                ->orWhere('recent_activities.receiver_id', $userId)
+                ->take(5)
+                ->get()
+                ->toArray();
        
-        $hangoutsData = HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage')
-                        ->join('users', function($sql) use($userId) {
-                            $sql->on('users.id', 'hangouts.receiver_id');
-                            $sql->where('hangouts.sender_id', $userId);
-                        })
-                        ->distinct('id')                        
-                        ->union(HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage')
-                                ->join('users', function($sql) use($userId) {
-                                    $sql->on('users.id', 'hangouts.sender_id');
-                                    $sql->where('hangouts.receiver_id', $userId);
-                                })
-                                ->distinct('id')
-                                ->orderBY('hangouts.id', 'desc'))->orderBY('id', 'desc')->get()->toArray(); 
-        
-
-        return view('profile::profile')->with(['data'=>$data]);;
+        return view('profile::profile')->with(['data' => $data, 'recentData' => $recentData, 'userId' => $userId]);
     }
 
     /*

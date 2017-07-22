@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use App\Modules\Hangout\Models\Hangouts as HangoutsModel;
 use Illuminate\Support\Facades\DB;
+use App\Modules\Hangout\Models\Recent_activity;
 
 class Hangouts extends Controller {
     /*
@@ -64,9 +65,11 @@ class Hangouts extends Controller {
             }
             return view('hangout::hangout')->with(['token' => $token, 'data' => $data, 'errors' => $validator->errors()->all()]);
         } else {
+
             try {
                 $query = HangoutsModel::create($data);
                 if (!empty($query)) {
+                    Recent_activity::create(['user_id' => $data['sender_id'], 'receiver_id' => $data['receiver_id'], 'module_name' => 'hangout', 'display_message' => 'You have sent a hangout request to']);
                     return view('hangout::hangout')->with(['token' => $token, 'status' => '1']);
                 }
             } catch (\PDOException $e) {
@@ -94,16 +97,17 @@ class Hangouts extends Controller {
                             $sql->on('users.id', 'hangouts.receiver_id');
                             $sql->where('hangouts.sender_id', $userId);
                         })
-                        ->distinct('id')                        
+                        ->distinct('id')
                         ->union(HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage')
                                 ->join('users', function($sql) use($userId) {
                                     $sql->on('users.id', 'hangouts.sender_id');
                                     $sql->where('hangouts.receiver_id', $userId);
                                 })
                                 ->distinct('id')
-                                ->orderBY('hangouts.id', 'desc'))->orderBY('id', 'desc')->get()->toArray();                                
+                                ->orderBY('hangouts.id', 'desc'))->orderBY('id', 'desc')->get()->toArray();
         return view('hangout::index')->with(['hangouts' => $hangouts]);
     }
+
     /*
      * function hangoutRequestDetailsAction
      * 
@@ -118,7 +122,7 @@ class Hangouts extends Controller {
                             $sql->on('users.id', 'hangouts.receiver_id');
                             $sql->where('hangouts.sender_id', $userId);
                         })
-                        ->distinct('id')                        
+                        ->distinct('id')
                         ->union(HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage')
                                 ->join('users', function($sql) use($userId) {
                                     $sql->on('users.id', 'hangouts.sender_id');
@@ -126,7 +130,7 @@ class Hangouts extends Controller {
                                 })
                                 ->distinct('id')
                                 ->orderBY('hangouts.id', 'desc'))->orderBY('id', 'desc')->get()->toArray();
-                                
+
         return view('hangout::index')->with(['hangouts' => $hangouts]);
     }
 

@@ -43,15 +43,30 @@
     </div>
     <div class="box pad">
         <div class="thick-text">Recent Activity</div>
+        @foreach($recentData as $key =>$value)
+        @if($value['user_id']==$userId)
         <div class="activity">
-            <img src="{{ asset('assets/user2.jpg')}}" class="user-icon">
+            <img src="{{ asset($value['receiver_profile_pic'])}}" class="user-icon">
             <div class="activity-text">
-                <div class="bold-text">Shay Laren</div>
-                <div class="activity-details">has sent a date request</div>
-                <div class="timestamp">11:32 PM</div>
+                <div class="bold-text">{{$value['receiver_name']}}</div>
+                <div class="activity-details">{{$value['display_message']}}</div>
+                <div class="timestamp">{{$value['created_at']}}</div>
             </div>
         </div>
-        <div class="activity">
+        
+        @else
+         <div class="activity">
+            <img src="{{ asset($value['receiver_profile_pic'])}}" class="user-icon">
+            <div class="activity-text">
+                <div class="bold-text">{{$value['receiver_name']}}</div>
+                <div class="activity-details">You receive {{$value['module_name']}} request</div>
+                <div class="timestamp">{{$value['created_at']}}</div>
+            </div>
+        </div>      
+        @endif
+        
+        @endforeach
+<!--        <div class="activity">
             <img src="{{ asset('assets/user3.jpg')}}" class="user-icon">
             <div class="activity-text">
                 <div class="bold-text">Shay Laren</div>
@@ -81,7 +96,7 @@
                 <div class="activity-details">You updated your profile data</div>
                 <div class="timestamp">02:45 PM</div>
             </div>
-        </div>
+        </div>-->
     </div>
 </div>
 @endsection

@@ -13,35 +13,33 @@ use Illuminate\Support\Facades\Validator;
 use App\Modules\Hangout\Models\Hangouts as HangoutsModel;
 use Illuminate\Support\Facades\DB;
 use App\Modules\Message\Models\Dine as DineModel;
+use App\Modules\Hangout\Models\Recent_activity;
 
 class Dine extends Controller {
-    
-    
-    
-      /*
+    /*
      * 
      * function indexAction
      * 
      * Dine html view
      * param null
      */
-    
+
     public function indexAction(Request $request, $token) {
-        
+
         return view('dine::index')->with(['token' => $token]);
     }
-    
-      /*
+
+    /*
      * 
      * function dineAction
      * 
      * dine sent Action
      * param null
      */
-    
+
     public function dineSentAction(Request $request, $token) {
-        
-         $data = array(
+
+        $data = array(
             'receiver_id' => Core::decodeIdAction($token),
             'sender_id' => Auth::user()->id,
             'event' => strip_tags(input::get('event')),
@@ -69,12 +67,15 @@ class Dine extends Controller {
             }
             return view('dine::index')->with(['token' => $token, 'data' => $data, 'errors' => $validator->errors()->all()]);
         } else {
-           
-                $query = DineModel::create($data);
-                if (!empty($query)) {
-                    return view('dine::index')->with(['token' => $token, 'status' => '1']);
-                }
-           try {  } catch (\PDOException $e) {
+
+            $query = DineModel::create($data);
+            if (!empty($query)) {
+                Recent_activity::create(['user_id' => $data['sender_id'], 'receiver_id' => $data['receiver_id'], 'module_name' => 'dine', 'display_message' => 'You have a dining  request to']);
+                return view('dine::index')->with(['token' => $token, 'status' => '1']);
+            }
+            try {
+                
+            } catch (\PDOException $e) {
 
                 $error[0] = "Not sent dine message!";
                 return view('dine::index')->with(['token' => $token, 'errors' => $error]);
@@ -84,24 +85,23 @@ class Dine extends Controller {
             }
         }
     }
-    
-    
-      /*
+
+    /*
      * 
      * function dineListAction
      * 
      * dine List Action
      * param null
      */
-    
+
     public function dineListAction() {
-         $userId = Auth::User()->id;
+        $userId = Auth::User()->id;
         $dines = DineModel::select("dines.*", "users.name", 'users.profileimage')
                         ->join('users', function($sql) use($userId) {
                             $sql->on('users.id', 'dines.receiver_id');
                             $sql->where('dines.sender_id', $userId);
                         })
-                        ->distinct('id')                        
+                        ->distinct('id')
                         ->union(DineModel::select("dines.*", "users.name", 'users.profileimage')
                                 ->join('users', function($sql) use($userId) {
                                     $sql->on('users.id', 'dines.sender_id');
@@ -109,9 +109,10 @@ class Dine extends Controller {
                                 })
                                 ->distinct('id')
                                 ->orderBY('dines.id', 'desc'))->orderBY('id', 'desc')->get()->toArray();
-                                
-                            
-                                
+
+
+
         return view('dine::dineList')->with(['dines' => $dines]);
     }
+
 }
