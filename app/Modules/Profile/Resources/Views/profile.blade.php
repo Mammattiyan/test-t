@@ -43,6 +43,7 @@
     </div>
     <div class="box pad">
         <div class="thick-text">Recent Activity</div>
+        @if(count($recentData) > 0)
         @foreach($recentData as $key =>$value)
         @if($value['user_id']==$userId)
         <div class="activity">
@@ -66,6 +67,17 @@
         @endif
         
         @endforeach
+        @else
+        <div class="activity">
+          
+            <div class="activity-text">
+                <div class="bold-text">No Recent Activity Found</div>
+               
+            </div>
+        </div> 
+        
+        @endif
+        
 <!--        <div class="activity">
             <img src="{{ asset('assets/user3.jpg')}}" class="user-icon">
             <div class="activity-text">

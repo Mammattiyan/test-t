@@ -59,7 +59,7 @@ class Dine extends Controller {
                     'time' => 'required',
                     'private' => 'required',
                     'accompany' => 'required',
-                    'family_member' => 'required|integer',
+                    'family_member' => 'required',
         ]);
         $user = User::find(Auth::user()->id)->toArray();
         if ($validator->fails()) {
