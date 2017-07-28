@@ -30,7 +30,7 @@
                     <img src="{{ URL::to(Auth::user()->profileimage)}}" class="menu-icon">
                     <div class="box pad menu hide">
                         <a href="{{ url('/activity') }}">Home</a>
-                        <a href="{{ url('/edit-profile') }}">Edit Profile</a>
+                        <a href="{{ url('/profile/edit') }}">Edit Profile</a>
                         <a href="{{ url('/logout') }}"  onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                             Logout
                         </a>

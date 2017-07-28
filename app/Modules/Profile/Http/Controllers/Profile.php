@@ -14,31 +14,12 @@ use Illuminate\Support\Facades\Auth;
 use App\Modules\Message\Models\Messages;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
-use App\Modules\Profile\Models\Relationhistory;
-use App\Modules\Profile\Models\Education;
-use App\Modules\Profile\Models\Profession;
-use App\Modules\Profile\Models\Bodytype;
-use App\Modules\Profile\Models\Zodiac;
-use App\Modules\Profile\Models\Disability;
-use App\Modules\Profile\Models\Languages;
-use App\Modules\Profile\Models\Currency;
-use App\Modules\Profile\Models\Color;
-use App\Modules\Profile\Models\Hairapp;
-use App\Modules\Profile\Models\Eyewear;
-use App\Modules\Profile\Models\Appearance;
-use App\Modules\Profile\Models\Pets;
-use App\Modules\Profile\Models\Marital;
-use App\Modules\Profile\Models\Countries;
-use App\Modules\Profile\Models\Smoketype;
-use App\Modules\Profile\Models\Drinktype;
-use App\Modules\Profile\Models\Relationfor;
-use App\Modules\Profile\Models\Motto;
-use App\Modules\Profile\Models\Uservid;
-use App\Modules\Profile\Models\Userpic;
 use App\Modules\Profile\Models\Userprofile;
 use App\Modules\Hangout\Models\Hangouts;
 use App\Modules\Message\Models\Dine;
 use App\Modules\Hangout\Models\Recent_activity;
+
+use App\Modules\Profile\Models\Gender_preference;
 
 class Profile extends Controller {
     /*
@@ -297,8 +278,12 @@ class Profile extends Controller {
         return $data;
     }
 
-    public function profileEditAction(Request $request) {
+    /*public function profileEditAction(Request $request) {
         $user = Auth::user()->id;
+        if(Userprofile::where('user_id', $user)->count()==0){
+            Userprofile::create(['user_id' => $user]);
+        }
+        
         $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
         $data = [];
         $data['mottos'] = $this->selectData(Motto::all(), 'motto');
@@ -323,6 +308,20 @@ class Profile extends Controller {
         $data['userpic'] = Userpic::where('user_id', $user);
         $data['user'] = User::where('id', $user)->first();
         $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
+        return view('profile::editprofile')->with('data', $data);
+    }*/
+    
+    public function profileEditAction(Request $request) {
+        $user = Auth::user()->id;
+//        if(Userprofile::where('user_id', $user)->count()==0){
+//            Userprofile::create(['user_id' => $user]);
+//        }
+        
+        $data = [];
+//        $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
+        $data['mottos'] = Gender_preference::all();
+        $data['gender_preference'] = Gender_preference::all();
+        dd($data['gender_preference']);
         return view('profile::editprofile')->with('data', $data);
     }
     
