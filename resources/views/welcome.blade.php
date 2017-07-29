@@ -10,6 +10,11 @@
         <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
         <script src="{{ asset('js/jquery.popupoverlay.js')}}"></script>
         <script src="{{ asset('js/dobPicker.min.js')}}"></script>
+        
+        <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkC8RKIPZZeg9rH8MWYteBqks0l6DNj5c"></script>-->
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false&key=AIzaSyAkC8RKIPZZeg9rH8MWYteBqks0l6DNj5c"></script>
+        <script src="{{ asset('js/jquery.geocomplete.js')}}"></script>
+        <script src="{{ asset('js/logger.js')}}"></script>
     </head>
     <body class="flex-box fd-col login-body">
         <div class="flex-item flex-box">
@@ -52,6 +57,9 @@
                         </form>
                         <div class="thick-text">New to <span style="color:#F00;">i</span>tweetup?</div>
                         <form id="registration-form" onSubmit="return checkForm(this, event);" action="{{ url('/register') }}" method="post" class="form-signin" role="form">
+                            <input type="hidden" name="dob" id="dob">
+                            <input type="hidden" name="gender" id="gender">
+                            <input type="hidden" name="place" id="place">
                             <input type="text" name="username" id="username" value="{{ Request::old('username') }}" type="text" autofocus required placeholder="User Name">
                             @if ($errors->has('username'))
                             <span class="help-block">
@@ -95,6 +103,13 @@
                                     <select id="dobday" class="form-control"></select>
                                     <select id="dobmonth"  class="form-control"></select>
                                     <select id="dobyear"  class="form-control"></select>
+                                </div>
+                                <div class="row" style="margin-top: 10px;">							
+                                    <input type="radio" name="gender" value="M"> Male
+                                    <input type="radio" name="gender" value="F"> Female
+                                </div>
+                                <div class="row">							
+                                    <input id="geocomplete" name="place" type="text" placeholder="Type in an address" size="90" />
                                 </div>
 
                                 <div class="row">
@@ -164,7 +179,7 @@
         </div>
         <script>
             $(document).ready(function () {
-                $('#basic').popup();
+                $('#basic').popup({blur:false});
                 $.dobPicker({
                     daySelector: '#dobday', /* Required */
                     monthSelector: '#dobmonth', /* Required */
@@ -190,7 +205,12 @@
                         $('.error').text("Please select your date of birth");
                     } else {
                         if (2017 - parseInt($("#dobyear").val()) > 17) {
-
+                            
+                            var dob = $("#dobyear").val()+'-'+$("#dobmonth").val()+'-'+$("#dobday").val();
+                            $('#dob').val(dob);
+                            $('#gender').val($('input[name=gender]:checked').val());
+                            $('#place').val($('#geocomplete').val());
+                            
                             $('#form-submit').trigger('click');
                         } else {
                             if (isNaN(parseInt($("#dobyear").val()))) {
@@ -202,6 +222,27 @@
                             }
                         }
                     }
+                });
+            });
+
+            $(function () {
+                $("#geocomplete").geocomplete()
+                    .bind("geocode:result", function (event, result) {
+                        $.log("Result: " + result.formatted_address);
+                    })
+                    .bind("geocode:error", function (event, status) {
+                        $.log("ERROR: " + status);
+                    })
+                    .bind("geocode:multiple", function (event, results) {
+                        $.log("Multiple: " + results.length + " results found");
+                    });
+                $("#find").click(function () {
+                    $("#geocomplete").trigger("geocode");
+                });
+
+                $("#examples a").click(function () {
+                    $("#geocomplete").val($(this).text()).trigger("geocode");
+                    return false;
                 });
             });
         </script>
