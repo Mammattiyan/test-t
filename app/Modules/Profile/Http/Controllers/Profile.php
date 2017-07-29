@@ -216,7 +216,7 @@ class Profile extends Controller {
 
         $jpegQuality = 100;
         $fileName = $destinationPath . rand();
-        $outputFilename = public_path($fileName);
+        $outputFilename = $fileName;
         $what = getimagesize($imgUrl);
 
         switch (strtolower($what['mime'])) {

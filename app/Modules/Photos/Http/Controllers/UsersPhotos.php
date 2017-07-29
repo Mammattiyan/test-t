@@ -23,25 +23,23 @@ class UsersPhotos extends Controller {
 
     public function indexAction() {
         $userId = Auth::user()->id;
-         $data = Module_documents::select('id', 'path')->where('parent_id',$userId)->where('module_name','user_images')->get()->toArray();
+        $data = Module_documents::select('id', 'path')->where('parent_id', $userId)->where('module_name', 'user_images')->get()->toArray();
         $appendedFiles = [];
         foreach ($data as $file) {
-            if (file_exists(public_path() . '/' . $file['path'])) {
+            if (file_exists(config('app.public_path') . '/' . $file['path'])) {
                 $appendedFiles[] = array(
                     "name" => $file['path'],
-                    "type" => FileUploader::mime_content_type(public_path() . '/' . $file['path']),
-                    "size" => filesize(public_path() . '/' . $file['path']),
+                    "type" => FileUploader::mime_content_type(config('app.public_path') . '/' . $file['path']),
+                    "size" => filesize(config('app.public_path') . '/' . $file['path']),
                     "file" => asset('') . $file['path'],
                     "data" => array(
                         "url" => asset('') . $file['path'],
                         "id" => $file['id']
-
                     )
                 );
             }
         }
         return view('photos::uploadPhotos')->with('images', $appendedFiles);
-        
     }
 
     /*
@@ -57,10 +55,8 @@ class UsersPhotos extends Controller {
      */
 
     public function imageUploadAction() {
-
-        // initialize FileUploader
         $FileUploader = new FileUploader('files', array(
-            'uploadDir' => public_path() . "/uploads/users_gallery/",
+            'uploadDir' => config('app.public_path'). "/uploads/users_gallery/",
             'title' => 'auto',
         ));
         // call to upload the files
@@ -71,8 +67,8 @@ class UsersPhotos extends Controller {
         echo $res->id;
         exit;
     }
-    
-     /*
+
+    /*
      * @function imageRemove
      * 
      * remove photo from the plugin
