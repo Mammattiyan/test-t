@@ -45,7 +45,7 @@ echo json_encode([
 
                     <div class="box pad menu hide">
                         <a href="home.html">Home</a>
-                        <a href="{{ url('/edit-profile') }}">Edit Profile</a>
+                        <a href="{{ url('/profile/edit') }}">Edit Profile</a>
                         <a href="{{ url('/logout') }}"  onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                             Logout
                         </a>
