@@ -2,16 +2,18 @@
 .fileuploader-theme-thumbnails .fileuploader-thumbnails-input,
 .fileuploader-theme-thumbnails .fileuploader-items-list li.fileuploader-item {
 	display: inline-block;
-	width: 25%;
-	height: 115px;
-    line-height: 95px;
-	padding: 10px;
+	width: 50%;
+	height: 250px;
+        line-height: 95px;
+	margin: 10px 0px 10px 0px;
 	vertical-align: top;
+        padding: 20px 15px;
 }
 /* input-inner */
 .fileuploader-theme-thumbnails .fileuploader-thumbnails-input-inner {
 	width: 100%;
 	height: 100%;
+        padding-top: 60px;
     border: 2px dashed #c2cdda;
     border-radius: 4px;
     text-align: center;
@@ -36,7 +38,7 @@
 }
 /* thumbnails */
 .fileuploader-theme-thumbnails .fileuploader-items-list {
-	margin: -5px -10px;
+	/*margin: -5px -10px;*/
 }
 .fileuploader-theme-thumbnails li.fileuploader-item {
 	-webkit-animation: fileuploaderScaleIn 0.2s ease;
@@ -138,4 +140,8 @@
     height: 6px;
 	margin: 0 auto;
 	background: #dde4f6;
+}
+
+.photoText{
+    margin: 10px 0px 0px 0px;
 }

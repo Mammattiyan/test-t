@@ -21,6 +21,7 @@
         <link href="{{ asset('croppic/assets/css/croppic.css')}}" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{{ asset('select2/css/select2.css') }}">
         <!-- Scripts -->
+        @yield('css')
         <script>
             window.Laravel = <?php echo json_encode(['csrfToken' => csrf_token(),]); ?>
         </script>
@@ -66,23 +67,24 @@
         <script src="{{ asset('js/picker.time.js') }}"></script>
 
         <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
+
         <script src=" https://code.jquery.com/jquery-2.1.3.min.js"></script> 
         <script src="https://code.jquery.com/jquery-3.1.1.min.js" ></script>
         <script src="https://code.jquery.com/jquery-migrate-3.0.0.js" ></script>
         <script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/parsley.js') }}"></script>
 
-        <script type="text/javascript" src="{{ asset('js/jquery.fileuploader.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
-
+        <script src="{{ asset('plugins/imageUpload/js/jquery.fileuploader.js')}}"></script>
         <script src="{{ asset('croppic/assets/js/bootstrap.min.js') }}"></script>
         <script src="{{ asset('croppic/assets/js/jquery.mousewheel.min.js') }}"></script>
         <script src="{{ asset('croppic/croppic.min.js') }}"></script>
         <script src="{{ asset('croppic/assets/js/main.js') }}"></script>
+
+
+
         <script>
-
-
-
+                            var base_url = "{{ asset('')}}";
+                            var csrf_token = '{{ csrf_token() }}';
                             var croppicContainerModalOptions = {
                                 uploadUrl: '{{ URL::to("profile/profileImageUpload") }}',
                                 uploadData: {
@@ -125,7 +127,6 @@
 
 
         </script>
-
         @yield('js')
     </body>
 </html>

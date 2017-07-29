@@ -13,4 +13,6 @@
 
 Route::group(['prefix' => 'videos'], function () {
     Route::get('/','Videos@indexAction');
+    Route::post('/videoUpload','Videos@videoUploadAction');
+    Route::post('/videoRemove','Videos@videoRemoveAction');
 });
