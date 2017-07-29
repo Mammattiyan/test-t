@@ -4,31 +4,11 @@ Itweetup :: Activities
 @endsection
 @section('content')
 <!-- styles -->
-<link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.fileuploader.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.fileuploader-theme-thumbnails.css') }}">
+<link href="{{ asset('plugins/imageUpload/css/jquery.fileuploader-theme-dragdrop.css') }}" rel="stylesheet">
+<link href="{{ asset('plugins/imageUpload/css/jquery.fileuploader-theme-thumbnails.css') }}" rel="stylesheet">
+<link href="{{ asset('plugins/imageUpload/css/jquery.fileuploader.css') }}" rel="stylesheet">
 
-
-
-
-<!-- js -->
-
-<style>
-
-    .photos {
-        font-family: 'Roboto', sans-serif;
-        font-size: 14px;
-        line-height: normal;
-        color: #47525d;
-        background-color: #fff;
-
-        margin: 0;
-        padding: 20px;
-
-        width: 560px;
-    }
-</style>            
-
-
+     
 <div class="flex-item updates-block">
     <div class="box">
         @include('search::search_form')
@@ -40,19 +20,22 @@ Itweetup :: Activities
                 <div class="perc-bar"></div>
             </div>
         </div>
-        <div class="activity photos">
-            <form action="php/form_upload.php" method="post" enctype="multipart/form-data">
-                <input type="file" name="files">
-                <input type="submit">
-            </form>
-        </div>
-
+         <div class="card-block">                      
+                        {{ Form::open(array('url' => '', 'id' => 'photosForm','class'=>'m-t-40', 'enctype'=>"multipart/form-data")) }}
+                        <div class="row">
+                            <div class="col-md-8">
+                                <input type="file" name="files" data-fileuploader-files='<?php echo json_encode($images)?>'>
+                                
+                            </div>
+                        </div>
+                        {{ Form::close()}}
+                    </div>
     </div>
-
 </div>
 @endsection
+@section('js')
+ <script src="{{ asset('plugins/imageUpload/js/customthumb.js')}}"></script> 
 
-
-
+@endsection
 
 

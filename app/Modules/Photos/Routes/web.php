@@ -13,4 +13,6 @@
 
 Route::group(['prefix' => 'photos'], function () {
     Route::get('/','UsersPhotos@indexAction');
+    Route::post('/imageUpload','UsersPhotos@imageUploadAction');
+    Route::post('/imageRemove','UsersPhotos@imageRemoveAction');
 });

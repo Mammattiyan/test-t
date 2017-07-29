@@ -25,11 +25,11 @@
     width: 100%;
     padding: 15px;
     margin: 15px 0;
-    background: #f5f6fA;
+    /*background: #f5f6fA;*/
     border-radius: 4px;
     line-height: normal;
     text-align: left;
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* 
@@ -170,6 +170,8 @@
     -webkit-animation: fileuploaderSlideIn 0.4s ease;
     animation: fileuploaderSlideIn 0.4s ease;
 }
+
+
 .fileuploader-item:last-child {
     border-bottom: 0;
     margin-bottom: -15px;
