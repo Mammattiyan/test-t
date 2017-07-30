@@ -18,8 +18,6 @@ use App\Modules\Profile\Models\Userprofile;
 use App\Modules\Hangout\Models\Hangouts;
 use App\Modules\Message\Models\Dine;
 use App\Modules\Hangout\Models\Recent_activity;
-<<<<<<< HEAD
-
 use App\Modules\Profile\Models\Mottos;
 use App\Modules\Profile\Models\Gender_preference;
 use App\Modules\Profile\Models\Marital_status;
@@ -37,11 +35,7 @@ use App\Modules\Profile\Models\Smoke;
 use App\Modules\Profile\Models\Traits;
 use App\Modules\Profile\Models\User_profile;
 use App\Modules\Profile\Models\Zodiac_signs;
-
-=======
-use App\Modules\Profile\Models\Gender_preference;
 use App\Modules\Profile\Models\Module_documents;
->>>>>>> e19f1777266d5f3e3b639937e86efd4490c10cf2
 
 class Profile extends Controller {
     /*
@@ -338,17 +332,11 @@ class Profile extends Controller {
 
     public function profileEditAction(Request $request) {
         $user = Auth::user()->id;
-<<<<<<< HEAD
         if(User_profile::where('user_id', $user)->count()==0){
             User_profile::create(['user_id' => $user]);
         }
         
-=======
-//        if(Userprofile::where('user_id', $user)->count()==0){
-//            Userprofile::create(['user_id' => $user]);
-//        }
 
->>>>>>> e19f1777266d5f3e3b639937e86efd4490c10cf2
         $data = [];
         $data['userprofiles'] = User_profile::where('user_id', $user)->first();
         $data['mottos'] = Mottos::all();
