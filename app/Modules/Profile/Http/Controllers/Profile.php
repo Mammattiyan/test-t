@@ -18,8 +18,8 @@ use App\Modules\Profile\Models\Userprofile;
 use App\Modules\Hangout\Models\Hangouts;
 use App\Modules\Message\Models\Dine;
 use App\Modules\Hangout\Models\Recent_activity;
-
 use App\Modules\Profile\Models\Gender_preference;
+use App\Modules\Profile\Models\Module_documents;
 
 class Profile extends Controller {
     /*
@@ -37,16 +37,15 @@ class Profile extends Controller {
         $data['hangoutCount'] = count(Hangouts::select('sender_id')->where('hangouts.receiver_id', $userId)->groupBy('sender_id')->get());
         $data['dineCount'] = count(Dine::select('sender_id')->where('dines.receiver_id', $userId)->groupBy('sender_id')->get());
         $data['messageCount'] = count(Messages::select('sender')->where('messages.receiver', $userId)->groupBy('sender')->get());
-        $recentData = Recent_activity::select('recent_activities.*', 'users.name AS user_name','users.profileimage AS user_profile_pic', DB::raw('(SELECT name FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_name'),DB::raw('(SELECT profileimage FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_profile_pic'))
+        $recentData = Recent_activity::select('recent_activities.*', 'users.name AS user_name', 'users.profileimage AS user_profile_pic', DB::raw('(SELECT name FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_name'), DB::raw('(SELECT profileimage FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_profile_pic'))
                 ->join('users', 'users.id', 'recent_activities.user_id')
                 ->where('recent_activities.user_id', $userId)
                 ->orWhere('recent_activities.receiver_id', $userId)
                 ->take(5)
                 ->get()
                 ->toArray();
-       
-        return view('profile::profile')->with(['data' => $data, 'recentData' => $recentData, 'userId' => $userId, 'token' => Core::encodeIdAction($userId)]);
 
+        return view('profile::profile')->with(['data' => $data, 'recentData' => $recentData, 'userId' => $userId, 'token' => Core::encodeIdAction($userId)]);
     }
 
     /*
@@ -58,10 +57,14 @@ class Profile extends Controller {
      */
 
     public function userProfileViewAction() {
+
         $userId = Input::get('user_id');
         $user = User::find($userId)->toArray();
         $user['id'] = Core::encodeIdAction($userId);
-        return view('profile::user_profile')->with(['user' => $user, 'token' => Core::encodeIdAction($userId)]);
+        $gallery = [];
+        $gallery['images'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_images')->get()->toArray();
+        $gallery['videos'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_videos')->get()->toArray();
+        return view('profile::user_profile')->with(['user' => $user, 'token' => Core::encodeIdAction($userId), 'gallery' => $gallery]);
     }
 
     /*
@@ -278,45 +281,45 @@ class Profile extends Controller {
         return $data;
     }
 
-    /*public function profileEditAction(Request $request) {
-        $user = Auth::user()->id;
-        if(Userprofile::where('user_id', $user)->count()==0){
-            Userprofile::create(['user_id' => $user]);
-        }
-        
-        $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
-        $data = [];
-        $data['mottos'] = $this->selectData(Motto::all(), 'motto');
-        $data['pets'] = $this->selectData(Pets::all(), 'name');
-        $data['relationhistory'] = $this->selectData(Relationhistory::all(), 'rel_hist');
-        $data['education'] = $this->selectData(Education::all(), 'education');
-        $data['profession'] = $this->selectData(Profession::all(), 'profession');
-        $data['bodytype'] = $this->selectData(Bodytype::all(), 'body_type');
-        $data['zodiac'] = $this->selectData(Zodiac::all(), 'zodiac');
-        $data['languages'] = $this->selectData(Languages::all(), 'languages');
-        $data['currency'] = $this->selectData(Currency::all(), 'name');
-        $data['color'] = $this->selectData(Color::all(), 'name');
-        $data['hairapp'] = $this->selectData(Hairapp::all(), 'type');
-        $data['eyewear'] = $this->selectData(Eyewear::all(), 'type');
-        $data['appearance'] = $this->selectData(Appearance::all(), 'type');
-        $data['marital'] = $this->selectData(Marital::all(), 'status');
-        $data['countries'] = $this->selectData(Countries::all(), 'name');
-        $data['smoketype'] = $this->selectData(Smoketype::all(), 'type');
-        $data['drinktype'] = $this->selectData(Drinktype::all(), 'type');
-        $data['relationfor'] = $this->selectData(Relationfor::all(), 'rel_for');
-        $data['uservid'] = Uservid::where('user_id', $user);
-        $data['userpic'] = Userpic::where('user_id', $user);
-        $data['user'] = User::where('id', $user)->first();
-        $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
-        return view('profile::editprofile')->with('data', $data);
-    }*/
-    
+    /* public function profileEditAction(Request $request) {
+      $user = Auth::user()->id;
+      if(Userprofile::where('user_id', $user)->count()==0){
+      Userprofile::create(['user_id' => $user]);
+      }
+
+      $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
+      $data = [];
+      $data['mottos'] = $this->selectData(Motto::all(), 'motto');
+      $data['pets'] = $this->selectData(Pets::all(), 'name');
+      $data['relationhistory'] = $this->selectData(Relationhistory::all(), 'rel_hist');
+      $data['education'] = $this->selectData(Education::all(), 'education');
+      $data['profession'] = $this->selectData(Profession::all(), 'profession');
+      $data['bodytype'] = $this->selectData(Bodytype::all(), 'body_type');
+      $data['zodiac'] = $this->selectData(Zodiac::all(), 'zodiac');
+      $data['languages'] = $this->selectData(Languages::all(), 'languages');
+      $data['currency'] = $this->selectData(Currency::all(), 'name');
+      $data['color'] = $this->selectData(Color::all(), 'name');
+      $data['hairapp'] = $this->selectData(Hairapp::all(), 'type');
+      $data['eyewear'] = $this->selectData(Eyewear::all(), 'type');
+      $data['appearance'] = $this->selectData(Appearance::all(), 'type');
+      $data['marital'] = $this->selectData(Marital::all(), 'status');
+      $data['countries'] = $this->selectData(Countries::all(), 'name');
+      $data['smoketype'] = $this->selectData(Smoketype::all(), 'type');
+      $data['drinktype'] = $this->selectData(Drinktype::all(), 'type');
+      $data['relationfor'] = $this->selectData(Relationfor::all(), 'rel_for');
+      $data['uservid'] = Uservid::where('user_id', $user);
+      $data['userpic'] = Userpic::where('user_id', $user);
+      $data['user'] = User::where('id', $user)->first();
+      $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
+      return view('profile::editprofile')->with('data', $data);
+      } */
+
     public function profileEditAction(Request $request) {
         $user = Auth::user()->id;
 //        if(Userprofile::where('user_id', $user)->count()==0){
 //            Userprofile::create(['user_id' => $user]);
 //        }
-        
+
         $data = [];
 //        $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
         $data['mottos'] = Gender_preference::all();
@@ -324,7 +327,7 @@ class Profile extends Controller {
         dd($data['gender_preference']);
         return view('profile::editprofile')->with('data', $data);
     }
-    
+
     public function profileUpdateAction(Request $request) {
         $user = Auth::user()->id;
         $data = Input::all();
