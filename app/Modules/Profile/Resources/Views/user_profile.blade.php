@@ -1,3 +1,4 @@
+
 @extends('profile::app')
 @section('title')
 Itweetup :: Activities
@@ -20,40 +21,60 @@ Itweetup :: Activities
             </div>
             <div class="box pad photo-gallery">
                 <div class="thick-text">Photos</div>
-                <img src="{{ asset('assets/gallery11.jpg')}}" class="featured-photo" data-pv="1">
-                <img src="{{ asset('assets/gallery1.jpg')}}" data-pv="2">
-                <img src="{{ asset('assets/gallery4.jpg')}}" data-pv="3">
-                <img src="{{ asset('assets/gallery6.jpg')}}" data-pv="4">
-                <img src="{{ asset('assets/gallery3.jpg')}}" data-pv="5">
-                <img src="{{ asset('assets/gallery5.jpg')}}" data-pv="6">
-                <img src="{{ asset('assets/gallery7.jpg')}}" data-pv="7">
-                <img src="{{ asset('assets/gallery2.jpg')}}" data-pv="8">
-                <img src="{{ asset('assets/gallery8.jpg')}}" data-pv="9">
-                <img src="{{ asset('assets/gallery9.jpg')}}" data-pv="10">
-                <img src="{{ asset('assets/gallery10.jpg')}}" data-pv="11">
+                @if(count($gallery['images'])>0)
+                @foreach($gallery['images'] as $key => $value)
+                @if($key == 0)
+                <img src="{{ asset($value['path'])}}" class="featured-photo" data-pv="1">
+                @else
+                <img src="{{ asset($value['path'])}}" data-pv="2">
+                @endif
+                @endforeach
+                @else
+                 <div class="vg-item-wrap">
+                    <div class="vg-item">
+                       Not Upload images
+                    </div>
+                </div>
+                @endif
             </div>
             <div class="box pad video-gallery">
                 <div class="thick-text">Videos</div>
+
+                @if(count($gallery['videos'])>0)
+                @foreach($gallery['videos'] as $key => $value)
+                @if($key == 0)
                 <div class="vg-item-wrap featured-vg-item">
                     <div class="vg-item">
-                        <iframe width="560" height="315" src="http://www.youtube.com/embed/BG-9SXdDWmE?showinfo=0&rel=0" frameborder="0" allowfullscreen="1" class="video"></iframe>
+                        <!--<iframe width="560" height="315" src="{{asset($value['path'])}}" frameborder="0" allowfullscreen="1" class="video"></iframe>-->
+
+                        <video width="560" height="315" controls>
+                            <source src="{{asset($value['path'])}}" type="video/mp4">
+                            <source src="{{asset($value['path'])}}" type="video/ogg">
+                            
+                        </video>
                     </div>
                 </div>
+                @else
                 <div class="vg-item-wrap">
                     <div class="vg-item">
-                        <iframe width="560" height="315" src="http://www.youtube.com/embed/1UvPZ8fD4B8?showinfo=0&rel=0" frameborder="0" allowfullscreen="1" class="video"></iframe>
+                        <!--<iframe width="560" height="315" src="{{asset($value['path'])}}" frameborder="0" allowfullscreen="1" class="video"></iframe>-->
+                   
+                     <video width="560" height="315" controls>
+                            <source src="{{asset($value['path'])}}" type="video/mp4">
+                            <source src="{{asset($value['path'])}}" type="video/ogg">
+                            
+                        </video>
                     </div>
                 </div>
-                <div class="vg-item-wrap">
+                @endif
+                @endforeach
+                @else
+                 <div class="vg-item-wrap">
                     <div class="vg-item">
-                        <iframe width="560" height="315" src="http://www.youtube.com/embed/MlUt54ESu78?showinfo=0&rel=0" frameborder="0" allowfullscreen="1" class="video"></iframe>
+                       Not Upload videos
                     </div>
                 </div>
-                <div class="vg-item-wrap">
-                    <div class="vg-item">
-                        <iframe width="560" height="315" src="http://www.youtube.com/embed/PPU2L38LcJw?showinfo=0&rel=0" frameborder="0" allowfullscreen="1" class="video"></iframe>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
         @include('profile::right_side')
