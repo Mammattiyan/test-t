@@ -335,8 +335,6 @@ class Profile extends Controller {
         if(User_profile::where('user_id', $user)->count()==0){
             User_profile::create(['user_id' => $user]);
         }
-        
-
         $data = [];
         $data['userprofiles'] = User_profile::where('user_id', $user)->first();
         $data['mottos'] = Mottos::all();
