@@ -172,7 +172,7 @@ class Profile extends Controller {
             $extension = Input::file('img')->getClientOriginalExtension(); // getting image extension
             $fileName = md5(\Carbon\Carbon::now() . rand(11111, 99999)) . '.' . $extension; // renameing image
             Input::file('img')->move($destinationPath, $fileName);
-            list($width, $height) = getimagesize(public_path($destinationPath . '/' . $fileName));
+            list($width, $height) = getimagesize($destinationPath . '/' . $fileName);
             $response = array(
                 "status" => 'success',
                 "url" => URL::to($destinationPath . '/' . $fileName),
@@ -219,7 +219,7 @@ class Profile extends Controller {
 
         $jpegQuality = 100;
         $fileName = $destinationPath . rand();
-        $outputFilename = public_path($fileName);
+        $outputFilename = $fileName;
         $what = getimagesize($imgUrl);
 
         switch (strtolower($what['mime'])) {

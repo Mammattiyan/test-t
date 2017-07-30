@@ -743,3 +743,7 @@
         transform: rotate(360deg);
     }
 }
+.fileuploader-item:first-child {
+    width: 100% !important;
+    height: 500px !important;
+}

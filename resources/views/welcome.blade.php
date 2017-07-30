@@ -27,7 +27,7 @@
                 <div class="flex-item login-form-wrap">
                     <div class="box pad">
                         <form id="login-form" action="{{ url('/login') }}" method="post" class="form-signin" role="form">
-
+                           <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <input type="text" name="login" id="login" value="{{ Request::old('login') }}" autofocus required placeholder="Phone, email or username">
 
                             @if ($errors->has('login'))
@@ -52,7 +52,7 @@
                                     <input type="submit" name="btn_login" class="button" value="Login">
                                 </div>
                             </div>
-                            {{ csrf_field() }}
+                           
 
                         </form>
                         <div class="thick-text">New to <span style="color:#F00;">i</span>tweetup?</div>
