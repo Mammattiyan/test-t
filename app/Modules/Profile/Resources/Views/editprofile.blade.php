@@ -31,10 +31,28 @@ Itweetup :: Activities
                         <div><input type="text" name="motto" value="{{$data['motto_name']->name or ''}}" required></div> 
                     </div>
                     <div class="formRow">
+                        @if(count($data['gender_preference'])>0)
                         <label>Your Gender & Preference</label>
-                        <div class="radioRow"><input type="radio" name="gender_preference_id" value=""><label>Your Gender & Preference</label></div> 
-                        <div class="radioRow"><input type="radio" name="gender_preference_id" value=""><label>Your Gender & Preference</label></div> 
-                        <div class="radioRow"><input type="radio" name="gender_preference_id" value=""><label>Your Gender & Preference</label></div> 
+                        @foreach($data['gender_preference'] as $val)
+                        <div class="radioRow"><input type="radio" name="gender_preference_id" value="{{$val->id}}"><label>{{$val->gender_preference_name}}</label></div> 
+                        @endforeach
+                        @endif
+                    </div>
+                    <div class="formRow">
+                        @if(count($data['marital_status'])>0)
+                        <label>What is your marital status?</label>
+                        @foreach($data['marital_status'] as $val)
+                        <div class="radioRow"><input type="radio" name="marital_status_id" value="{{$val->id}}"><label>{{$val->marital_status}}</label></div> 
+                        @endforeach
+                        @endif
+                    </div>
+                    <div class="formRow">
+                        <label>Height</label>
+                        <div class="radioRow">{!! Form::select('height', $data['height'], [], ['class' => 'dropdown', 'required']) !!}</div> 
+                    </div>
+                    <div class="formRow">
+                        <label>If you are NRI choose your ethnic origin</label>
+                        <div class="radioRow">{!! Form::select('height', $data['height'], [2=>2], ['class' => 'dropdown', 'required']) !!}</div> 
                     </div>
                 </div>
             </div>
@@ -63,9 +81,9 @@ Itweetup :: Activities
 
 @section('js')
 <script>
-//    $('select').select2({
-//        minimumResultsForSearch: -1
-//    });
+    $('select').select2({
+        minimumResultsForSearch: -1
+    });
 
     function updateProfile() {
         $('#editProfile').parsley().validate();

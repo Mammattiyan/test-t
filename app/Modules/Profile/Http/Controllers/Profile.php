@@ -19,7 +19,24 @@ use App\Modules\Hangout\Models\Hangouts;
 use App\Modules\Message\Models\Dine;
 use App\Modules\Hangout\Models\Recent_activity;
 
+use App\Modules\Profile\Models\Mottos;
 use App\Modules\Profile\Models\Gender_preference;
+use App\Modules\Profile\Models\Marital_status;
+use App\Modules\Profile\Models\Ethnic_origin;
+use App\Modules\Profile\Models\Job_category;
+use App\Modules\Profile\Models\Jobs;
+use App\Modules\Profile\Models\Partner_grew_up_country;
+use App\Modules\Profile\Models\Partner_job_category;
+use App\Modules\Profile\Models\Partner_living_country;
+use App\Modules\Profile\Models\Partner_living_state;
+use App\Modules\Profile\Models\Partner_qualification;
+use App\Modules\Profile\Models\Pet_lover;
+use App\Modules\Profile\Models\Qualification;
+use App\Modules\Profile\Models\Smoke;
+use App\Modules\Profile\Models\Traits;
+use App\Modules\Profile\Models\User_profile;
+use App\Modules\Profile\Models\Zodiac_signs;
+
 
 class Profile extends Controller {
     /*
@@ -313,15 +330,22 @@ class Profile extends Controller {
     
     public function profileEditAction(Request $request) {
         $user = Auth::user()->id;
-//        if(Userprofile::where('user_id', $user)->count()==0){
-//            Userprofile::create(['user_id' => $user]);
-//        }
+        if(User_profile::where('user_id', $user)->count()==0){
+            User_profile::create(['user_id' => $user]);
+        }
         
         $data = [];
-//        $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
-        $data['mottos'] = Gender_preference::all();
+        $data['userprofiles'] = User_profile::where('user_id', $user)->first();
+        $data['mottos'] = Mottos::all();
         $data['gender_preference'] = Gender_preference::all();
-        dd($data['gender_preference']);
+        $data['marital_status'] = Marital_status::all();
+        $height = [];
+        for($i=10;$i<=210;$i++){
+            $height[$i] = $i.' cm';
+        }
+        $data['height'] = $height;
+        $data['ethnic_origin'] = Ethnic_origin::all();
+//        dd($data['gender_preference']);
         return view('profile::editprofile')->with('data', $data);
     }
     
