@@ -36,6 +36,9 @@ use App\Modules\Profile\Models\Traits;
 use App\Modules\Profile\Models\User_profile;
 use App\Modules\Profile\Models\Zodiac_signs;
 use App\Modules\Profile\Models\Module_documents;
+use App\Modules\Profile\Models\Drink;
+use App\Modules\Profile\Models\Countries;
+use App\Modules\Profile\Models\States;
 
 class Profile extends Controller {
     /*
@@ -332,7 +335,7 @@ class Profile extends Controller {
 
     public function profileEditAction(Request $request) {
         $user = Auth::user()->id;
-        if(User_profile::where('user_id', $user)->count()==0){
+        if (User_profile::where('user_id', $user)->count() == 0) {
             User_profile::create(['user_id' => $user]);
         }
         $data = [];
@@ -341,12 +344,25 @@ class Profile extends Controller {
         $data['gender_preference'] = Gender_preference::all();
         $data['marital_status'] = Marital_status::all();
         $height = [];
-        for($i=10;$i<=210;$i++){
-            $height[$i] = $i.' cm';
+        for ($i = 10; $i <= 210; $i++) {
+            $height[$i] = $i . ' cm';
         }
         $data['height'] = $height;
-        $data['ethnic_origin'] = Ethnic_origin::all();
-//        dd($data['gender_preference']);
+        $data['ethnic_origin'] = $this->selectData(Ethnic_origin::all(), 'ethnic_origin_name');
+        $data['qualification'] = Qualification::all();
+        $data['smoke'] = Smoke::all();
+        $data['drink'] = Drink::all();
+        $data['pet_lover'] = Pet_lover::all();
+        $data['partner_marital_status'] = $this->selectData(Marital_status::all(), 'marital_status');
+        $states = $this->selectData(States::all(), 'state_name');
+
+        
+        $data['living_country'] = $this->selectData(Countries::all(), 'name');
+        $data['jobs'] = Job_category::select('id as job_category_id', 'category_name')
+                        ->with(['jobs' => function($q) {
+                                $q->select('id as job_id', 'job_category_id', 'job_name');
+                            }])
+                        ->get()->toArray();
         return view('profile::editprofile')->with('data', $data);
     }
 

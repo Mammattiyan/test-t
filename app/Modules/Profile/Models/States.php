@@ -4,8 +4,8 @@ namespace App\Modules\Profile\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Countries extends Model
+class States extends Model
 {
-    protected $table='countries';
+    protected $table='states';
     
 }
