@@ -78,62 +78,54 @@
         <script src="{{ asset('croppic/assets/js/bootstrap.min.js') }}"></script>
         <script src="{{ asset('croppic/assets/js/jquery.mousewheel.min.js') }}"></script>
         <script src="{{ asset('croppic/croppic.min.js') }}"></script>
-<<<<<<< HEAD
         <!--<script src="{{ asset('croppic/assets/js/main.js') }}"></script>-->
-       <script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>
-      <script type="text/javascript" src="{{ asset('js/parsley.js') }}"></script>
-     
+        <script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/parsley.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/jquery.fileuploader.min.js') }}"></script>
- <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
         <script>
-=======
-        <script src="{{ asset('croppic/assets/js/main.js') }}"></script>
->>>>>>> e19f1777266d5f3e3b639937e86efd4490c10cf2
 
-
-
-        <script>
-                            var base_url = "{{ asset('')}}";
-                            var csrf_token = '{{ csrf_token() }}';
-                            var croppicContainerModalOptions = {
-                                uploadUrl: '{{ URL::to("profile/profileImageUpload") }}',
-                                uploadData: {
-                                    "_token": "{{{ csrf_token() }}}"
-                                },
-                                cropUrl: '{{ URL::to("profile/profileImageCrop") }}',
-                                cropData: {
-                                    "_token": "{{{ csrf_token() }}}"
-                                },
-                                modal: true,
-                                imgEyecandy: false,
-                                loaderHtml: '<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div> ',
-                                onBeforeImgUpload: function () {
-                                    console.log('onBeforeImgUpload')
-                                },
-                                onAfterImgUpload: function () {
-                                    console.log('onAfterImgUpload')
-                                },
-                                onImgDrag: function () {
-                                    console.log('onImgDrag')
-                                },
-                                onImgZoom: function () {
-                                    console.log('onImgZoom')
-                                },
-                                onBeforeImgCrop: function () {
-                                    console.log('onBeforeImgCrop')
-                                },
-                                onAfterImgCrop: function () {
-                                    $('.cropControlRemoveCroppedImage').hide();
-                                    console.log('onAfterImgCrop')
-                                },
-                                onReset: function () {
-                                    console.log('onReset')
-                                },
-                                onError: function (errormessage) {
-                                    console.log('onError:' + errormessage)
-                                }
-                            }
-                            var cropContainerModal = new Croppic('cropContainerModal', croppicContainerModalOptions);
+        var base_url = "{{ asset('')}}";
+        var csrf_token = '{{ csrf_token() }}';
+        var croppicContainerModalOptions = {
+            uploadUrl: '{{ URL::to("profile/profileImageUpload") }}',
+            uploadData: {
+                "_token": "{{{ csrf_token() }}}"
+            },
+            cropUrl: '{{ URL::to("profile/profileImageCrop") }}',
+            cropData: {
+                "_token": "{{{ csrf_token() }}}"
+            },
+            modal: true,
+            imgEyecandy: false,
+            loaderHtml: '<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div> ',
+            onBeforeImgUpload: function () {
+                console.log('onBeforeImgUpload')
+            },
+            onAfterImgUpload: function () {
+                console.log('onAfterImgUpload')
+            },
+            onImgDrag: function () {
+                console.log('onImgDrag')
+            },
+            onImgZoom: function () {
+                console.log('onImgZoom')
+            },
+            onBeforeImgCrop: function () {
+                console.log('onBeforeImgCrop')
+            },
+            onAfterImgCrop: function () {
+                $('.cropControlRemoveCroppedImage').hide();
+                console.log('onAfterImgCrop')
+            },
+            onReset: function () {
+                console.log('onReset')
+            },
+            onError: function (errormessage) {
+                console.log('onError:' + errormessage)
+            }
+        }
+        var cropContainerModal = new Croppic('cropContainerModal', croppicContainerModalOptions);
 
 
         </script>
