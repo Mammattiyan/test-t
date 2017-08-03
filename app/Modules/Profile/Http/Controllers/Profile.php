@@ -354,7 +354,7 @@ class Profile extends Controller {
                                 $q->select('id as job_id', 'job_category_id', 'job_name');
                             }])
                         ->get()->toArray();
-                            
+        $data['zodiac_signs'] = Zodiac_signs::all();
         $data['selected_partner_grew_up_country'] = $this->selectPartnerData(Partner_grew_up_country::where('user_id', $user)->get(), 'country_id');
         $data['selected_partner_job_category'] = $this->selectPartnerData(Partner_job_category::where('user_id', $user)->get(), 'job_category_id');
         $data['selected_partner_living_country'] = $this->selectPartnerData(Partner_living_country::where('user_id', $user)->get(), 'country_id');
@@ -362,6 +362,13 @@ class Profile extends Controller {
         $data['selected_partner_marital_status'] = $this->selectPartnerData(Partner_marital_status::where('user_id', $user)->get(), 'marital_status_id');
         $data['selected_partner_qualification'] = $this->selectPartnerData(Partner_qualification::where('user_id', $user)->get(), 'qualification_id');
         
+        $data['traits'] = Traits::select('category')
+                            ->with(['traits' => function($sql){
+                                $sql->select();
+                            }])
+                            ->distinct()
+                            ->get()->toArray();
+                            
         return view('profile::editprofile')->with('data', $data);
     }
 

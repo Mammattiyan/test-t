@@ -13,8 +13,47 @@ Itweetup :: Activities
     .parsley-required{
         color: red;
     }
-</style>
+    
+    
+    .cc-selector input{
+    margin:0;padding:0;
+    -webkit-appearance:none;
+       -moz-appearance:none;
+            appearance:none;
+}
 
+.cc-selector-2 input{
+    position:absolute;
+    z-index:999;
+}
+
+.cc-selector-2 input:active +.drinkcard-cc, .cc-selector input:active +.drinkcard-cc{opacity: .9;}
+.cc-selector-2 input:checked +.drinkcard-cc, .cc-selector input:checked +.drinkcard-cc{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
+.drinkcard-cc{
+    cursor:pointer;
+    background-size:contain;
+    background-repeat:no-repeat;
+    display:inline-block;
+    width:100px;height:70px;
+    -webkit-transition: all 100ms ease-in;
+       -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+       -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+            filter: brightness(1.8) grayscale(1) opacity(.7);
+}
+.drinkcard-cc:hover{
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+    
+</style>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <?php
 $profile = $data['user_profiles'];
 ?>
@@ -29,7 +68,7 @@ $profile = $data['user_profiles'];
         <div class="accordion-group">
             <div class="accordion">
                 <div class="accordion-title">Personal Details</div>
-                <div class="accordion-content" style="display: block;">
+                <div class="accordion-content" style="display: none;">
                     <div class="formRow">
                         <label>Motto</label>
                         <div><input type="text" name="motto_id" value="{{$data['motto_name']->name or ''}}" required></div> 
@@ -96,7 +135,20 @@ $profile = $data['user_profiles'];
                     </div>
                     <div class="formRow">
                         <label>Zodiac Signs</label>
-                        <div><input type="text" name="zodiac_sign_id" value="{{$data['zodiac_sign_id'] or ''}}" required ></div> 
+                        
+                            @if(count($data['zodiac_signs']) > 0)
+                                @foreach($data['zodiac_signs'] as $value)
+                                <?php 
+                                $url = asset("images/zodiac-signs/".$value->sign_image_url);
+                                $zodiac_name = strtolower($value->zodiac_name);
+                                echo '<style>.'.$zodiac_name.'{background-image:url('.$url.');}</style>';
+                                ?>
+                                <div class="cc-selector">
+                                    <input <?php echo ($profile['zodiac_sign_id'] == $value->id)?'checked="checked"':''?>  id="{{$zodiac_name}}" type="radio" name="zodiac_sign_id" value="{{$value->id}}" />
+                                    <label class="drinkcard-cc {{$zodiac_name}}" for="{{$zodiac_name}}"></label>
+                                </div>
+                                @endforeach
+                            @endif
                     </div>
 
                 </div>
@@ -132,9 +184,22 @@ $profile = $data['user_profiles'];
 
                 </div>
             </div>
+            
+            
+            
             <div class="accordion">
                 <div class="accordion-title">Personality Traits</div>
                 <div class="accordion-content" style="display: none;">
+                        @if(count($data['traits'])>0)
+                            @foreach($data['traits'] as $value)
+                            <div class="">
+                            <label><b>{{$value['category']}}</b></label>
+                                @foreach($value['traits'] as $val)
+                                    <div>{{$val['name']}}</div> 
+                                @endforeach
+                            </div>
+                            @endforeach
+                        @endif
                 </div>
             </div>
             <div class="accordion">
@@ -262,6 +327,7 @@ $profile = $data['user_profiles'];
                 <label id="result"></label>
                 <input type="button" name="editpic" class="button" value="Submit" onclick="updateProfile()">
             </div>
+            
         </div>
         {{ Form::close() }}
     </div>
@@ -270,6 +336,7 @@ $profile = $data['user_profiles'];
 @endsection
 
 @section('js')
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script>
     $('select').select2({
         minimumResultsForSearch: -1

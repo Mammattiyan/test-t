@@ -61,11 +61,8 @@
         <script src="{{ asset('croppic/assets/js/main.js') }}"></script>
 
         <script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>
-<<<<<<< HEAD
         <script type="text/javascript" src="{{ asset('js/parsley.js') }}"></script>
-=======
 
->>>>>>> 705674716a75049f6ba35394cf4e51fa06206c01
         @yield('js')
     </body>
 </html>
