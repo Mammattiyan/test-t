@@ -1,8 +1,8 @@
 <div class="flex-item userdata-block">
     <div class="box userinfo-tile">
-        <img src="{{asset($user['profileimage'])}}" class="user-photo">
+        <img src="{{asset($fullData['profileimage'])}}" class="user-photo">
         <div class="pad">
-            <div class="thick-text">{{ ucfirst($user['name'])}}</div>
+            <div class="thick-text">{{ ucfirst($fullData['full_name'])}}</div>
             <div class="user-motto">Real beauty is always inside</div>
         </div>
     </div>

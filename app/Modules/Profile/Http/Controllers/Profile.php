@@ -83,7 +83,7 @@ class Profile extends Controller {
         $user['id'] = Core::encodeIdAction($userId);
         $gallery = [];
         $fullData = User_profile::select('user_profile.*', 'gender_preference.gender_preference_name', 'marital_status.marital_status', 'ethnic_origin.ethnic_origin_name', 'qualification.qualification_name', 'job_category.category_name', 'smoke.name as smoke_status', 'drink.name as drink_status'
-                                , 'pet_lover.name as pet_lover','users.name as full_name')
+                                , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage')
                         ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
                         ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')
                         ->leftJoin('ethnic_origin', 'ethnic_origin.id', 'user_profile.ethnic_origin_id')
@@ -92,8 +92,8 @@ class Profile extends Controller {
                         ->leftJoin('smoke', 'smoke.id', 'user_profile.smoke_id')
                         ->leftJoin('drink', 'drink.id', 'user_profile.drink_id')
                         ->leftJoin('pet_lover', 'pet_lover.id', 'user_profile.pet_lover_id')
-                        ->leftJoin('users', 'users.id', 'user_profile.user_id')
-                        ->where('user_id', '3')
+                        ->join('users', 'users.id', 'user_profile.user_id')
+                        ->where('user_profile.user_id', $userId)
                         ->first()->toArray();
         $gallery['images'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_images')->get()->toArray();
         $gallery['videos'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_videos')->get()->toArray();
@@ -112,7 +112,23 @@ class Profile extends Controller {
         $userId = Core::decodeIdAction($token);
         $user = User::find($userId)->toArray();
         $user['id'] = $token;
-        return view('profile::user_profile')->with(['user' => $user, 'token' => $token]);
+        $fullData = User_profile::select('user_profile.*', 'gender_preference.gender_preference_name', 'marital_status.marital_status', 'ethnic_origin.ethnic_origin_name', 'qualification.qualification_name', 'job_category.category_name', 'smoke.name as smoke_status', 'drink.name as drink_status'
+                                , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage')
+                        ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
+                        ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')
+                        ->leftJoin('ethnic_origin', 'ethnic_origin.id', 'user_profile.ethnic_origin_id')
+                        ->leftJoin('qualification', 'qualification.id', 'user_profile.qualification_id')
+                        ->leftJoin('job_category', 'job_category.id', 'user_profile.job_category_id')
+                        ->leftJoin('smoke', 'smoke.id', 'user_profile.smoke_id')
+                        ->leftJoin('drink', 'drink.id', 'user_profile.drink_id')
+                        ->leftJoin('pet_lover', 'pet_lover.id', 'user_profile.pet_lover_id')
+                        ->join('users', 'users.id', 'user_profile.user_id')
+                        ->where('user_profile.user_id', $userId)
+                        ->first()->toArray();
+        $gallery = [];
+        $gallery['images'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_images')->get()->toArray();
+        $gallery['videos'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_videos')->get()->toArray();
+        return view('profile::user_profile')->with(['user' => $user, 'fullData' => $fullData, 'token' => $token, 'gallery' => $gallery]);
     }
 
     /*
@@ -151,7 +167,22 @@ class Profile extends Controller {
                     ->orWhere(['receiver' => Auth::user()->id, 'sender' => $userId])
                     ->orderBy('messages.id', 'asc')
                     ->get();
-            return view('profile::user_messages')->with(['user' => $user, 'token' => $token, 'message' => $message, 'my' => Auth::user()->id]);
+
+            $fullData = User_profile::select('user_profile.*', 'gender_preference.gender_preference_name', 'marital_status.marital_status', 'ethnic_origin.ethnic_origin_name', 'qualification.qualification_name', 'job_category.category_name', 'smoke.name as smoke_status', 'drink.name as drink_status'
+                                    , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage')
+                            ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
+                            ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')
+                            ->leftJoin('ethnic_origin', 'ethnic_origin.id', 'user_profile.ethnic_origin_id')
+                            ->leftJoin('qualification', 'qualification.id', 'user_profile.qualification_id')
+                            ->leftJoin('job_category', 'job_category.id', 'user_profile.job_category_id')
+                            ->leftJoin('smoke', 'smoke.id', 'user_profile.smoke_id')
+                            ->leftJoin('drink', 'drink.id', 'user_profile.drink_id')
+                            ->leftJoin('pet_lover', 'pet_lover.id', 'user_profile.pet_lover_id')
+                            ->join('users', 'users.id', 'user_profile.user_id')
+                            ->where('user_profile.user_id', $userId)
+                            ->first()->toArray();
+
+            return view('profile::user_messages')->with(['user' => $user, 'token' => $token, 'message' => $message, 'my' => Auth::user()->id, 'fullData' => $fullData]);
         } else {
             return redirect('message');
         }
@@ -313,7 +344,7 @@ class Profile extends Controller {
         }
         return $data;
     }
-    
+
     public function selectPartnerData($list, $label) {
         $data = [];
         if (count($list) > 0) {
@@ -354,14 +385,14 @@ class Profile extends Controller {
                                 $q->select('id as job_id', 'job_category_id', 'job_name');
                             }])
                         ->get()->toArray();
-                            
+
         $data['selected_partner_grew_up_country'] = $this->selectPartnerData(Partner_grew_up_country::where('user_id', $user)->get(), 'country_id');
         $data['selected_partner_job_category'] = $this->selectPartnerData(Partner_job_category::where('user_id', $user)->get(), 'job_category_id');
         $data['selected_partner_living_country'] = $this->selectPartnerData(Partner_living_country::where('user_id', $user)->get(), 'country_id');
         $data['selected_partner_living_state'] = $this->selectPartnerData(Partner_living_state::where('user_id', $user)->get(), 'state_id');
         $data['selected_partner_marital_status'] = $this->selectPartnerData(Partner_marital_status::where('user_id', $user)->get(), 'marital_status_id');
         $data['selected_partner_qualification'] = $this->selectPartnerData(Partner_qualification::where('user_id', $user)->get(), 'qualification_id');
-        
+
         return view('profile::editprofile')->with('data', $data);
     }
 
@@ -393,46 +424,46 @@ class Profile extends Controller {
         $values["no_of_children_lived_with"] = $data["no_of_children_lived_with"];
         $values["adopting_children"] = $data["adopting_children"];
         $values["accept_children_under_18"] = $data["accept_children_under_18"];
-        
+
         Partner_grew_up_country::where('user_id', $user)->delete();
-        if(isset($data['partner_grew_up_country']) && count($data['partner_grew_up_country']) > 0){
-            foreach($data['partner_grew_up_country'] as $val){
+        if (isset($data['partner_grew_up_country']) && count($data['partner_grew_up_country']) > 0) {
+            foreach ($data['partner_grew_up_country'] as $val) {
                 Partner_grew_up_country::create(['user_id' => $user, 'country_id' => $val]);
             }
         }
         Partner_job_category::where('user_id', $user)->delete();
-        if(isset($data['partner_job_category']) && count($data['partner_job_category']) > 0){
-            foreach($data['partner_job_category'] as $val){
+        if (isset($data['partner_job_category']) && count($data['partner_job_category']) > 0) {
+            foreach ($data['partner_job_category'] as $val) {
                 Partner_job_category::create(['user_id' => $user, 'job_category_id' => $val]);
             }
         }
         Partner_living_country::where('user_id', $user)->delete();
-        if(isset($data['partner_living_country']) && count($data['partner_living_country']) > 0){
-            foreach($data['partner_living_country'] as $val){
+        if (isset($data['partner_living_country']) && count($data['partner_living_country']) > 0) {
+            foreach ($data['partner_living_country'] as $val) {
                 Partner_living_country::create(['user_id' => $user, 'country_id' => $val]);
             }
         }
         Partner_living_state::where('user_id', $user)->delete();
-        if(isset($data['partner_living_state']) && count($data['partner_living_state']) > 0){
-            foreach($data['partner_living_state'] as $val){
+        if (isset($data['partner_living_state']) && count($data['partner_living_state']) > 0) {
+            foreach ($data['partner_living_state'] as $val) {
                 Partner_living_state::create(['user_id' => $user, 'state_id' => $val]);
             }
         }
         Partner_marital_status::where('user_id', $user)->delete();
-        if(isset($data['partner_marital_status']) && count($data['partner_marital_status']) > 0){
-            foreach($data['partner_marital_status'] as $val){
+        if (isset($data['partner_marital_status']) && count($data['partner_marital_status']) > 0) {
+            foreach ($data['partner_marital_status'] as $val) {
                 Partner_marital_status::create(['user_id' => $user, 'marital_status_id' => $val]);
             }
         }
         Partner_qualification::where('user_id', $user)->delete();
-        if(isset($data['partner_qualification']) && count($data['partner_qualification']) > 0){
-            foreach($data['partner_qualification'] as $val){
+        if (isset($data['partner_qualification']) && count($data['partner_qualification']) > 0) {
+            foreach ($data['partner_qualification'] as $val) {
                 Partner_qualification::create(['user_id' => $user, 'qualification_id' => $val]);
             }
         }
-        
+
         User_profile::where('user_id', $user)->update($values);
-       
+
         echo json_encode(['response' => 1, 'msg' => 'Profile updated successfully']);
     }
 
@@ -455,6 +486,8 @@ class Profile extends Controller {
                             ->where('hangouts.id', $hangId)
                             ->orderBy('hangouts.id', 'asc')
                             ->first()->toArray();
+          
+
             if ($message['sender_id'] == Auth::user()->id) {
                 $user = User::find($message['receiver_id'])->toArray();
             } else {
