@@ -14,6 +14,10 @@ Itweetup :: Activities
         color: red;
     }
 </style>
+
+<?php
+$profile = $data['user_profiles'];
+?>
 <div class="flex-item updates-block">
     <div class="box">
         @include('search::search_form')
@@ -28,13 +32,13 @@ Itweetup :: Activities
                 <div class="accordion-content" style="display: block;">
                     <div class="formRow">
                         <label>Motto</label>
-                        <div><input type="text" name="motto" value="{{$data['motto_name']->name or ''}}" required></div> 
+                        <div><input type="text" name="motto_id" value="{{$data['motto_name']->name or ''}}" required></div> 
                     </div>
                     <div class="formRow">
                         @if(count($data['gender_preference'])>0)
                         <label>Your Gender & Preference</label>
                         @foreach($data['gender_preference'] as $val)
-                        <div class="radioRow"><input type="radio" name="gender_preference_id" value="{{$val->id}}"><label>{{$val->gender_preference_name}}</label></div> 
+                        <div class="radioRow"><input type="radio" name="gender_preference_id" <?php echo ($profile['gender_preference_id'] == $val->id) ? 'checked="checked"' : '' ?> value="{{$val->id}}"><label>{{$val->gender_preference_name}}</label></div> 
                         @endforeach
                         @endif
                     </div>
@@ -42,17 +46,17 @@ Itweetup :: Activities
                         @if(count($data['marital_status'])>0)
                         <label>What is your marital status?</label>
                         @foreach($data['marital_status'] as $val)
-                        <div class="radioRow"><input type="radio" name="marital_status_id" value="{{$val->id}}"><label>{{$val->marital_status}}</label></div> 
+                        <div class="radioRow"><input type="radio" name="marital_status_id" <?php echo ($profile['marital_status_id'] == $val->id) ? 'checked="checked"' : '' ?> value="{{$val->id}}"><label>{{$val->marital_status}}</label></div> 
                         @endforeach
                         @endif
                     </div>
                     <div class="formRow">
                         <label>Height</label>
-                        <div class="radioRow">{!! Form::select('height', $data['height'], [], ['class' => 'dropdown', 'required']) !!}</div> 
+                        <div class="radioRow">{!! Form::select('height', $data['height'], [$profile['marital_status_id']], ['class' => 'dropdown', 'required']) !!}</div> 
                     </div>
                     <div class="formRow">
                         <label>If you are NRI choose your ethnic origin</label>
-                        <div class="radioRow">{!! Form::select('ethnic_origin', $data['ethnic_origin'], [], ['class' => 'dropdown', 'required','id'=>'ethnic_origin']) !!}</div> 
+                        <div class="radioRow">{!! Form::select('ethnic_origin_id', $data['ethnic_origin'], [$profile['ethnic_origin_id']], ['class' => 'dropdown', 'required','id'=>'ethnic_origin']) !!}</div> 
                     </div>
                     <div class="formRow">
 
@@ -60,7 +64,7 @@ Itweetup :: Activities
                         <label>Hightest level of qualification</label>
 
                         @foreach($data['qualification'] as $val)
-                        <div class="radioRow"><input type="radio" name="marital_status_id" value="{{$val->id}}"><label>{{$val->qualification_name}}</label></div> 
+                        <div class="radioRow"><input type="radio" name="qualification_id" <?php echo ($profile['qualification_id'] == $val->id) ? 'checked="checked"' : '' ?> value="{{$val->id}}"><label>{{$val->qualification_name}}</label></div> 
                         @endforeach
                         @endif
                     </div>
@@ -73,26 +77,26 @@ Itweetup :: Activities
 
                         <label>Core Area</label>
                         <div class="radioRow">
-                            <select style="width:300px" id="core_area_job">
+                            <select style="width:300px" id="job_category_id" name="job_category_id">
                                 @if(count($data['jobs'] >0))
                                 @foreach($data['jobs'] as $key =>$value)
                                 <optgroup label="{{$value['category_name']}}">
                                     @foreach($value['jobs'] as $jobKey =>$jobValue)
-                                    <option value="{{$jobValue['job_id']}}">{{$jobValue['job_name']}}</option>                                    
+                                    <option <?php echo ($profile['job_category_id'] == $jobValue['job_id']) ? 'selected="selected"' : '' ?> value="{{$jobValue['job_id']}}">{{$jobValue['job_name']}}</option>                                    
                                     @endforeach  
                                 </optgroup>
                                 @endforeach
                                 @endif
-                            </select   
+                            </select>  
                         </div> 
                     </div>
                     <div class="formRow">
                         <label>Job Title</label>
-                        <div><input type="text" name="motto" value="" required></div> 
+                        <div><input type="text" name="job_title" value="{{$profile['job_title']}}" ></div> 
                     </div>
                     <div class="formRow">
                         <label>Zodiac Signs</label>
-                        <div><input type="text" name="motto" value="{{$data['motto_name']->name or ''}}" required></div> 
+                        <div><input type="text" name="zodiac_sign_id" value="{{$data['zodiac_sign_id'] or ''}}" required ></div> 
                     </div>
 
                 </div>
@@ -101,32 +105,26 @@ Itweetup :: Activities
                 <div class="accordion-title">Social &amp; Lifestyle</div>
                 <div class="accordion-content" style="display: none;">
                     <div class="formRow">
-
                         @if(count($data['smoke'])>0)
                         <label>Smoke :</label>
-
                         @foreach($data['smoke'] as $val)
-                        <div class="radioRow"><input type="radio" name="marital_status_id" value="{{$val->id}}"><label>{{$val->name}}</label></div> 
+                        <div class="radioRow"><input type="radio" name="smoke_id" <?php echo ($profile['smoke_id'] == $val->id) ? 'checked="checked"' : '' ?> value="{{$val->id}}"><label>{{$val->name}}</label></div> 
                         @endforeach
                         @endif
                     </div>
                     <div class="formRow">
-
-                        @if(count($data['smoke'])>0)
+                        @if(count($data['drink'])>0)
                         <label>Drink :</label>
-
                         @foreach($data['drink'] as $val)
-                        <div class="radioRow"><input type="radio" name="marital_status_id" value="{{$val->id}}"><label>{{$val->name}}</label></div> 
+                        <div class="radioRow"><input type="radio" name="drink_id" <?php echo ($profile['drink_id'] == $val->id) ? 'checked="checked"' : '' ?> value="{{$val->id}}"><label>{{$val->name}}</label></div> 
                         @endforeach
                         @endif
                     </div>
                     <div class="formRow">
-
                         @if(count($data['pet_lover'])>0)
                         <label>Pet Lover:</label>
-
                         @foreach($data['pet_lover'] as $val)
-                        <div class="radioRow"><input type="radio" name="marital_status_id" value="{{$val->id}}"><label>{{$val->name}}</label></div> 
+                        <div class="radioRow"><input type="radio" name="pet_lover_id" <?php echo ($profile['pet_lover_id'] == $val->id) ? 'checked="checked"' : '' ?> value="{{$val->id}}"><label>{{$val->name}}</label></div> 
                         @endforeach
                         @endif
                     </div>
@@ -144,104 +142,116 @@ Itweetup :: Activities
                 <div class="accordion-content" style="display: none;">
                     <div class="formRow">
                         <label>I'm seeking a</label>
-                        <div class="radioRow"><input type="radio" name="marital_status_id" value=""><label>Male</label></div> 
-                        <div class="radioRow"><input type="radio" name="marital_status_id" value=""><label>Female</label></div> 
+                        <div class="radioRow"><input type="radio" name="partner_gender" <?php echo ($profile['partner_gender'] == 'male') ? 'checked="checked"' : '' ?> value="male"><label>Male</label></div> 
+                        <div class="radioRow"><input type="radio" name="partner_gender" <?php echo ($profile['partner_gender'] == 'female') ? 'checked="checked"' : '' ?> value="female"><label>Female</label></div> 
                     </div>
                     <div class="formRow">
                         <label>Age</label>
                         <div class="radioRow">
-                            <input type="number" style="width: 106px;" name="age" value="18" min="18"> To
-                            <input type="number"  style="width: 106px;"  name="age" value="18" min="18">
+                            <input type="number" style="width: 106px;" name="age_from" value="{{$profile['age_from']}}" min="18"> To
+                            <input type="number"  style="width: 106px;"  name="age_to" value="{{$profile['age_to']}}" min="18">
                         </div> 
                     </div>
                     <div class="formRow">
                         <label>Height</label>
                         <div class="radioRow">
-                            <input type="number" style="width: 106px;" name="age" value="18" min="18"> To
-                            <input type="number"  style="width: 106px;"  name="age" value="18" min="18">
+                            <input type="number" style="width: 106px;" name="height_from" value="{{$profile['height_from']}}"> To
+                            <input type="number"  style="width: 106px;"  name="height_to" value="{{$profile['height_to']}}">
                         </div> 
                     </div>
                     <div class="formRow">
                         <label>Marital Status</label>
-                        <div class="radioRow">{!! Form::select('partner_marital_status', $data['partner_marital_status'], [], ['class' => 'dropdown', 'required','id'=>'partner_marital_status','multiple'=>'multiple']) !!}</div> 
+                        <div class="radioRow">{!! Form::select('partner_marital_status[]', $data['partner_marital_status'], $data['selected_partner_marital_status'], ['class' => 'dropdown', 'required','id'=>'partner_marital_status','multiple'=>'multiple']) !!}</div> 
                     </div>
                     <div class="formRow">
                         <label>Country living in</label>
-                        <div class="radioRow">{!! Form::select('living_country', $data['living_country'], [], ['class' => 'dropdown', 'required','id'=>'living_country','multiple'=>'multiple']) !!}</div> 
+                        <div class="radioRow">{!! Form::select('partner_living_country[]', $data['living_country'], $data['selected_partner_living_country'], ['class' => 'dropdown', 'required','id'=>'living_country','multiple'=>'multiple']) !!}</div> 
                     </div>
                     <div class="formRow">
                         <label>State living in</label>
-                        <div class="radioRow">{!! Form::select('living_country', $data['states'], [], ['class' => 'dropdown', 'required','id'=>'living_country','multiple'=>'multiple']) !!}</div> 
+                        <div class="radioRow">{!! Form::select('partner_living_state[]', $data['states'], $data['selected_partner_living_state'], ['class' => 'dropdown', 'required','id'=>'living_country','multiple'=>'multiple']) !!}</div> 
                     </div>
                     <div class="formRow">
                         <label>Residential status</label>
-                        <div class="radioRow">{!! Form::select('living_country', $data['living_country'], [], ['class' => 'dropdown', 'required','id'=>'living_country','multiple'=>'multiple']) !!}</div> 
+                        <div class="radioRow">{!! Form::select('partner_grew_up_country[]', $data['living_country'], $data['selected_partner_grew_up_country'], ['class' => 'dropdown', 'required','id'=>'living_country','multiple'=>'multiple']) !!}</div> 
                     </div>
                     <div class="formRow">
                         <label>Country grew up in</label>
-                        <div class="radioRow">{!! Form::select('living_country', $data['living_country'], [], ['class' => 'dropdown', 'required','id'=>'living_country','multiple'=>'multiple']) !!}</div> 
+                        <div class="radioRow">{!! Form::select('partner_grew_up_country[]', $data['living_country'], $data['selected_partner_grew_up_country'], ['class' => 'dropdown', 'required','id'=>'living_country','multiple'=>'multiple']) !!}</div> 
                     </div>
                     <div class="formRow">
                         <label>Education</label>
-                        <div class="radioRow">{!! Form::select('living_country', $data['living_country'], [], ['class' => 'dropdown', 'required','id'=>'living_country','multiple'=>'multiple']) !!}</div> 
+                        <div class="radioRow">{!! Form::select('partner_qualification[]', $data['partner_qualification'], $data['selected_partner_qualification'], ['class' => 'dropdown', 'required','id'=>'living_country','multiple'=>'multiple']) !!}</div> 
                     </div>
                     <div class="formRow">
                         <label>Profession Area</label>
-                        <div class="radioRow">{!! Form::select('living_country', $data['living_country'], [], ['class' => 'dropdown', 'required','id'=>'living_country','multiple'=>'multiple']) !!}</div> 
+                        <div class="radioRow">
+                            <select style="width:300px" name="partner_job_category[]" multiple="">
+                                @if(count($data['jobs'] >0))
+                                @foreach($data['jobs'] as $key =>$value)
+                                <optgroup label="{{$value['category_name']}}">
+                                    @foreach($value['jobs'] as $jobKey =>$jobValue)
+                                    <option <?php echo ($profile['job_category_id'] == $jobValue['job_id']) ? 'selected="selected"' : '' ?> value="{{$jobValue['job_id']}}">{{$jobValue['job_name']}}</option>                                    
+                                    @endforeach  
+                                </optgroup>
+                                @endforeach
+                                @endif
+                            </select>  
+                        </div>
                     </div>
                     <div class="formRow">
-                        <label>Annual Income</label>
-                        <div class="radioRow"><input type="text" name="motto" value="" required></div> 
+                        <label>Annual Income Range</label>
+                        <div class="radioRow"><input type="text" name="annual_income_from" value="" ></div> 
+                        <div class="radioRow"><input type="text" name="annual_income_to" value="" ></div> 
                     </div>
                     <div class="formRow">
                         <label>Please indicate which smoking habits you would accept from your partner.</label>
                         <div class="radioRow">
-                            <select style="width:300px" id="smoking_habits">
-                                <option value="never">Never</option>  
-                                <option value="a_few_times_a_year">A few times a year</option>  
-                                <option value="about_once_a_week">About once a week</option>  
-                                <option value="a_few_times_a_week">A few times a week</option>  
-                                <option value="every_day">Every day</option>  
+                            <select style="width:300px" id="partner_smoking_habit" name="partner_smoking_habit">
+                                <option value="never" <?php echo ($profile['partner_smoking_habit'] == 'never') ? 'selected="selected"' : '' ?>>Never</option>  
+                                <option value="a_few_times_a_year" <?php echo ($profile['partner_smoking_habit'] == 'a_few_times_a_year') ? 'selected="selected"' : '' ?>>A few times a year</option>  
+                                <option value="about_once_a_week" <?php echo ($profile['partner_smoking_habit'] == 'about_once_a_week') ? 'selected="selected"' : '' ?>>About once a week</option>  
+                                <option value="a_few_times_a_week" <?php echo ($profile['partner_smoking_habit'] == 'a_few_times_a_week') ? 'selected="selected"' : '' ?>>A few times a week</option>  
+                                <option value="every_day" <?php echo ($profile['partner_smoking_habit'] == 'every_day') ? 'selected="selected"' : '' ?>>Every day</option>  
                             </select>
                         </div> 
 
                     </div>
                     <div class="formRow">
-
                         <label>Please indicate which drinking habits you would accept from your partner.</label>
                         <div class="radioRow">
-                            <select style="width:300px" id="smoking_habits">
-                                <option value="never">Never</option>  
-                                <option value="several_times_a_year">Several times a year</option>  
-                                <option value="about_once_a_week">About once a week</option>  
-                                <option value="a_few_times_a_week">A few times a week</option>  
-                                <option value="every_day">Every day</option>  
+                            <select style="width:300px" id="partner_drinking_habit" name="partner_drinking_habit">
+                                <option value="never" <?php echo ($profile['partner_drinking_habit'] == 'never') ? 'selected="selected"' : '' ?>>Never</option>  
+                                <option value="several_times_a_year" <?php echo ($profile['partner_drinking_habit'] == 'several_times_a_year') ? 'selected="selected"' : '' ?>>Several times a year</option>  
+                                <option value="about_once_a_week" <?php echo ($profile['partner_drinking_habit'] == 'about_once_a_week') ? 'selected="selected"' : '' ?>>About once a week</option>  
+                                <option value="a_few_times_a_week" <?php echo ($profile['partner_drinking_habit'] == 'a_few_times_a_week') ? 'selected="selected"' : '' ?>>A few times a week</option>  
+                                <option value="every_day" <?php echo ($profile['partner_drinking_habit'] == 'every_day') ? 'selected="selected"' : '' ?>>Every day</option>  
                             </select>
                         </div> 
 
                     </div>
                     <div class="formRow">
-
                         <label>How many children up to the age of 18 currently live in your household?</label>
-                        <div class="radioRow"><input type="text" name="motto" value="" required></div> 
-
+                        <div class="radioRow"><input type="radio" name="no_of_children_lived_with" <?php echo ($profile['no_of_children_lived_with'] == 0) ? 'checked="checked"' : '' ?> value="0"><label>No children</label></div> 
+                        <div class="radioRow"><input type="radio" name="no_of_children_lived_with" <?php echo ($profile['no_of_children_lived_with'] == 1) ? 'checked="checked"' : '' ?> value="1"><label>One child</label></div> 
+                        <div class="radioRow"><input type="radio" name="no_of_children_lived_with" <?php echo ($profile['no_of_children_lived_with'] == 2) ? 'checked="checked"' : '' ?> value="2"><label>Two children</label></div> 
+                        <div class="radioRow"><input type="radio" name="no_of_children_lived_with" <?php echo ($profile['no_of_children_lived_with'] == 3) ? 'checked="checked"' : '' ?> value="3"><label>Three or more children</label></div> 
                     </div>
                     <div class="formRow">
                         <label>Could you imagine having children or adopting with your partner and raising a family?</label>
                         <div class="radioRow">
-                            <select style="width:300px" id="smoking_habits">
+                            <select style="width:300px" id="adopting_children" name="adopting_children">
                                 <option value="yes">Yes</option>  
                                 <option value="may_be">Maybe</option>  
                                 <option value="no">No</option>  
                             </select>
                         </div> 
-
                     </div>
                     <div class="formRow">
                         <label>Would you accept a partner who has children under the age of 18 in her household?</label>
                         <div class="radioRow">
-                            <input type="radio" name="marital_status_id" value="yes"><label>Yes</label>
-                            <input type="radio" name="marital_status_id" value="no"><label>No</label>
+                            <input type="radio" name="accept_children_under_18" <?php echo ($profile['accept_children_under_18'] == 'yes') ? 'checked="checked"' : '' ?> value="yes"><label>Yes</label>
+                            <input type="radio" name="accept_children_under_18" <?php echo ($profile['accept_children_under_18'] == 'no') ? 'checked="checked"' : '' ?> value="no"><label>No</label>
                         </div> 
                     </div>
 
