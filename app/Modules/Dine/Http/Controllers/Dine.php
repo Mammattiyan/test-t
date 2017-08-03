@@ -14,6 +14,7 @@ use App\Modules\Hangout\Models\Hangouts as HangoutsModel;
 use Illuminate\Support\Facades\DB;
 use App\Modules\Message\Models\Dine as DineModel;
 use App\Modules\Hangout\Models\Recent_activity;
+use App\Modules\Profile\Models\User_profile;
 
 class Dine extends Controller {
     /*
@@ -28,7 +29,20 @@ class Dine extends Controller {
 
         $userId = Core::decodeIdAction($token);
         $user = User::find($userId)->toArray();
-        return view('dine::index')->with(['user' => $user, 'token' => $token]);
+             $fullData = User_profile::select('user_profile.*', 'gender_preference.gender_preference_name', 'marital_status.marital_status', 'ethnic_origin.ethnic_origin_name', 'qualification.qualification_name', 'job_category.category_name', 'smoke.name as smoke_status', 'drink.name as drink_status'
+                                    , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage')
+                            ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
+                            ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')
+                            ->leftJoin('ethnic_origin', 'ethnic_origin.id', 'user_profile.ethnic_origin_id')
+                            ->leftJoin('qualification', 'qualification.id', 'user_profile.qualification_id')
+                            ->leftJoin('job_category', 'job_category.id', 'user_profile.job_category_id')
+                            ->leftJoin('smoke', 'smoke.id', 'user_profile.smoke_id')
+                            ->leftJoin('drink', 'drink.id', 'user_profile.drink_id')
+                            ->leftJoin('pet_lover', 'pet_lover.id', 'user_profile.pet_lover_id')
+                            ->join('users', 'users.id', 'user_profile.user_id')
+                            ->where('user_profile.user_id', $userId)
+                            ->first()->toArray();
+        return view('dine::index')->with(['user' => $user, 'token' => $token,'fullData'=>$fullData]);
     }
 
     /*

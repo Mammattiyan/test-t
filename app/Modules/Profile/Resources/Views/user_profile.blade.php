@@ -12,11 +12,18 @@ Itweetup :: Activities
             @include('search::search_form')
             <div class="box pad">
                 <div class="thick-text">About Me</div>
-                <span class="user-info">Name: Shay Laren</span><br>
+                <span class="user-info">Name: {{ucfirst($fullData['full_name'])}}</span><br>
                 <span class="user-info">Age: 28</span><br>
-                <span class="user-info">Height: 6"2</span><br>
-                <span class="user-info">Relationship story: Single</span><br>
-                <span class="user-info">Location: Georgia</span><br><br>
+                <span class="user-info">Height: {{$fullData['height']}}</span><br>
+                <span class="user-info">Gender preference: {{$fullData['gender_preference_name']}}</span><br>
+                <span class="user-info">Ethnic origin: {{$fullData['ethnic_origin_name']}}</span><br>
+                <span class="user-info">Qualification: {{$fullData['qualification_name']}}</span><br>
+                <span class="user-info">Job Category: {{$fullData['category_name']}}</span><br>
+                <span class="user-info">Smokeing Status: {{$fullData['smoke_status']}}</span><br>
+                <span class="user-info">Drink Status: {{$fullData['drink_status']}}</span><br>
+                <span class="user-info">Pet lover: {{$fullData['pet_lover']}}</span><br>
+                <span class="user-info">Relationship story: {{$fullData['marital_status']}}</span><br>
+                <span class="user-info">Location: {{$fullData['location']}}</span><br><br>
                 <span>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.<br><br> Enim ad minim veniam, quis nostrud exercitation love.</span>
             </div>
             <div class="box pad photo-gallery">
