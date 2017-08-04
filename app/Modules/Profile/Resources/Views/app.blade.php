@@ -60,7 +60,7 @@
         <script src="{{ asset('croppic/croppic.min.js') }}"></script>
         <script src="{{ asset('croppic/assets/js/main.js') }}"></script>
 
-        <script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>
+        <!--<script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>-->
         <script type="text/javascript" src="{{ asset('js/parsley.js') }}"></script>
 
         @yield('js')

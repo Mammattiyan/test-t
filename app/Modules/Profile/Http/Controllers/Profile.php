@@ -362,8 +362,8 @@ class Profile extends Controller {
         }
         $data = [];
         $data['user_profiles'] = User_profile::where('user_id', $user)->first()->toArray();
-//        dd($data['user_profiles']);
-        $data['mottos'] = Mottos::all();
+        $data['mottos'] = $this->selectPartnerData(Mottos::all(), 'motto_name');
+//        dd($data['mottos']);
         $data['gender_preference'] = Gender_preference::all();
         $data['marital_status'] = Marital_status::all();
         $height = [];
@@ -406,7 +406,7 @@ class Profile extends Controller {
         $user = Auth::user()->id;
         $data = Input::all();
         $values = [];
-        $values["motto_id"] = $data["motto_id"];
+        $values["motto"] = $data["motto"];
         $values["gender_preference_id"] = $data["gender_preference_id"];
         $values["marital_status_id"] = $data["marital_status_id"];
         $values["height"] = $data["height"];

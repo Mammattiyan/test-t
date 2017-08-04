@@ -53,6 +53,8 @@ Itweetup :: Activities
 }
     
 </style>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <?php
 $profile = $data['user_profiles'];
@@ -68,10 +70,10 @@ $profile = $data['user_profiles'];
         <div class="accordion-group">
             <div class="accordion">
                 <div class="accordion-title">Personal Details</div>
-                <div class="accordion-content" style="display: none;">
+                <div class="accordion-content" style="display: block;">
                     <div class="formRow">
                         <label>Motto</label>
-                        <div><input type="text" name="motto_id" value="{{$data['motto_name']->name or ''}}" required></div> 
+                        <div><input type="text" name="motto" id="motto_id" value="{{$data['motto_name']->name or ''}}" required></div> 
                     </div>
                     <div class="formRow">
                         @if(count($data['gender_preference'])>0)
@@ -111,7 +113,7 @@ $profile = $data['user_profiles'];
             </div>
             <div class="accordion">
                 <div class="accordion-title">Personal Appearance</div>
-                <div class="accordion-content" style="display: none;">
+                <div class="accordion-content" style="display: block;">
                     <div class="formRow">
 
                         <label>Core Area</label>
@@ -155,7 +157,7 @@ $profile = $data['user_profiles'];
             </div>
             <div class="accordion">
                 <div class="accordion-title">Social &amp; Lifestyle</div>
-                <div class="accordion-content" style="display: none;">
+                <div class="accordion-content" style="display: block;">
                     <div class="formRow">
                         @if(count($data['smoke'])>0)
                         <label>Smoke :</label>
@@ -189,10 +191,10 @@ $profile = $data['user_profiles'];
             
             <div class="accordion">
                 <div class="accordion-title">Personality Traits</div>
-                <div class="accordion-content" style="display: none;">
+                <div class="accordion-content" style="display: block;">
                         @if(count($data['traits'])>0)
                             @foreach($data['traits'] as $value)
-                            <div class="">
+                            <div class="col-md-4">
                             <label><b>{{$value['category']}}</b></label>
                                 @foreach($value['traits'] as $val)
                                     <div>{{$val['name']}}</div> 
@@ -202,9 +204,10 @@ $profile = $data['user_profiles'];
                         @endif
                 </div>
             </div>
+            
             <div class="accordion">
                 <div class="accordion-title">Tell us what you would like us partner </div>
-                <div class="accordion-content" style="display: none;">
+                <div class="accordion-content" style="display: block;">
                     <div class="formRow">
                         <label>I'm seeking a</label>
                         <div class="radioRow"><input type="radio" name="partner_gender" <?php echo ($profile['partner_gender'] == 'male') ? 'checked="checked"' : '' ?> value="male"><label>Male</label></div> 
@@ -266,8 +269,8 @@ $profile = $data['user_profiles'];
                     </div>
                     <div class="formRow">
                         <label>Annual Income Range</label>
-                        <div class="radioRow"><input type="text" name="annual_income_from" value="" ></div> 
-                        <div class="radioRow"><input type="text" name="annual_income_to" value="" ></div> 
+                        <div class="radioRow"><input type="text" name="annual_income_from" value="{{$profile['annual_income_from']}}" ></div> 
+                        <div class="radioRow"><input type="text" name="annual_income_to" value="{{$profile['annual_income_to']}}" ></div> 
                     </div>
                     <div class="formRow">
                         <label>Please indicate which smoking habits you would accept from your partner.</label>
@@ -336,6 +339,7 @@ $profile = $data['user_profiles'];
 @endsection
 
 @section('js')
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script>
     $('select').select2({
@@ -344,6 +348,12 @@ $profile = $data['user_profiles'];
     $('#ethnic_origin').select2({
     });
     $('#smoking_habits').select2({
+    });
+    
+    
+    var availableTags = $.parseJSON('<?php echo addslashes(json_encode($data['mottos']));?>');
+    $( "#motto_id" ).autocomplete({
+      source: availableTags
     });
 
 
@@ -368,5 +378,7 @@ $profile = $data['user_profiles'];
             });
         }
     }
+    
+    $('.accordion-content').hide();
 </script>
 @endsection
