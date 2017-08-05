@@ -18,8 +18,28 @@ use App\Modules\Profile\Models\Userprofile;
 use App\Modules\Hangout\Models\Hangouts;
 use App\Modules\Message\Models\Dine;
 use App\Modules\Hangout\Models\Recent_activity;
-
+use App\Modules\Profile\Models\Mottos;
 use App\Modules\Profile\Models\Gender_preference;
+use App\Modules\Profile\Models\Marital_status;
+use App\Modules\Profile\Models\Ethnic_origin;
+use App\Modules\Profile\Models\Job_category;
+use App\Modules\Profile\Models\Jobs;
+use App\Modules\Profile\Models\Partner_grew_up_country;
+use App\Modules\Profile\Models\Partner_job_category;
+use App\Modules\Profile\Models\Partner_living_country;
+use App\Modules\Profile\Models\Partner_living_state;
+use App\Modules\Profile\Models\Partner_qualification;
+use App\Modules\Profile\Models\Partner_marital_status;
+use App\Modules\Profile\Models\Pet_lover;
+use App\Modules\Profile\Models\Qualification;
+use App\Modules\Profile\Models\Smoke;
+use App\Modules\Profile\Models\Traits;
+use App\Modules\Profile\Models\User_profile;
+use App\Modules\Profile\Models\Zodiac_signs;
+use App\Modules\Profile\Models\Module_documents;
+use App\Modules\Profile\Models\Drink;
+use App\Modules\Profile\Models\Countries;
+use App\Modules\Profile\Models\States;
 
 class Profile extends Controller {
     /*
@@ -37,16 +57,15 @@ class Profile extends Controller {
         $data['hangoutCount'] = count(Hangouts::select('sender_id')->where('hangouts.receiver_id', $userId)->groupBy('sender_id')->get());
         $data['dineCount'] = count(Dine::select('sender_id')->where('dines.receiver_id', $userId)->groupBy('sender_id')->get());
         $data['messageCount'] = count(Messages::select('sender')->where('messages.receiver', $userId)->groupBy('sender')->get());
-        $recentData = Recent_activity::select('recent_activities.*', 'users.name AS user_name','users.profileimage AS user_profile_pic', DB::raw('(SELECT name FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_name'),DB::raw('(SELECT profileimage FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_profile_pic'))
+        $recentData = Recent_activity::select('recent_activities.*', 'users.name AS user_name', 'users.profileimage AS user_profile_pic', DB::raw('(SELECT name FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_name'), DB::raw('(SELECT profileimage FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_profile_pic'))
                 ->join('users', 'users.id', 'recent_activities.user_id')
                 ->where('recent_activities.user_id', $userId)
                 ->orWhere('recent_activities.receiver_id', $userId)
                 ->take(5)
                 ->get()
                 ->toArray();
-       
-        return view('profile::profile')->with(['data' => $data, 'recentData' => $recentData, 'userId' => $userId, 'token' => Core::encodeIdAction($userId)]);
 
+        return view('profile::profile')->with(['data' => $data, 'recentData' => $recentData, 'userId' => $userId, 'token' => Core::encodeIdAction($userId)]);
     }
 
     /*
@@ -58,10 +77,27 @@ class Profile extends Controller {
      */
 
     public function userProfileViewAction() {
+
         $userId = Input::get('user_id');
         $user = User::find($userId)->toArray();
         $user['id'] = Core::encodeIdAction($userId);
-        return view('profile::user_profile')->with(['user' => $user, 'token' => Core::encodeIdAction($userId)]);
+        $gallery = [];
+        $fullData = User_profile::select('user_profile.*', 'gender_preference.gender_preference_name', 'marital_status.marital_status', 'ethnic_origin.ethnic_origin_name', 'qualification.qualification_name', 'job_category.category_name', 'smoke.name as smoke_status', 'drink.name as drink_status'
+                                , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage')
+                        ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
+                        ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')
+                        ->leftJoin('ethnic_origin', 'ethnic_origin.id', 'user_profile.ethnic_origin_id')
+                        ->leftJoin('qualification', 'qualification.id', 'user_profile.qualification_id')
+                        ->leftJoin('job_category', 'job_category.id', 'user_profile.job_category_id')
+                        ->leftJoin('smoke', 'smoke.id', 'user_profile.smoke_id')
+                        ->leftJoin('drink', 'drink.id', 'user_profile.drink_id')
+                        ->leftJoin('pet_lover', 'pet_lover.id', 'user_profile.pet_lover_id')
+                        ->join('users', 'users.id', 'user_profile.user_id')
+                        ->where('user_profile.user_id', $userId)
+                        ->first()->toArray();
+        $gallery['images'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_images')->get()->toArray();
+        $gallery['videos'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_videos')->get()->toArray();
+        return view('profile::user_profile')->with(['user' => $user, 'fullData' => $fullData, 'token' => Core::encodeIdAction($userId), 'gallery' => $gallery]);
     }
 
     /*
@@ -76,7 +112,23 @@ class Profile extends Controller {
         $userId = Core::decodeIdAction($token);
         $user = User::find($userId)->toArray();
         $user['id'] = $token;
-        return view('profile::user_profile')->with(['user' => $user, 'token' => $token]);
+        $fullData = User_profile::select('user_profile.*', 'gender_preference.gender_preference_name', 'marital_status.marital_status', 'ethnic_origin.ethnic_origin_name', 'qualification.qualification_name', 'job_category.category_name', 'smoke.name as smoke_status', 'drink.name as drink_status'
+                                , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage')
+                        ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
+                        ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')
+                        ->leftJoin('ethnic_origin', 'ethnic_origin.id', 'user_profile.ethnic_origin_id')
+                        ->leftJoin('qualification', 'qualification.id', 'user_profile.qualification_id')
+                        ->leftJoin('job_category', 'job_category.id', 'user_profile.job_category_id')
+                        ->leftJoin('smoke', 'smoke.id', 'user_profile.smoke_id')
+                        ->leftJoin('drink', 'drink.id', 'user_profile.drink_id')
+                        ->leftJoin('pet_lover', 'pet_lover.id', 'user_profile.pet_lover_id')
+                        ->join('users', 'users.id', 'user_profile.user_id')
+                        ->where('user_profile.user_id', $userId)
+                        ->first()->toArray();
+        $gallery = [];
+        $gallery['images'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_images')->get()->toArray();
+        $gallery['videos'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_videos')->get()->toArray();
+        return view('profile::user_profile')->with(['user' => $user, 'fullData' => $fullData, 'token' => $token, 'gallery' => $gallery]);
     }
 
     /*
@@ -115,7 +167,22 @@ class Profile extends Controller {
                     ->orWhere(['receiver' => Auth::user()->id, 'sender' => $userId])
                     ->orderBy('messages.id', 'asc')
                     ->get();
-            return view('profile::user_messages')->with(['user' => $user, 'token' => $token, 'message' => $message, 'my' => Auth::user()->id]);
+
+            $fullData = User_profile::select('user_profile.*', 'gender_preference.gender_preference_name', 'marital_status.marital_status', 'ethnic_origin.ethnic_origin_name', 'qualification.qualification_name', 'job_category.category_name', 'smoke.name as smoke_status', 'drink.name as drink_status'
+                                    , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage')
+                            ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
+                            ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')
+                            ->leftJoin('ethnic_origin', 'ethnic_origin.id', 'user_profile.ethnic_origin_id')
+                            ->leftJoin('qualification', 'qualification.id', 'user_profile.qualification_id')
+                            ->leftJoin('job_category', 'job_category.id', 'user_profile.job_category_id')
+                            ->leftJoin('smoke', 'smoke.id', 'user_profile.smoke_id')
+                            ->leftJoin('drink', 'drink.id', 'user_profile.drink_id')
+                            ->leftJoin('pet_lover', 'pet_lover.id', 'user_profile.pet_lover_id')
+                            ->join('users', 'users.id', 'user_profile.user_id')
+                            ->where('user_profile.user_id', $userId)
+                            ->first()->toArray();
+
+            return view('profile::user_messages')->with(['user' => $user, 'token' => $token, 'message' => $message, 'my' => Auth::user()->id, 'fullData' => $fullData]);
         } else {
             return redirect('message');
         }
@@ -278,95 +345,131 @@ class Profile extends Controller {
         return $data;
     }
 
-    /*public function profileEditAction(Request $request) {
-        $user = Auth::user()->id;
-        if(Userprofile::where('user_id', $user)->count()==0){
-            Userprofile::create(['user_id' => $user]);
-        }
-        
-        $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
+    public function selectPartnerData($list, $label) {
         $data = [];
-        $data['mottos'] = $this->selectData(Motto::all(), 'motto');
-        $data['pets'] = $this->selectData(Pets::all(), 'name');
-        $data['relationhistory'] = $this->selectData(Relationhistory::all(), 'rel_hist');
-        $data['education'] = $this->selectData(Education::all(), 'education');
-        $data['profession'] = $this->selectData(Profession::all(), 'profession');
-        $data['bodytype'] = $this->selectData(Bodytype::all(), 'body_type');
-        $data['zodiac'] = $this->selectData(Zodiac::all(), 'zodiac');
-        $data['languages'] = $this->selectData(Languages::all(), 'languages');
-        $data['currency'] = $this->selectData(Currency::all(), 'name');
-        $data['color'] = $this->selectData(Color::all(), 'name');
-        $data['hairapp'] = $this->selectData(Hairapp::all(), 'type');
-        $data['eyewear'] = $this->selectData(Eyewear::all(), 'type');
-        $data['appearance'] = $this->selectData(Appearance::all(), 'type');
-        $data['marital'] = $this->selectData(Marital::all(), 'status');
-        $data['countries'] = $this->selectData(Countries::all(), 'name');
-        $data['smoketype'] = $this->selectData(Smoketype::all(), 'type');
-        $data['drinktype'] = $this->selectData(Drinktype::all(), 'type');
-        $data['relationfor'] = $this->selectData(Relationfor::all(), 'rel_for');
-        $data['uservid'] = Uservid::where('user_id', $user);
-        $data['userpic'] = Userpic::where('user_id', $user);
-        $data['user'] = User::where('id', $user)->first();
-        $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
-        return view('profile::editprofile')->with('data', $data);
-    }*/
-    
+        if (count($list) > 0) {
+            foreach ($list as $val) {
+                $data[] = $val->$label;
+            }
+        }
+        return $data;
+    }
+
     public function profileEditAction(Request $request) {
         $user = Auth::user()->id;
-//        if(Userprofile::where('user_id', $user)->count()==0){
-//            Userprofile::create(['user_id' => $user]);
-//        }
-        
+        if (User_profile::where('user_id', $user)->count() == 0) {
+            User_profile::create(['user_id' => $user]);
+        }
         $data = [];
-//        $data['userprofiles'] = Userprofile::where('user_id', $user)->first();
-        $data['mottos'] = Gender_preference::all();
+        $data['user_profiles'] = User_profile::where('user_id', $user)->first()->toArray();
+        $data['mottos'] = $this->selectPartnerData(Mottos::all(), 'motto_name');
+//        dd($data['mottos']);
         $data['gender_preference'] = Gender_preference::all();
-        dd($data['gender_preference']);
+        $data['marital_status'] = Marital_status::all();
+        $height = [];
+        for ($i = 10; $i <= 210; $i++) {
+            $height[$i] = $i . ' cm';
+        }
+        $data['height'] = $height;
+        $data['ethnic_origin'] = $this->selectData(Ethnic_origin::all(), 'ethnic_origin_name');
+        $data['qualification'] = Qualification::all();
+        $data['partner_qualification'] = $this->selectData(Qualification::all(), 'qualification_name');
+        $data['smoke'] = Smoke::all();
+        $data['drink'] = Drink::all();
+        $data['pet_lover'] = Pet_lover::all();
+        $data['partner_marital_status'] = $this->selectData(Marital_status::all(), 'marital_status');
+        $data['states'] = $this->selectData(States::all(), 'state_name');
+        $data['living_country'] = $this->selectData(Countries::all(), 'name');
+        $data['jobs'] = Job_category::select('id as job_category_id', 'category_name')
+                        ->with(['jobs' => function($q) {
+                                $q->select('id as job_id', 'job_category_id', 'job_name');
+                            }])
+                        ->get()->toArray();
+        $data['zodiac_signs'] = Zodiac_signs::all();
+        $data['selected_partner_grew_up_country'] = $this->selectPartnerData(Partner_grew_up_country::where('user_id', $user)->get(), 'country_id');
+        $data['selected_partner_job_category'] = $this->selectPartnerData(Partner_job_category::where('user_id', $user)->get(), 'job_category_id');
+        $data['selected_partner_living_country'] = $this->selectPartnerData(Partner_living_country::where('user_id', $user)->get(), 'country_id');
+        $data['selected_partner_living_state'] = $this->selectPartnerData(Partner_living_state::where('user_id', $user)->get(), 'state_id');
+        $data['selected_partner_marital_status'] = $this->selectPartnerData(Partner_marital_status::where('user_id', $user)->get(), 'marital_status_id');
+        $data['selected_partner_qualification'] = $this->selectPartnerData(Partner_qualification::where('user_id', $user)->get(), 'qualification_id');
+        $data['traits'] = Traits::select('category')
+                            ->with(['traits' => function($sql){
+                                $sql->select()->where('status', 1);
+                            }])
+                            ->distinct()
+                            ->get()->toArray();
+                            
         return view('profile::editprofile')->with('data', $data);
     }
-    
+
     public function profileUpdateAction(Request $request) {
         $user = Auth::user()->id;
         $data = Input::all();
         $values = [];
-        $values['motto'] = $data['motto'];
-        $values['about'] = $data['motto'];
-        $values['height'] = $data['motto'];
-        $values['htunit'] = $data['motto'];
-        $values['weight'] = $data['motto'];
-        $values['wtunit'] = $data['motto'];
-        $values['relationhist'] = $data['motto'];
-        $values['education'] = $data['motto'];
-        $values['profession'] = $data['motto'];
-        $values['bodytype'] = $data['motto'];
-        $values['zodiac'] = $data['motto'];
-        $values['disability'] = $data['motto'];
-        $values['fluency'] = $data['motto'];
-        $values['haircolor'] = $data['motto'];
-        $values['hairapp'] = $data['motto'];
-        $values['eyecolor'] = $data['motto'];
-        $values['eyewear'] = $data['motto'];
-        $values['ethinicity'] = $data['motto'];
-        $values['tatoo'] = $data['motto'];
-        $values['appearance'] = $data['motto'];
-        $values['smoke'] = $data['motto'];
-        $values['drink'] = $data['motto'];
-        $values['pets'] = $data['motto'];
-        $values['countries_visit'] = $data['motto'];
-        $values['marital'] = $data['motto'];
-        $values['children'] = $data['motto'];
-        $values['relationlooking'] = $data['motto'];
-        $values['relmarital'] = $data['motto'];
-        $values['relethinicity'] = $data['motto'];
-        $values['reltatoo'] = $data['motto'];
-        $values['relappearance'] = $data['motto'];
-        $values['relsmoke'] = $data['motto'];
-        $values['reldrink'] = $data['motto'];
-        $values['relpets'] = $data['motto'];
-        Userprofile::where('user_id', $user)->update($values);
-        $userData = [];
-        $userData['birthday'] = $data['age_submit'];
-        User::where('id', $user)->update($userData);
+        $values["motto"] = $data["motto"];
+        $values["gender_preference_id"] = $data["gender_preference_id"];
+        $values["marital_status_id"] = $data["marital_status_id"];
+        $values["height"] = $data["height"];
+        $values["ethnic_origin_id"] = $data["ethnic_origin_id"];
+        $values["qualification_id"] = $data["qualification_id"];
+        $values["job_category_id"] = $data["job_category_id"];
+        $values["job_title"] = $data["job_title"];
+        $values["zodiac_sign_id"] = $data["zodiac_sign_id"];
+        $values["smoke_id"] = $data["smoke_id"];
+        $values["drink_id"] = $data["drink_id"];
+        $values["pet_lover_id"] = $data["pet_lover_id"];
+        $values["partner_gender"] = $data["partner_gender"];
+        $values["age_from"] = $data["age_from"];
+        $values["age_to"] = $data["age_to"];
+        $values["height_from"] = $data["height_from"];
+        $values["height_to"] = $data["height_to"];
+        $values["annual_income_from"] = $data["annual_income_from"];
+        $values["annual_income_to"] = $data["annual_income_to"];
+        $values["partner_smoking_habit"] = $data["partner_smoking_habit"];
+        $values["partner_drinking_habit"] = $data["partner_drinking_habit"];
+        $values["no_of_children_lived_with"] = $data["no_of_children_lived_with"];
+        $values["adopting_children"] = $data["adopting_children"];
+        $values["accept_children_under_18"] = $data["accept_children_under_18"];
+
+        Partner_grew_up_country::where('user_id', $user)->delete();
+        if (isset($data['partner_grew_up_country']) && count($data['partner_grew_up_country']) > 0) {
+            foreach ($data['partner_grew_up_country'] as $val) {
+                Partner_grew_up_country::create(['user_id' => $user, 'country_id' => $val]);
+            }
+        }
+        Partner_job_category::where('user_id', $user)->delete();
+        if (isset($data['partner_job_category']) && count($data['partner_job_category']) > 0) {
+            foreach ($data['partner_job_category'] as $val) {
+                Partner_job_category::create(['user_id' => $user, 'job_category_id' => $val]);
+            }
+        }
+        Partner_living_country::where('user_id', $user)->delete();
+        if (isset($data['partner_living_country']) && count($data['partner_living_country']) > 0) {
+            foreach ($data['partner_living_country'] as $val) {
+                Partner_living_country::create(['user_id' => $user, 'country_id' => $val]);
+            }
+        }
+        Partner_living_state::where('user_id', $user)->delete();
+        if (isset($data['partner_living_state']) && count($data['partner_living_state']) > 0) {
+            foreach ($data['partner_living_state'] as $val) {
+                Partner_living_state::create(['user_id' => $user, 'state_id' => $val]);
+            }
+        }
+        Partner_marital_status::where('user_id', $user)->delete();
+        if (isset($data['partner_marital_status']) && count($data['partner_marital_status']) > 0) {
+            foreach ($data['partner_marital_status'] as $val) {
+                Partner_marital_status::create(['user_id' => $user, 'marital_status_id' => $val]);
+            }
+        }
+        Partner_qualification::where('user_id', $user)->delete();
+        if (isset($data['partner_qualification']) && count($data['partner_qualification']) > 0) {
+            foreach ($data['partner_qualification'] as $val) {
+                Partner_qualification::create(['user_id' => $user, 'qualification_id' => $val]);
+            }
+        }
+
+        User_profile::where('user_id', $user)->update($values);
+
         echo json_encode(['response' => 1, 'msg' => 'Profile updated successfully']);
     }
 
@@ -389,6 +492,8 @@ class Profile extends Controller {
                             ->where('hangouts.id', $hangId)
                             ->orderBy('hangouts.id', 'asc')
                             ->first()->toArray();
+          
+
             if ($message['sender_id'] == Auth::user()->id) {
                 $user = User::find($message['receiver_id'])->toArray();
             } else {
