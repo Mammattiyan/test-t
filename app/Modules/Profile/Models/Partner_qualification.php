@@ -8,5 +8,4 @@ class Partner_qualification extends Model
 {
     protected $table='partner_qualification';
     protected $guarded = [];
-    protected $connection = 'mysql2';
 }

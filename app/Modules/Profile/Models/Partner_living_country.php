@@ -8,5 +8,4 @@ class 	Partner_living_country extends Model
 {
     protected $table='partner_living_country';
     protected $guarded = [];
-    protected $connection = 'mysql2';
 }

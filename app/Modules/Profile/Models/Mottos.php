@@ -8,5 +8,4 @@ class Mottos extends Model
 {
     protected $table='mottos';
     protected $guarded = [];
-    protected $connection = 'mysql2';
 }

@@ -8,5 +8,4 @@ class Gender_preference extends Model
 {
     protected $table='gender_preference';
     protected $guarded = [];
-    protected $connection = 'mysql2';
 }

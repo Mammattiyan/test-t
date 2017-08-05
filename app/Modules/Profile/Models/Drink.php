@@ -8,5 +8,4 @@ class Drink extends Model
 {
     protected $table='drink';
     protected $guarded = [];
-    protected $connection = 'mysql2';
 }

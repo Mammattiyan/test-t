@@ -8,5 +8,4 @@ class Partner_living_state extends Model
 {
     protected $table='partner_living_state';
     protected $guarded = [];
-    protected $connection = 'mysql2';
 }
