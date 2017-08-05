@@ -70,10 +70,10 @@ $profile = $data['user_profiles'];
         <div class="accordion-group">
             <div class="accordion">
                 <div class="accordion-title">Personal Details</div>
-                <div class="accordion-content" style="display: block;">
+                <div class="accordion-content" style="display: none;">
                     <div class="formRow">
                         <label>Motto</label>
-                        <div><input type="text" name="motto" id="motto_id" value="{{$data['motto_name']->name or ''}}" required></div> 
+                        <div><input type="text" name="motto" id="motto_id" value="{{$profile['motto'] or ''}}" required></div> 
                     </div>
                     <div class="formRow">
                         @if(count($data['gender_preference'])>0)
@@ -113,7 +113,7 @@ $profile = $data['user_profiles'];
             </div>
             <div class="accordion">
                 <div class="accordion-title">Personal Appearance</div>
-                <div class="accordion-content" style="display: block;">
+                <div class="accordion-content" style="display: none;">
                     <div class="formRow">
 
                         <label>Core Area</label>
@@ -135,29 +135,32 @@ $profile = $data['user_profiles'];
                         <label>Job Title</label>
                         <div><input type="text" name="job_title" value="{{$profile['job_title']}}" ></div> 
                     </div>
-                    <div class="formRow">
-                        <label>Zodiac Signs</label>
-                        
+                    <div class="formRow zodiStyle">
+                        <h3>Zodiac Signs</h3>
+                        <div class="row">
+                            <div class="col-md-12">
                             @if(count($data['zodiac_signs']) > 0)
                                 @foreach($data['zodiac_signs'] as $value)
                                 <?php 
                                 $url = asset("images/zodiac-signs/".$value->sign_image_url);
                                 $zodiac_name = strtolower($value->zodiac_name);
-                                echo '<style>.'.$zodiac_name.'{background-image:url('.$url.');}</style>';
+                                echo '<style>.'.$zodiac_name.'{background:url('.$url.') no-repeat center center ; background-size:auto 100%; positon:relative; display:inline-block; }</style>';
                                 ?>
-                                <div class="cc-selector">
+                                <div class="cc-selector text-center zodicSingle">
                                     <input <?php echo ($profile['zodiac_sign_id'] == $value->id)?'checked="checked"':''?>  id="{{$zodiac_name}}" type="radio" name="zodiac_sign_id" value="{{$value->id}}" />
-                                    <label class="drinkcard-cc {{$zodiac_name}}" for="{{$zodiac_name}}"></label>
+                                    <label class="drinkcard-cc {{$zodiac_name}}" for="{{$zodiac_name}}"><span>{{$zodiac_name}}</span></label>
                                 </div>
                                 @endforeach
                             @endif
+                            </div>
+                            </div>
                     </div>
 
                 </div>
             </div>
             <div class="accordion">
                 <div class="accordion-title">Social &amp; Lifestyle</div>
-                <div class="accordion-content" style="display: block;">
+                <div class="accordion-content" style="display: none;">
                     <div class="formRow">
                         @if(count($data['smoke'])>0)
                         <label>Smoke :</label>
@@ -188,26 +191,44 @@ $profile = $data['user_profiles'];
             </div>
             
             
-            
+            <?php $traits = []?>
             <div class="accordion">
                 <div class="accordion-title">Personality Traits</div>
-                <div class="accordion-content" style="display: block;">
-                        @if(count($data['traits'])>0)
-                            @foreach($data['traits'] as $value)
-                            <div class="col-md-4">
-                            <label><b>{{$value['category']}}</b></label>
+                <?php /*
+                <div class="accordion-content" style="display: none;">
+                    @if(count($data['traits'])>0)
+                        @foreach($data['traits'] as $key => $value)
+                        <div style="<?php echo ($key == 0)?'display:block':'display:none';?>">
+                            <label><b>{{ucwords(str_replace('_', ' ', $value['category']))}}</b></label>
+                            <div class="lists" id="{{$value['category']}}" style="min-height: 100px; border: 1px solid #ccc;">
+                                <?php $traits[$value['category']] = '';?>
                                 @foreach($value['traits'] as $val)
-                                    <div>{{$val['name']}}</div> 
+                                    <!--<div>{{$val['name']}}</div>--> 
+                                    <?php $traits[$value['category']] .= '<div class="col-md-4"><div id="item1" class="lists">'.$val['name'].'</div></div>';?>
                                 @endforeach
                             </div>
-                            @endforeach
-                        @endif
+                        </div>
+                        @endforeach
+                    @endif
+                    <div class="clearfix"></div>
+                    @if(count($data['traits'])>0)
+                        @foreach($data['traits'] as $key => $value)
+                        <div style="<?php echo ($key == 0)?'display:block':'display:none';?>">
+                            <label><b>{{ucwords(str_replace('_', ' ', $value['category']))}}</b></label>
+                            <div class="lists" id="{{$value['category']}}_sel" style="min-height: 100px; border: 1px solid #ccc;">
+                                
+                                
+                            </div>
+                        </div>
+                        @endforeach
+                    @endif    
                 </div>
+                <?php */?>
             </div>
             
             <div class="accordion">
                 <div class="accordion-title">Tell us what you would like us partner </div>
-                <div class="accordion-content" style="display: block;">
+                <div class="accordion-content" style="display: none;">
                     <div class="formRow">
                         <label>I'm seeking a</label>
                         <div class="radioRow"><input type="radio" name="partner_gender" <?php echo ($profile['partner_gender'] == 'male') ? 'checked="checked"' : '' ?> value="male"><label>Male</label></div> 
@@ -342,6 +363,29 @@ $profile = $data['user_profiles'];
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script>
+    
+    $(document).ready(function () {
+        addElements();
+        $(function () {
+            $("#positive, #positive_sel").sortable({
+                connectWith: ".lists",
+                cursor: "move"
+            }).disableSelection();
+            
+            $("#negative, #negative_sel").sortable({
+                connectWith: ".lists",
+                cursor: "move"
+            }).disableSelection();
+        });
+
+        
+    });
+
+    function addElements() {
+        $("#positive").empty().append('{!!$traits["positive"]!!}');
+        $("#negative").empty().append('{!!$traits["negative"]!!}');
+    }
+    
     $('select').select2({
         minimumResultsForSearch: -1
     });
@@ -379,6 +423,6 @@ $profile = $data['user_profiles'];
         }
     }
     
-    $('.accordion-content').hide();
+//    $('.accordion-content').hide();
 </script>
 @endsection

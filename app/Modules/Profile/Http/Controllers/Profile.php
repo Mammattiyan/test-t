@@ -394,7 +394,7 @@ class Profile extends Controller {
         $data['selected_partner_qualification'] = $this->selectPartnerData(Partner_qualification::where('user_id', $user)->get(), 'qualification_id');
         $data['traits'] = Traits::select('category')
                             ->with(['traits' => function($sql){
-                                $sql->select();
+                                $sql->select()->where('status', 1);
                             }])
                             ->distinct()
                             ->get()->toArray();
