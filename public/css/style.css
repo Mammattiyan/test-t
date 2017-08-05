@@ -635,7 +635,28 @@ input[type='submit'], button {
 
 .accordion {
     margin-top: 15px; }
-
+.accordion-group .accordion {
+    display: block;
+    width: 100%;
+    float: left;
+}
+.accordion-group  .accordion-content{
+     display: block;
+    width: 100%;
+    float: left;
+    clear: both;
+}
+.zodicSingle{
+    display: block;
+    width: 18.6%;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    display:inline-block;
+}
+.zodicSingle label span{
+    top: -26px;
+    position: relative;
+}
 .accordion-title {
     background-color: #EEEEEE;
     padding: 10px 40px 10px 15px;
@@ -1227,3 +1248,6 @@ input[type='submit'], button {
 .select2-container--default .select2-selection--single .select2-selection__arrow{
     top:4px!important;
 }
+
+/*-------------------------------------*/
+

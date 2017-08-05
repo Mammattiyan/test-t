@@ -362,8 +362,8 @@ class Profile extends Controller {
         }
         $data = [];
         $data['user_profiles'] = User_profile::where('user_id', $user)->first()->toArray();
-//        dd($data['user_profiles']);
-        $data['mottos'] = Mottos::all();
+        $data['mottos'] = $this->selectPartnerData(Mottos::all(), 'motto_name');
+//        dd($data['mottos']);
         $data['gender_preference'] = Gender_preference::all();
         $data['marital_status'] = Marital_status::all();
         $height = [];
@@ -385,14 +385,20 @@ class Profile extends Controller {
                                 $q->select('id as job_id', 'job_category_id', 'job_name');
                             }])
                         ->get()->toArray();
-
+        $data['zodiac_signs'] = Zodiac_signs::all();
         $data['selected_partner_grew_up_country'] = $this->selectPartnerData(Partner_grew_up_country::where('user_id', $user)->get(), 'country_id');
         $data['selected_partner_job_category'] = $this->selectPartnerData(Partner_job_category::where('user_id', $user)->get(), 'job_category_id');
         $data['selected_partner_living_country'] = $this->selectPartnerData(Partner_living_country::where('user_id', $user)->get(), 'country_id');
         $data['selected_partner_living_state'] = $this->selectPartnerData(Partner_living_state::where('user_id', $user)->get(), 'state_id');
         $data['selected_partner_marital_status'] = $this->selectPartnerData(Partner_marital_status::where('user_id', $user)->get(), 'marital_status_id');
         $data['selected_partner_qualification'] = $this->selectPartnerData(Partner_qualification::where('user_id', $user)->get(), 'qualification_id');
-
+        $data['traits'] = Traits::select('category')
+                            ->with(['traits' => function($sql){
+                                $sql->select()->where('status', 1);
+                            }])
+                            ->distinct()
+                            ->get()->toArray();
+                            
         return view('profile::editprofile')->with('data', $data);
     }
 
@@ -400,7 +406,7 @@ class Profile extends Controller {
         $user = Auth::user()->id;
         $data = Input::all();
         $values = [];
-        $values["motto_id"] = $data["motto_id"];
+        $values["motto"] = $data["motto"];
         $values["gender_preference_id"] = $data["gender_preference_id"];
         $values["marital_status_id"] = $data["marital_status_id"];
         $values["height"] = $data["height"];
