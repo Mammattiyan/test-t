@@ -8,5 +8,4 @@ class Smoke extends Model
 {
     protected $table='smoke';
     protected $guarded = [];
-    protected $connection = 'mysql2';
 }

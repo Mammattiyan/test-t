@@ -8,5 +8,4 @@ class Zodiac_signs extends Model
 {
     protected $table='zodiac_signs';
     protected $guarded = [];
-    protected $connection = 'mysql2';
 }

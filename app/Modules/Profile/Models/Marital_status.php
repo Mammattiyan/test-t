@@ -8,5 +8,4 @@ class Marital_status extends Model
 {
     protected $table='marital_status';
     protected $guarded = [];
-    protected $connection = 'mysql2';
 }

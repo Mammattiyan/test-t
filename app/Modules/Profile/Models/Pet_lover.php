@@ -8,5 +8,4 @@ class Pet_lover extends Model
 {
     protected $table='pet_lover';
     protected $guarded = [];
-    protected $connection = 'mysql2';
 }

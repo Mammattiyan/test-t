@@ -8,5 +8,4 @@ class Jobs extends Model
 {
     protected $table='jobs';
     protected $guarded = [];
-    protected $connection = 'mysql2';
 }

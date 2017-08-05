@@ -8,5 +8,4 @@ class Ethnic_origin extends Model
 {
     protected $table='ethnic_origin';
     protected $guarded = [];
-    protected $connection = 'mysql2';
 }

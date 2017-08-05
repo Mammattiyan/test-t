@@ -8,5 +8,4 @@ class Traits extends Model
 {
     protected $table='	traits';
     protected $guarded = [];
-    protected $connection = 'mysql2';
 }
