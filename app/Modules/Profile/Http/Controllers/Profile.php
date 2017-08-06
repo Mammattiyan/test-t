@@ -561,7 +561,7 @@ class Profile extends Controller {
 
         $fullData = [];
         $fullData['datas'] = User_profile::select('user_profile.*', 'gender_preference.gender_preference_name', 'marital_status.marital_status', 'ethnic_origin.ethnic_origin_name', 'qualification.qualification_name', 'job_category.category_name', 'smoke.name as smoke_status', 'drink.name as drink_status'
-                                , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage')
+                                , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage', 'zodiac_signs.zodiac_name', 'zodiac_signs.sign_image_url')
                         ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
                         ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')
                         ->leftJoin('ethnic_origin', 'ethnic_origin.id', 'user_profile.ethnic_origin_id')
@@ -570,6 +570,7 @@ class Profile extends Controller {
                         ->leftJoin('smoke', 'smoke.id', 'user_profile.smoke_id')
                         ->leftJoin('drink', 'drink.id', 'user_profile.drink_id')
                         ->leftJoin('pet_lover', 'pet_lover.id', 'user_profile.pet_lover_id')
+                        ->leftJoin('zodiac_signs', 'zodiac_signs.id', 'user_profile.zodiac_sign_id')
                         ->join('users', 'users.id', 'user_profile.user_id')
                         ->where('user_profile.user_id', $userId)
                         ->first()->toArray();

@@ -24,6 +24,9 @@ Itweetup :: Activities
                 <span class="user-info">Pet lover: {{$fullData['pet_lover']}}</span><br>
                 <span class="user-info">Relationship story: {{$fullData['marital_status']}}</span><br>
                 <span class="user-info">Location: {{$fullData['location']}}</span><br><br>
+                <span class="user-info"> Zodiac name: {{$fullData['zodiac_name']}}</span><br><br>
+                <?php $url = asset("images/zodiac-signs/" . $fullData['sign_image_url']); ?>
+                <span class="user-info">Zodiac sign: <img style=" width: 89px;" src=<?php echo $url ?>></span><br><br>
                 <span>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.<br><br> Enim ad minim veniam, quis nostrud exercitation love.</span>
             </div>
             <div class="box pad photo-gallery">
@@ -37,9 +40,9 @@ Itweetup :: Activities
                 @endif
                 @endforeach
                 @else
-                 <div class="vg-item-wrap">
+                <div class="vg-item-wrap">
                     <div class="vg-item">
-                       Not Upload images
+                        Not Upload images
                     </div>
                 </div>
                 @endif
@@ -57,7 +60,7 @@ Itweetup :: Activities
                         <video width="560" height="315" controls>
                             <source src="{{asset($value['path'])}}" type="video/mp4">
                             <source src="{{asset($value['path'])}}" type="video/ogg">
-                            
+
                         </video>
                     </div>
                 </div>
@@ -65,20 +68,20 @@ Itweetup :: Activities
                 <div class="vg-item-wrap">
                     <div class="vg-item">
                         <!--<iframe width="560" height="315" src="{{asset($value['path'])}}" frameborder="0" allowfullscreen="1" class="video"></iframe>-->
-                   
-                     <video width="560" height="315" controls>
+
+                        <video width="560" height="315" controls>
                             <source src="{{asset($value['path'])}}" type="video/mp4">
                             <source src="{{asset($value['path'])}}" type="video/ogg">
-                            
+
                         </video>
                     </div>
                 </div>
                 @endif
                 @endforeach
                 @else
-                 <div class="vg-item-wrap">
+                <div class="vg-item-wrap">
                     <div class="vg-item">
-                       Not Upload videos
+                        Not Upload videos
                     </div>
                 </div>
                 @endif
