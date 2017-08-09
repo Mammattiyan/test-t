@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use App\Modules\Message\Models\Dine as DineModel;
 use App\Modules\Hangout\Models\Recent_activity;
 use App\Modules\Profile\Models\User_profile;
+use App\Modules\Profile\Http\Controllers\Profile;
 
 class Dine extends Controller {
     /*
@@ -29,20 +30,10 @@ class Dine extends Controller {
 
         $userId = Core::decodeIdAction($token);
         $user = User::find($userId)->toArray();
-             $fullData = User_profile::select('user_profile.*', 'gender_preference.gender_preference_name', 'marital_status.marital_status', 'ethnic_origin.ethnic_origin_name', 'qualification.qualification_name', 'job_category.category_name', 'smoke.name as smoke_status', 'drink.name as drink_status'
-                                    , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage')
-                            ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
-                            ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')
-                            ->leftJoin('ethnic_origin', 'ethnic_origin.id', 'user_profile.ethnic_origin_id')
-                            ->leftJoin('qualification', 'qualification.id', 'user_profile.qualification_id')
-                            ->leftJoin('job_category', 'job_category.id', 'user_profile.job_category_id')
-                            ->leftJoin('smoke', 'smoke.id', 'user_profile.smoke_id')
-                            ->leftJoin('drink', 'drink.id', 'user_profile.drink_id')
-                            ->leftJoin('pet_lover', 'pet_lover.id', 'user_profile.pet_lover_id')
-                            ->join('users', 'users.id', 'user_profile.user_id')
-                            ->where('user_profile.user_id', $userId)
-                            ->first()->toArray();
-        return view('dine::index')->with(['user' => $user, 'token' => $token,'fullData'=>$fullData]);
+
+        $allData = Profile::otherProfileViewAction($userId);
+
+        return view('dine::index')->with(['user' => $user, 'token' => $token, 'fullData' => $allData['datas']]);
     }
 
     /*
@@ -81,13 +72,13 @@ class Dine extends Controller {
             foreach (array_values($validator->messages()->toArray()) as $msg) {
                 $error = implode(' ', $msg) . '<br>';
             }
-            return view('dine::index')->with(['token' => $token, 'user'=>$user,'data' => $data, 'errors' => $validator->errors()->all()]);
+            return view('dine::index')->with(['token' => $token, 'user' => $user, 'data' => $data, 'errors' => $validator->errors()->all()]);
         } else {
 
             $query = DineModel::create($data);
             if (!empty($query)) {
                 Recent_activity::create(['user_id' => $data['sender_id'], 'receiver_id' => $data['receiver_id'], 'module_name' => 'dine', 'display_message' => 'You have a dining  request to']);
-                return view('dine::index')->with(['token' => $token, 'user'=>$user, 'status' => '1']);
+                return view('dine::index')->with(['token' => $token, 'user' => $user, 'status' => '1']);
             }
             try {
                 
