@@ -382,8 +382,7 @@ $profile = $data['user_profiles'];
     });
 
     function addElements() {
-        $("#positive").empty().append('{!!$traits["positive"]!!}');
-        $("#negative").empty().append('{!!$traits["negative"]!!}');
+       
     }
     
     $('select').select2({
