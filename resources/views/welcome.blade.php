@@ -98,7 +98,7 @@
 
 
                             <div id="basic" class="well" style="max-width:44em;text-align: center;">
-                                <h4 style="text-align: center;">Date of birth</h4>
+                                <h4 style="text-align: left; margin-bottom:5px;">Date of birth</h4>
                                 <div class="row">							
                                     <select id="dobday" class="form-control"></select>
                                     <select id="dobmonth"  class="form-control"></select>

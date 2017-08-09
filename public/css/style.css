@@ -23,7 +23,7 @@ body {
     position: relative; 
 }
 .header-logo img{
-    height: 60px;
+    margin: 9px 0 0 0;
 }
 img {
     max-width: 100%;
@@ -1278,4 +1278,7 @@ input[type='submit'], button {
     background: #fff;
     padding: 10px 5px 10px 5px;
     text-align: center;
+}
+.login-body > .flex-box{
+    background: rgba(0,0,0,.6);
 }
