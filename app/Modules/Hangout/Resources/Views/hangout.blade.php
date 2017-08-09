@@ -53,11 +53,15 @@ Itweetup :: Activities
                         </div>
                         <div class="row">
                             <label>Private <span class="text text-danger">*</span></label>
-                            <input type="text" name="private" value="{{ $data['private']  or "" }}" required>
+                            <div class="radioRow"><input type="radio" name="private_hangout" value="yes" checked><label>Yes</label>
+                            <input type="radio" name="private_hangout" value="no"><label>No</label>
+                            </div> 
                         </div>
                         <div class="row">
                             <label>Accompany <span class="text text-danger">*</span></label>
-                            <input type="text" name="accompany" value="{{ $data['accompany']  or "" }}" required >
+                            <div class="radioRow"><input type="radio" name="accompany_hangout" value="yes" checked><label>Yes</label>
+                            <input type="radio" name="accompany_hangout" value="no"><label>No</label>
+                            </div> 
                         </div>
                         <div class="row">
                             <label>Family Member <span class="text text-danger">*</span></label>
