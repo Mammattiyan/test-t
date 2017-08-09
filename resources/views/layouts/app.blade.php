@@ -13,6 +13,7 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('css/default.date.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('css/multiselect.min.css') }}">       
         <link rel="stylesheet" type="text/css" href="{{ asset('css/default.time.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/font-awesome.min.css') }}">
 
 
 
@@ -81,8 +82,9 @@
         <!--<script src="{{ asset('croppic/assets/js/main.js') }}"></script>-->
         <!--<script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>-->
         <script type="text/javascript" src="{{ asset('js/parsley.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/jquery.fileuploader.min.js') }}"></script>
+       <!-- <script type="text/javascript" src="{{ asset('js/jquery.fileuploader.min.js') }}"></script>-->
         <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/bootstrap-notify.min.js') }}"></script>
 
  <!--<script src="{{ asset('croppic/assets/js/main.js') }}"></script>-->
 
@@ -130,6 +132,18 @@
                                 }
                             }
                             var cropContainerModal = new Croppic('cropContainerModal', croppicContainerModalOptions);
+
+
+                            function loadingShow() {
+                                var over = '<div id="overlay">' +
+                                        '<div class="bulat"> <div id="dalbulat"> <span>L</span> <span>O</span> <span>A</span> <span>D</span> <span>I</span> <span>N</span> <span>G</span> </div> <div class="luarbulat"></div> </div> <div class="name"><a href="http://www.pixelmimic.com/"></a> </div>' +
+                                        '</div>';
+                                $(over).appendTo('body');
+                                $('#overlay').css('height', $('body').height());
+                            }
+                            function loadingHide() {
+                                $('#overlay').remove();
+                            }
 
 
         </script>

@@ -34,6 +34,7 @@ use App\Modules\Profile\Models\Pet_lover;
 use App\Modules\Profile\Models\Qualification;
 use App\Modules\Profile\Models\Smoke;
 use App\Modules\Profile\Models\Traits;
+use App\Modules\Profile\Models\Traits_selected;
 use App\Modules\Profile\Models\User_profile;
 use App\Modules\Profile\Models\Zodiac_signs;
 use App\Modules\Profile\Models\Module_documents;
@@ -393,12 +394,25 @@ class Profile extends Controller {
         $data['selected_partner_marital_status'] = $this->selectPartnerData(Partner_marital_status::where('user_id', $user)->get(), 'marital_status_id');
         $data['selected_partner_qualification'] = $this->selectPartnerData(Partner_qualification::where('user_id', $user)->get(), 'qualification_id');
         $data['traits'] = Traits::select('category')
-                            ->with(['traits' => function($sql){
-                                $sql->select()->where('status', 1);
+                        ->with(['traits' => function($sql) {
+                                $sql->select('traits.id', 'traits.category', 'traits.name', 'traits_selected.trait_id')
+                                        ->leftJoin('traits_selected', 'traits_selected.trait_id', '=', 'traits.id')
+                                        ->whereNull('traits_selected.trait_id')
+                                        ->where('status', 1);
                             }])
-                            ->distinct()
-                            ->get()->toArray();
+                        ->distinct()
+                        ->get()->toArray();
+        $data['traits_selected'] = Traits::select('category')
+                        ->with(['traits' => function($sql) {
+                                $sql->select('traits.id', 'traits.category', 'traits.name', 'traits_selected.trait_id')
+                                        ->join('traits_selected', 'traits_selected.trait_id', '=', 'traits.id')
+                                        ->whereNotNull('traits_selected.trait_id')
+                                        ->where('status', 1);
+                            }])
+                        ->distinct()
+                        ->get()->toArray();
                             
+//                            dd($data['traits_selected']);
         return view('profile::editprofile')->with('data', $data);
     }
 
@@ -406,6 +420,7 @@ class Profile extends Controller {
         $user = Auth::user()->id;
         $data = Input::all();
         $values = [];
+        $values["about_me"] = $data["about_me"];
         $values["motto"] = $data["motto"];
         $values["gender_preference_id"] = $data["gender_preference_id"];
         $values["marital_status_id"] = $data["marital_status_id"];
@@ -467,6 +482,13 @@ class Profile extends Controller {
                 Partner_qualification::create(['user_id' => $user, 'qualification_id' => $val]);
             }
         }
+        Traits_selected::where(['user_id' => $user])->delete();
+        if (isset($data['traits_selected']) && count($data['traits_selected']) > 0) {
+            $data['traits_selected'] = json_decode($data['traits_selected'], true);
+            foreach ($data['traits_selected'] as $key => $val) {
+                Traits_selected::create(['user_id' => $user, 'trait_id' => $val['id'], 'category' => $val['category']]);
+            }
+        }
 
         User_profile::where('user_id', $user)->update($values);
 
@@ -492,7 +514,7 @@ class Profile extends Controller {
                             ->where('hangouts.id', $hangId)
                             ->orderBy('hangouts.id', 'asc')
                             ->first()->toArray();
-          
+
 
             if ($message['sender_id'] == Auth::user()->id) {
                 $user = User::find($message['receiver_id'])->toArray();

@@ -72,6 +72,10 @@ $profile = $data['user_profiles'];
                 <div class="accordion-title">Personal Details</div>
                 <div class="accordion-content" style="display: none;">
                     <div class="formRow">
+                        <label>About Me</label>
+                        <div><textarea name="about_me">{{$profile['about_me'] or ''}}</textarea></div> 
+                    </div>
+                    <div class="formRow">
                         <label>Motto</label>
                         <div><input type="text" name="motto" id="motto_id" value="{{$profile['motto'] or ''}}" required></div> 
                     </div>
@@ -203,20 +207,22 @@ $profile = $data['user_profiles'];
                                 <?php $traits[$value['category']] = '';?>
                                 @foreach($value['traits'] as $val)
                                     <!--<div>{{$val['name']}}</div>--> 
-                                    <?php $traits[$value['category']] .= '<div class="col-md-4 traits-box" data-id="'.$val['id'].'" data-category="'.$val['category'].'" class="lists'.$value['category'].'">'.$val['name'].'</div>';?>
+                                    <?php $traits[$value['category']] .= '<div class="col-md-4 traits-box" data-id="'.$val['id'].'" data-category="'.$val['category'].'" class="lists'.$value['category'].'">'.str_replace('\n', '', $val['name']).'</div>';?>
                                 @endforeach
                             </div>
-                            
+                            <div class="clearfix"></div>
                             <label><b>{{ucwords(str_replace('_', ' ', $value['category']))}} Selected</b></label>
                             <div class="lists{{$value['category']}} traits-selected" id="{{$value['category']}}_sel">
-                                
-                                
+                                @if(count($data['traits_selected'][$key]['traits'])>0)
+                                    @foreach($data['traits_selected'][$key]['traits'] as $valSel)
+                                     <?php echo '<div class="col-md-4 traits-box" data-id="'.$valSel['id'].'" data-category="'.$valSel['category'].'" class="lists'.$value['category'].'">'.str_replace('\n', '', $valSel['name']).'</div>'?>
+                                    @endforeach
+                                @endif
                             </div>
-                            
                         @endforeach
                     @endif
                     <div class="clearfix"></div>
-                       
+                    <input type="text" name="traits_selected" id="traits_selected">   
                 </div>
             </div>
             
@@ -384,13 +390,17 @@ $profile = $data['user_profiles'];
     }
     
     function getTraits(){
-        var traits;
+        var traits = {};
+        var data = {};        
         $('.traits-selected .traits-box').each(function(){
             var id = $(this).data('id');
             var category = $(this).data('category');
-            traits[category] = id;
+            data['id'] = id;
+            data['category'] = category;
+            traits[id] = data;
+            data = {};
         });
-        console.log(JSON.stringify(traits));
+        $('#traits_selected').val(JSON.stringify(traits));
     }
     
     $('select').select2({
@@ -413,6 +423,7 @@ $profile = $data['user_profiles'];
         allowClear: true
     });
     function updateProfile() {
+        getTraits();
         $('#editProfile').parsley().validate();
         if ($('#editProfile').parsley().isValid()) {
             $.ajax({
@@ -421,10 +432,7 @@ $profile = $data['user_profiles'];
                 dataType: "json",
                 data: $('#editProfile').serialize(),
                 success: function (data) {
-                    $("#result").html(data.msg);
-                    setTimeout(function () {
-                        $("#result").hide('slow');
-                    }, 6000);
+                    $.notify({message: data.msg},{type:'success'});
                 }
             });
         }

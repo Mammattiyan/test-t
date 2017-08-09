@@ -20,11 +20,13 @@ body {
     font-size: 14px;
     background-color: #F5F8FA;
     color: #1E3948;
-    position: relative; }
-
+    position: relative; 
+}
+.header-logo img{
+    height: 60px;
+}
 img {
     max-width: 100%;
-    height: auto;
     vertical-align: middle; }
 .cropImgWrapper img{
     max-width: none !important;
@@ -33,7 +35,7 @@ img {
     display: none;
 }
 a {
-    color: #B9121B;
+    color: #00aff0;
     text-decoration: none;
     -webkit-transition: color 0.2s ease-in-out;
     -moz-transition: color 0.2s ease-in-out;
@@ -192,7 +194,7 @@ ul, ol {
 
 .header {
     height: 70px;
-    background-color: #B9121B; }
+    background-color: #00aff0; }
 .header .container {
     height: 100%;
     align-items: center; }
@@ -320,7 +322,7 @@ ul, ol {
     vertical-align: middle;
     height: 100%;
     width: 70%;
-    background-color: #B9121B;
+    background-color: #00aff0;
     position: absolute;
     top: 0;
     left: 0; }
@@ -352,7 +354,7 @@ ul, ol {
     /* NEW, Spec - Opera 12.1, Firefox 20+ */
     height: 95px;
     border-radius: 4px;
-    background-color: #B9121B;
+    background-color: #00aff0;
     display: -webkit-box;
     /* OLD - iOS 6-, Safari 3.1-6 */
     display: -moz-box;
@@ -479,7 +481,7 @@ ul, ol {
     font-size: inherit;
     border: none;
     outline: none;
-    background-color: #B9121B;
+    background-color: #00aff0;
     color: #FFFFFF;
     cursor: pointer;
     margin: 5px 0;
@@ -493,7 +495,7 @@ input[type='submit'], button {
     font-size: inherit;
     border: none;
     outline: none;
-    background-color: #B9121B;
+    background-color: #00aff0;
     color: #FFFFFF;
     cursor: pointer;
     margin: 5px 0;
@@ -571,7 +573,7 @@ input[type='submit'], button {
     background-color: rgba(30, 57, 72, 0.3); }
 .modal .modal-heading {
     padding: 15px 45px 15px 15px;
-    background-color: #B9121B;
+    background-color: #00aff0;
     color: #FFFFFF;
     font-size: 16px;
     font-weight: 600; }
@@ -695,7 +697,7 @@ input[type='submit'], button {
     display: none; }
 
 .accordion-expanded .accordion-title {
-    background-color: #B9121B;
+    background-color: #00aff0;
     color: #FFFFFF; }
 .accordion-expanded .accordion-title::after {
     background-image: url("../assets/arrow-light.svg");
@@ -1254,13 +1256,21 @@ input[type='submit'], button {
 .traits{
     min-height: 100px; 
     border: 1px solid #ccc;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    clear: both;
+    overflow: auto;
+    display: box;
+    width: 100%;
 }
 
 .traits-selected{
     min-height: 100px; 
     border: 1px solid #ccc;
     margin-bottom: 10px;
+    clear: both;
+    overflow: auto;
+    display: box;
+    width: 100%;
 }
 
 .traits-box{

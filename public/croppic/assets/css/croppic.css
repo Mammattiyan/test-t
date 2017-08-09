@@ -38,48 +38,59 @@
 				line-height:20px;
 				color:#FFF;
 			}
-			
+                        .cropControls.cropControlsCrop{
+                            right: -47px;
+                            top: 0;
+                        }
 			.cropControls{
 				z-index:2;
 				position:absolute;
-				height:30px;
+				height:40px;
+                                width: 40px;
 				display:block;
 				/* top: -31px; */
-				top: -1px;
-				right: -1px;
+				top: 5px;
+				right: 5px;
 				font-family:sans-serif;
-				background-color:rgba(0,0,0,0.35); 
+                                color: #00aff0;
+				
 			}
+                        .cropControls.cropControlsCrop i{
+                            background: #f1f1f1;
+                            color: #00aff0;
+                            font-size: 21px;
+                        }
 			
 			.cropControls i{
 				display:block;
 				float:left;
 				margin:0;
 				cursor:pointer;
-				background-image:url('../img/cropperIcons.png');	
-				width:30px;
-				height:30px;
+				/*background-image:url('../img/cropperIcons.png');	*/
+                                font-family: FontAwesome;
+				width:40px;
+				height:40px;
+                                line-height: 40px;
 				text-align:center;
-				line-height:20px;
-				color:#FFF;
-				font-size:13px;
-				font-weight: bold;
-				font-style: normal;
-				
+				font-size:17px;
+                                margin-bottom: 5px;
+                                border-radius: 3px;
+                                font-style: normal;
+				background-color:rgba(0,0,0,0.05); 
 			}
 			
-			.cropControls i:hover{ background-color:rgba(0,0,0,0.7);  }
+			.cropControls i:hover, .cropControls.cropControlsCrop i:hover{ background-color:#00aff0; color: #fff;  }
 			
-			.cropControls i.cropControlZoomMuchIn{ background-position:0px 0px;}
-			.cropControls i.cropControlZoomIn{ background-position:-30px 0px; }
-			.cropControls i.cropControlZoomOut{ background-position:-60px 0px; }
-			.cropControls i.cropControlZoomMuchOut{ background-position:-90px 0px; }
-			.cropControls i.cropControlRotateLeft{ background-position:-210px 0px; }
-			.cropControls i.cropControlRotateRight{ background-position:-240px 0px; }
-			.cropControls i.cropControlCrop{ background-position:-120px 0px;}
-			.cropControls i.cropControlUpload{ background-position:-150px 0px;}
-			.cropControls i.cropControlReset{ background-position:-180px 0px;}
-			.cropControls i.cropControlRemoveCroppedImage{ background-position:-180px 0px;}
+			.cropControls i.cropControlZoomMuchIn{  content:"\f00e"; display: none;}
+			.cropControls i.cropControlZoomIn:after{  content:"\f00e";    }
+			.cropControls i.cropControlZoomOut:after{ content:"\f010";}
+			.cropControls i.cropControlZoomMuchOut{ content:"\f010"; display: none;}
+			.cropControls i.cropControlRotateLeft:after{ content:"\f0e2"; }
+			.cropControls i.cropControlRotateRight:after{ content:"\f01e"; }
+			.cropControls i.cropControlCrop:after{ content:"\f125"; }
+			.cropControls i.cropControlUpload:after{ content:"\f093";}
+			.cropControls i.cropControlReset:after{ content:"\f021";}
+			.cropControls i.cropControlRemoveCroppedImage:after{ content:"\f010"; }
 			
 			.cropControls i:last-child{
 				margin-right:none;
