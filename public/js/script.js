@@ -129,7 +129,7 @@ $('#age').pickadate({
   selectMonths: true,
   min: addMonths(new Date(), 100),
    max: addMonths(new Date(), 20),
-   selectYears:80,
+//   selectYears:80,
 	formatSubmit: 'yyyy-mm-dd'
    
   });

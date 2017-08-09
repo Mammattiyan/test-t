@@ -194,36 +194,30 @@ $profile = $data['user_profiles'];
             <?php $traits = []?>
             <div class="accordion">
                 <div class="accordion-title">Personality Traits</div>
-                <?php /*
+                
                 <div class="accordion-content" style="display: none;">
                     @if(count($data['traits'])>0)
                         @foreach($data['traits'] as $key => $value)
-                        <div style="<?php echo ($key == 0)?'display:block':'display:none';?>">
                             <label><b>{{ucwords(str_replace('_', ' ', $value['category']))}}</b></label>
-                            <div class="lists" id="{{$value['category']}}" style="min-height: 100px; border: 1px solid #ccc;">
+                            <div class="lists{{$value['category']}} traits" id="{{$value['category']}}">
                                 <?php $traits[$value['category']] = '';?>
                                 @foreach($value['traits'] as $val)
                                     <!--<div>{{$val['name']}}</div>--> 
-                                    <?php $traits[$value['category']] .= '<div class="col-md-4"><div id="item1" class="lists">'.$val['name'].'</div></div>';?>
+                                    <?php $traits[$value['category']] .= '<div class="col-md-4 traits-box" data-id="'.$val['id'].'" data-category="'.$val['category'].'" class="lists'.$value['category'].'">'.$val['name'].'</div>';?>
                                 @endforeach
                             </div>
-                        </div>
+                            
+                            <label><b>{{ucwords(str_replace('_', ' ', $value['category']))}} Selected</b></label>
+                            <div class="lists{{$value['category']}} traits-selected" id="{{$value['category']}}_sel">
+                                
+                                
+                            </div>
+                            
                         @endforeach
                     @endif
                     <div class="clearfix"></div>
-                    @if(count($data['traits'])>0)
-                        @foreach($data['traits'] as $key => $value)
-                        <div style="<?php echo ($key == 0)?'display:block':'display:none';?>">
-                            <label><b>{{ucwords(str_replace('_', ' ', $value['category']))}}</b></label>
-                            <div class="lists" id="{{$value['category']}}_sel" style="min-height: 100px; border: 1px solid #ccc;">
-                                
-                                
-                            </div>
-                        </div>
-                        @endforeach
-                    @endif    
+                       
                 </div>
-                <?php */?>
             </div>
             
             <div class="accordion">
@@ -367,22 +361,40 @@ $profile = $data['user_profiles'];
     $(document).ready(function () {
         addElements();
         $(function () {
-            $("#positive, #positive_sel").sortable({
-                connectWith: ".lists",
-                cursor: "move"
-            }).disableSelection();
-            
-            $("#negative, #negative_sel").sortable({
-                connectWith: ".lists",
-                cursor: "move"
-            }).disableSelection();
+            @if(count($data['traits'])>0)
+                @foreach($data['traits'] as $key => $value)
+                    $("#{{$value['category']}}, #{{$value['category']}}_sel").sortable({
+                        connectWith: ".lists{{$value['category']}}",
+                        cursor: "move"
+                    }).disableSelection();
+                @endforeach
+            @endif
         });
 
         
     });
 
     function addElements() {
+<<<<<<< HEAD
        
+=======
+        @if(count($data['traits'])>0)
+            @foreach($data['traits'] as $key => $value)
+                $("#{{$value['category']}}").empty().append('{!!$traits[$value['category']]!!}');
+            @endforeach
+        @endif
+        
+    }
+    
+    function getTraits(){
+        var traits;
+        $('.traits-selected .traits-box').each(function(){
+            var id = $(this).data('id');
+            var category = $(this).data('category');
+            traits[category] = id;
+        });
+        console.log(JSON.stringify(traits));
+>>>>>>> e07ccbf3b5ea8eb363b0c026e076d7b724f342aa
     }
     
     $('select').select2({

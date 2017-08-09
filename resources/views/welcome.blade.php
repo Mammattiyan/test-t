@@ -10,8 +10,8 @@
         <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
         <script src="{{ asset('js/jquery.popupoverlay.js')}}"></script>
         <script src="{{ asset('js/dobPicker.min.js')}}"></script>
-        
-        <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkC8RKIPZZeg9rH8MWYteBqks0l6DNj5c"></script>-->
+
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkC8RKIPZZeg9rH8MWYteBqks0l6DNj5c"></script>-->
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false&key=AIzaSyAkC8RKIPZZeg9rH8MWYteBqks0l6DNj5c"></script>
         <script src="{{ asset('js/jquery.geocomplete.js')}}"></script>
         <script src="{{ asset('js/logger.js')}}"></script>
@@ -27,7 +27,7 @@
                 <div class="flex-item login-form-wrap">
                     <div class="box pad">
                         <form id="login-form" action="{{ url('/login') }}" method="post" class="form-signin" role="form">
-                           <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <input type="text" name="login" id="login" value="{{ Request::old('login') }}" autofocus required placeholder="Phone, email or username">
 
                             @if ($errors->has('login'))
@@ -52,7 +52,7 @@
                                     <input type="submit" name="btn_login" class="button" value="Login">
                                 </div>
                             </div>
-                           
+
 
                         </form>
                         <div class="thick-text">New to <span style="color:#F00;">i</span>tweetup?</div>
@@ -122,15 +122,15 @@
                             {{ csrf_field() }}
                         </form>
                         <div class="flex-box info-icons-wrap text-center">
-                            <div class="flex-item">
+                            <div class="flex-item" data-modal="trusted">
                                 <img src="assets/trusted.png">
                                 <div class="bold-text">Trusted</div>
                             </div>
-                            <div class="flex-item">
+                            <div class="flex-item" data-modal="continental">
                                 <img src="assets/continental.png">
                                 <div class="bold-text">Continental</div>
                             </div>
-                            <div class="flex-item">
+                            <div class="flex-item" data-modal="simple">
                                 <img src="assets/simple.png">
                                 <div class="bold-text">Simple</div>
                             </div>
@@ -168,18 +168,38 @@
             <div data-modal-content="about-us">
                 <div data-modal-heading>About Us</div>
                 <div data-modal-body>
-                    <div class="thick-text">Who are we?</div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<br><br>
-                    <div class="thick-text">What we do...</div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<br><br>
-                    <div class="thick-text">How we do it!</div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<br><br>
-                    <div class="thick-text">How we do it!</div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<br><br>
-                    <div class="thick-text">How we do it!</div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<br><br>
-                    <div class="thick-text">How we do it!</div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    <div class="thick-text">Who are we?</div>Itweetup verifies users credibility based on the documents user/member provide us and its matched and checked with external document verification service providers and users on the itweetup; who has CV highlighted on their profiles are the members who have verified their Citizenship with itweetup and this makes them more authentic/true members. <br><br>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="hide" data-modal-contents-wrap>
+            <div data-modal-content="trusted">
+                <div data-modal-heading>Trusted</div>
+                <div data-modal-body>
+                   <div class="thick-text"></div>Itweetup verifies users credibility based on the documents user/member provide us and its matched and checked with external document verification service providers and users on the itweetup; who has CV highlighted on their profiles are the members who have verified their Citizenship with itweetup and this makes them more authentic/true members. <br><br>
+                </div>
+            </div>
+        </div>
+        <div class="hide" data-modal-contents-wrap>
+            <div data-modal-content="continental">
+                <div data-modal-heading>Continental</div>
+                <div data-modal-body>
+                   <div class="thick-text"></div>Our service instantly connect people everywhere around the world and any registered user on the Itweetup can send message, chat, and send various other personal request like hangout and dinning request to any users around the world and all the features varies depending on the membership they hold with itweetup.  <br><br>
+                </div>
+            </div>
+        </div>
+        <div class="hide" data-modal-contents-wrap>
+            <div data-modal-content="simple">
+                <div data-modal-heading>Simple</div>
+                <div data-modal-body>
+                   <div class="thick-text"></div>Our service is simple and it can be accessible easily by all the users and does not require any technical knowledge to send request or view any options and itweetup does not interrupt any users regardless of the membership the hold with us advertisement and any other external promotions. <br><br>
                 </div>
             </div>
         </div>
         <script>
             $(document).ready(function () {
-                $('#basic').popup({blur:false});
+                $('#basic').popup({blur: false});
                 $.dobPicker({
                     daySelector: '#dobday', /* Required */
                     monthSelector: '#dobmonth', /* Required */
@@ -205,12 +225,12 @@
                         $('.error').text("Please select your date of birth");
                     } else {
                         if (2017 - parseInt($("#dobyear").val()) > 17) {
-                            
-                            var dob = $("#dobyear").val()+'-'+$("#dobmonth").val()+'-'+$("#dobday").val();
+
+                            var dob = $("#dobyear").val() + '-' + $("#dobmonth").val() + '-' + $("#dobday").val();
                             $('#dob').val(dob);
                             $('#gender').val($('input[name=gender]:checked').val());
                             $('#place').val($('#geocomplete').val());
-                            
+
                             $('#form-submit').trigger('click');
                         } else {
                             if (isNaN(parseInt($("#dobyear").val()))) {
@@ -223,19 +243,21 @@
                         }
                     }
                 });
+
+
             });
 
             $(function () {
                 $("#geocomplete").geocomplete()
-                    .bind("geocode:result", function (event, result) {
-                        $.log("Result: " + result.formatted_address);
-                    })
-                    .bind("geocode:error", function (event, status) {
-                        $.log("ERROR: " + status);
-                    })
-                    .bind("geocode:multiple", function (event, results) {
-                        $.log("Multiple: " + results.length + " results found");
-                    });
+                        .bind("geocode:result", function (event, result) {
+                            $.log("Result: " + result.formatted_address);
+                        })
+                        .bind("geocode:error", function (event, status) {
+                            $.log("ERROR: " + status);
+                        })
+                        .bind("geocode:multiple", function (event, results) {
+                            $.log("Multiple: " + results.length + " results found");
+                        });
                 $("#find").click(function () {
                     $("#geocomplete").trigger("geocode");
                 });
@@ -244,6 +266,32 @@
                     $("#geocomplete").val($(this).text()).trigger("geocode");
                     return false;
                 });
+                var modalGlass = $('.modal-glass');
+
+// Populate and show modal
+                $('[data-modal').click(function () {
+                    var modalData = $('[data-modal-content="' + $(this).attr('data-modal') + '"]');
+
+                    modalGlass.find('.modal-heading').text(modalData.find('[data-modal-heading]').text());
+                    modalGlass.find('.modal-body').html(modalData.find('[data-modal-body]').html());
+
+                    modalGlass.removeClass('hide');
+                    setTimeout(function () {
+                        modalGlass.find('.modal').addClass('show-modal');
+                    }, 10);
+                });
+
+// Close modal
+                modalGlass.find('.modal-close').click(closeModal);
+                modalGlass.click(function (event) {
+                    if ($(event.target).hasClass('modal-glass')) {
+                        closeModal();
+                    }
+                });
+
+                function closeModal() {
+                    modalGlass.addClass('hide').find('.modal').removeClass('show-modal').children().empty();
+                }
             });
         </script>
     </body>
