@@ -222,7 +222,7 @@ $profile = $data['user_profiles'];
                         @endforeach
                     @endif
                     <div class="clearfix"></div>
-                    <input type="text" name="traits_selected" id="traits_selected">   
+                    <input type="hidden" name="traits_selected" id="traits_selected">   
                 </div>
             </div>
             
