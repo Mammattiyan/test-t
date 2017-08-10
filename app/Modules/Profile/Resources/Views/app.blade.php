@@ -49,9 +49,7 @@
 
         <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
 
-        <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/picker.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/picker.date.js') }}"></script>
+   
         <script src="{{ asset('js/picker.time.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
         <script src=" https://code.jquery.com/jquery-2.1.3.min.js"></script>
@@ -60,7 +58,7 @@
         <script src="{{ asset('croppic/croppic.min.js') }}"></script>
         <script src="{{ asset('croppic/assets/js/main.js') }}"></script>
 
-        <!--<script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>-->
+        <script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/parsley.js') }}"></script>
 
         @yield('js')

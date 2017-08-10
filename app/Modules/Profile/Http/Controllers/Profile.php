@@ -40,6 +40,7 @@ use App\Modules\Profile\Models\Module_documents;
 use App\Modules\Profile\Models\Drink;
 use App\Modules\Profile\Models\Countries;
 use App\Modules\Profile\Models\States;
+use App\Modules\Profile\Models\Family_members;
 
 class Profile extends Controller {
     /*
@@ -85,6 +86,8 @@ class Profile extends Controller {
         $gallery = [];
         $gallery['images'] = $allData['images'];
         $gallery['videos'] = $allData['videos'];
+        $user['family_members'] = $this->selectData(Family_members::all(), 'name');
+
         return view('profile::user_profile')->with(['user' => $user, 'fullData' => $allData['datas'], 'token' => Core::encodeIdAction($userId), 'gallery' => $gallery]);
     }
 

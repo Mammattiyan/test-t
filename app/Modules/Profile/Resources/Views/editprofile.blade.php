@@ -375,9 +375,6 @@ $profile = $data['user_profiles'];
     });
 
     function addElements() {
-<<<<<<< HEAD
-       
-=======
         @if(count($data['traits'])>0)
             @foreach($data['traits'] as $key => $value)
                 $("#{{$value['category']}}").empty().append('{!!$traits[$value['category']]!!}');
@@ -393,8 +390,6 @@ $profile = $data['user_profiles'];
             var category = $(this).data('category');
             traits[category] = id;
         });
-        console.log(JSON.stringify(traits));
->>>>>>> e07ccbf3b5ea8eb363b0c026e076d7b724f342aa
     }
     
     $('select').select2({
