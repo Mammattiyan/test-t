@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/feedback', 'HomeController@sendFeedbackAction'); 
 Auth::routes();
 
 Route::get('register/verify/{token}', 'Auth\RegisterController@verify'); 
