@@ -34,6 +34,7 @@ use App\Modules\Profile\Models\Pet_lover;
 use App\Modules\Profile\Models\Qualification;
 use App\Modules\Profile\Models\Smoke;
 use App\Modules\Profile\Models\Traits;
+use App\Modules\Profile\Models\Traits_selected;
 use App\Modules\Profile\Models\User_profile;
 use App\Modules\Profile\Models\Zodiac_signs;
 use App\Modules\Profile\Models\Module_documents;
@@ -82,12 +83,10 @@ class Profile extends Controller {
         $userId = Input::get('user_id');
         $user = User::find($userId)->toArray();
         $user['id'] = Core::encodeIdAction($userId);
-        $allData = self::otherProfileViewAction($userId);
         $gallery = [];
         $gallery['images'] = $allData['images'];
         $gallery['videos'] = $allData['videos'];
         $user['family_members'] = $this->selectData(Family_members::all(), 'name');
-
         return view('profile::user_profile')->with(['user' => $user, 'fullData' => $allData['datas'], 'token' => Core::encodeIdAction($userId), 'gallery' => $gallery]);
     }
 
@@ -103,11 +102,23 @@ class Profile extends Controller {
         $userId = Core::decodeIdAction($token);
         $user = User::find($userId)->toArray();
         $user['id'] = $token;
-        $allData = self::otherProfileViewAction($userId);
+        $fullData = User_profile::select('user_profile.*', 'gender_preference.gender_preference_name', 'marital_status.marital_status', 'ethnic_origin.ethnic_origin_name', 'qualification.qualification_name', 'job_category.category_name', 'smoke.name as smoke_status', 'drink.name as drink_status'
+                                , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage')
+                        ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
+                        ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')
+                        ->leftJoin('ethnic_origin', 'ethnic_origin.id', 'user_profile.ethnic_origin_id')
+                        ->leftJoin('qualification', 'qualification.id', 'user_profile.qualification_id')
+                        ->leftJoin('job_category', 'job_category.id', 'user_profile.job_category_id')
+                        ->leftJoin('smoke', 'smoke.id', 'user_profile.smoke_id')
+                        ->leftJoin('drink', 'drink.id', 'user_profile.drink_id')
+                        ->leftJoin('pet_lover', 'pet_lover.id', 'user_profile.pet_lover_id')
+                        ->join('users', 'users.id', 'user_profile.user_id')
+                        ->where('user_profile.user_id', $userId)
+                        ->first()->toArray();
         $gallery = [];
-        $gallery['images'] = $allData['images'];
-        $gallery['videos'] = $allData['videos'];
-        return view('profile::user_profile')->with(['user' => $user, 'fullData' => $allData['datas'], 'token' => $token, 'gallery' => $gallery]);
+        $gallery['images'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_images')->get()->toArray();
+        $gallery['videos'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_videos')->get()->toArray();
+        return view('profile::user_profile')->with(['user' => $user, 'fullData' => $fullData, 'token' => $token, 'gallery' => $gallery]);
     }
 
     /*
@@ -147,9 +158,21 @@ class Profile extends Controller {
                     ->orderBy('messages.id', 'asc')
                     ->get();
 
-            $allData = self::otherProfileViewAction($userId);
+            $fullData = User_profile::select('user_profile.*', 'gender_preference.gender_preference_name', 'marital_status.marital_status', 'ethnic_origin.ethnic_origin_name', 'qualification.qualification_name', 'job_category.category_name', 'smoke.name as smoke_status', 'drink.name as drink_status'
+                                    , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage')
+                            ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
+                            ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')
+                            ->leftJoin('ethnic_origin', 'ethnic_origin.id', 'user_profile.ethnic_origin_id')
+                            ->leftJoin('qualification', 'qualification.id', 'user_profile.qualification_id')
+                            ->leftJoin('job_category', 'job_category.id', 'user_profile.job_category_id')
+                            ->leftJoin('smoke', 'smoke.id', 'user_profile.smoke_id')
+                            ->leftJoin('drink', 'drink.id', 'user_profile.drink_id')
+                            ->leftJoin('pet_lover', 'pet_lover.id', 'user_profile.pet_lover_id')
+                            ->join('users', 'users.id', 'user_profile.user_id')
+                            ->where('user_profile.user_id', $userId)
+                            ->first()->toArray();
 
-            return view('profile::user_messages')->with(['user' => $user, 'token' => $token, 'message' => $message, 'my' => Auth::user()->id, 'fullData' => $allData['datas']]);
+            return view('profile::user_messages')->with(['user' => $user, 'token' => $token, 'message' => $message, 'my' => Auth::user()->id, 'fullData' => $fullData]);
         } else {
             return redirect('message');
         }
@@ -361,11 +384,24 @@ class Profile extends Controller {
         $data['selected_partner_qualification'] = $this->selectPartnerData(Partner_qualification::where('user_id', $user)->get(), 'qualification_id');
         $data['traits'] = Traits::select('category')
                         ->with(['traits' => function($sql) {
-                                $sql->select()->where('status', 1);
+                                $sql->select('traits.id', 'traits.category', 'traits.name', 'traits_selected.trait_id')
+                                ->leftJoin('traits_selected', 'traits_selected.trait_id', '=', 'traits.id')
+                                ->whereNull('traits_selected.trait_id')
+                                ->where('status', 1);
+                            }])
+                        ->distinct()
+                        ->get()->toArray();
+        $data['traits_selected'] = Traits::select('category')
+                        ->with(['traits' => function($sql) {
+                                $sql->select('traits.id', 'traits.category', 'traits.name', 'traits_selected.trait_id')
+                                ->join('traits_selected', 'traits_selected.trait_id', '=', 'traits.id')
+                                ->whereNotNull('traits_selected.trait_id')
+                                ->where('status', 1);
                             }])
                         ->distinct()
                         ->get()->toArray();
 
+//                            dd($data['traits_selected']);
         return view('profile::editprofile')->with('data', $data);
     }
 
@@ -373,6 +409,7 @@ class Profile extends Controller {
         $user = Auth::user()->id;
         $data = Input::all();
         $values = [];
+        $values["about_me"] = $data["about_me"];
         $values["motto"] = $data["motto"];
         $values["gender_preference_id"] = $data["gender_preference_id"];
         $values["marital_status_id"] = $data["marital_status_id"];
@@ -432,6 +469,13 @@ class Profile extends Controller {
         if (isset($data['partner_qualification']) && count($data['partner_qualification']) > 0) {
             foreach ($data['partner_qualification'] as $val) {
                 Partner_qualification::create(['user_id' => $user, 'qualification_id' => $val]);
+            }
+        }
+        Traits_selected::where(['user_id' => $user])->delete();
+        if (isset($data['traits_selected']) && count($data['traits_selected']) > 0) {
+            $data['traits_selected'] = json_decode($data['traits_selected'], true);
+            foreach ($data['traits_selected'] as $key => $val) {
+                Traits_selected::create(['user_id' => $user, 'trait_id' => $val['id'], 'category' => $val['category']]);
             }
         }
 
@@ -550,36 +594,6 @@ class Profile extends Controller {
                 return response()->json(['status' => '1']);
             }
         }
-    }
-
-    /*
-     * 
-     * function otherProfileViewAction
-     * 
-     * return hangoutRequestDetailsview
-     * param array
-     */
-
-    public static function otherProfileViewAction($userId) {
-
-        $fullData = [];
-        $fullData['datas'] = User_profile::select('user_profile.*', 'gender_preference.gender_preference_name', 'marital_status.marital_status', 'ethnic_origin.ethnic_origin_name', 'qualification.qualification_name', 'job_category.category_name', 'smoke.name as smoke_status', 'drink.name as drink_status'
-                                , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage', 'zodiac_signs.zodiac_name', 'zodiac_signs.sign_image_url')
-                        ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
-                        ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')
-                        ->leftJoin('ethnic_origin', 'ethnic_origin.id', 'user_profile.ethnic_origin_id')
-                        ->leftJoin('qualification', 'qualification.id', 'user_profile.qualification_id')
-                        ->leftJoin('job_category', 'job_category.id', 'user_profile.job_category_id')
-                        ->leftJoin('smoke', 'smoke.id', 'user_profile.smoke_id')
-                        ->leftJoin('drink', 'drink.id', 'user_profile.drink_id')
-                        ->leftJoin('pet_lover', 'pet_lover.id', 'user_profile.pet_lover_id')
-                        ->leftJoin('zodiac_signs', 'zodiac_signs.id', 'user_profile.zodiac_sign_id')
-                        ->join('users', 'users.id', 'user_profile.user_id')
-                        ->where('user_profile.user_id', $userId)
-                        ->first()->toArray();
-        $fullData['images'] = Module_documents::select('id', 'path')->where('parent_id', $userId)->where('module_name', 'user_images')->get()->toArray();
-        $fullData['videos'] = Module_documents::select('id', 'path')->where('parent_id', $userId)->where('module_name', 'user_videos')->get()->toArray();
-        return $fullData;
     }
 
 }
