@@ -142,7 +142,7 @@ $('#hangoutDate').pickadate({
   });
   $('#hangoutTime').pickatime({
       format: 'h:i A',
-  })
+  });
 
 function selectValues(classname) {
 	var valu = [];

@@ -400,6 +400,7 @@ $profile = $data['user_profiles'];
             traits[id] = data;
             data = {};
         });
+
         $('#traits_selected').val(JSON.stringify(traits));
     }
     

@@ -145,11 +145,11 @@
                 <div class="flex-item">
                     <div class="footer-nav">
                         <a data-modal="about-us">About Us</a>
-                        <a href="#">Feedback</a>
-                        <a href="#">Contact Us</a>
-                        <a href="#">Dating Tips</a>
-                        <a href="#">First Date?</a>
-                        <a href="#">Terms &amp; Conditions</a>
+                        <a data-modal="feedback" >Feedback</a>
+                        <a data-modal="contact-us" >Contact Us</a>
+                        <a data-modal="dating-tips" >Dating Tips</a>
+                        <a data-modal="first-date" >First Date?</a>
+                        <a data-modal="conditions" >Terms &amp; Conditions</a>
                     </div>
                 </div>
                 <div class="flex-item">
@@ -169,7 +169,47 @@
                 <div data-modal-heading>About Us</div>
                 <div data-modal-body>
                     <div class="thick-text">Who are we?</div>Itweetup verifies users credibility based on the documents user/member provide us and its matched and checked with external document verification service providers and users on the itweetup; who has CV highlighted on their profiles are the members who have verified their Citizenship with itweetup and this makes them more authentic/true members. <br><br>
-                    
+
+                </div>
+            </div>
+        </div>
+        <div class="hide" data-modal-contents-wrap>
+            <div data-modal-content="feedback">
+                <div data-modal-heading>Send Feedback</div>
+                <div data-modal-body>
+                    <div class="box pad">
+                        {{ Form::open(array('url' => 'feedback')) }}
+                        <div class="col col-md-6">
+                            <div class="row">
+                                <label>Full name <span class="text text-danger">*</span></label>
+                                <input type="text" name="full_name" value="" required >                        
+                            </div>
+                            <div class="row">
+                                <label>Email <span class="text text-danger">*</span></label>
+                                <input type="email" name="email" value="" required >                      
+                            </div>
+
+                            <div class="row">
+                                <label>Web <span class="text text-danger">*</span></label>
+                                <input type="url" name="web"  value=""  required >
+                            </div>                                
+
+                        </div>
+                        <div class="col col-md-6" >
+                            <div class="row">
+                                <label>Feedback <span class="text text-danger">*</span></label>
+                                <textarea type="text" name="feedback" rows="7" value="" required ></textarea>                       
+                            </div>                                   
+
+                            <div class="flex-item text-right">
+                                <input type="submit" name="submit" class="button" value="Submit">
+                            </div>
+                        </div>
+
+                        {{ Form::close() }}
+                    </div>
+                    <br><br>
+
                 </div>
             </div>
         </div>
@@ -177,7 +217,7 @@
             <div data-modal-content="trusted">
                 <div data-modal-heading>Trusted</div>
                 <div data-modal-body>
-                   <div class="thick-text"></div>Itweetup verifies users credibility based on the documents user/member provide us and its matched and checked with external document verification service providers and users on the itweetup; who has CV highlighted on their profiles are the members who have verified their Citizenship with itweetup and this makes them more authentic/true members. <br><br>
+                    <div class="thick-text"></div>Itweetup verifies users credibility based on the documents user/member provide us and its matched and checked with external document verification service providers and users on the itweetup; who has CV highlighted on their profiles are the members who have verified their Citizenship with itweetup and this makes them more authentic/true members. <br><br>
                 </div>
             </div>
         </div>
@@ -185,7 +225,7 @@
             <div data-modal-content="continental">
                 <div data-modal-heading>Continental</div>
                 <div data-modal-body>
-                   <div class="thick-text"></div>Our service instantly connect people everywhere around the world and any registered user on the Itweetup can send message, chat, and send various other personal request like hangout and dinning request to any users around the world and all the features varies depending on the membership they hold with itweetup.  <br><br>
+                    <div class="thick-text"></div>Our service instantly connect people everywhere around the world and any registered user on the Itweetup can send message, chat, and send various other personal request like hangout and dinning request to any users around the world and all the features varies depending on the membership they hold with itweetup.  <br><br>
                 </div>
             </div>
         </div>
@@ -193,10 +233,33 @@
             <div data-modal-content="simple">
                 <div data-modal-heading>Simple</div>
                 <div data-modal-body>
-                   <div class="thick-text"></div>Our service is simple and it can be accessible easily by all the users and does not require any technical knowledge to send request or view any options and itweetup does not interrupt any users regardless of the membership the hold with us advertisement and any other external promotions. <br><br>
+                    <div class="thick-text"></div>Our service is simple and it can be accessible easily by all the users and does not require any technical knowledge to send request or view any options and itweetup does not interrupt any users regardless of the membership the hold with us advertisement and any other external promotions. <br><br>
                 </div>
             </div>
         </div>
+        <div class="hide" data-modal-contents-wrap>
+            <div data-modal-content="dating-tips">
+                <div data-modal-heading>Dating Tips</div>
+                <div data-modal-body>
+                    <div class="thick-text">Keep your friends in the loop</div>Tell a friend or family member where you are going, when you will return, and how to reach you, If plans change, text your friend the new details of where you'll be. <br><br>
+                    <div class="thick-text">Use your own transportation</div>Either take your own car, or if you plan on drinking, take public transportation or a taxi so you don't have to rely on your date to get home.  Also, that way he won't know your address. <br><br>
+                    <div class="thick-text">Meet in public</div>We recommend meeting your date in public. Not only will this decrease your chances of being put in an unsafe situation, but other people may also remember you being in that location, should something happen to you. <br><br>
+                    <div class="thick-text">Bring extra money</div>Even if he's paying for dinner, carry some cash for cab fare if the date goes south. <br><br>
+                    <div class="thick-text">Don't give out your personal info</div>Guard your personal contact information on any dating or social networking site,. "If using an online dating website, you can choose to have the individual respond to the site, rather than your email address, or you can set up an email address specifically for this purpose. <br><br>
+                    <div class="thick-text">Use the buddy system</div>Go out with at least one other girlfriend, especially if you are headed to a place where you don't know anyone else. That way, you can help keep each other in check if one of you starts getting doe-eyed over some dude feeding you liquor or trying to get you to go home with him. <br><br>
+                    <div class="thick-text">Have a plan if the buddy system fails</div>If said friend winds up disappearing from the party or the bar, have another way of getting home. Try calling or texting your friend to find out where she went, who she's with and how she plans to get home.<br>
+                    "If you cannot drive, call a friend you know well or a taxi," she said. "Let someone else know what has happened, how you will be getting home and all that you know about where your friend has gone and with whom."<br>
+                    <div class="thick-text">Remember that Mace still exists</div>A lot of women think it's over-the-top, but tucking some pepper spray or Mace in your purse when you go on a first date can help if he gets too grabby or tries to attack you. <br><br>
+                    <div class="thick-text">Don't lie</div>This tip may seem to go against keeping your vital statistics private, but misrepresenting yourself over email or on a dating site might anger your date. "It is ill-advised to share photos or other information that is untruthful, as discovering such misrepresentation can lead to angry feelings and perhaps aggressive. <br><br>
+                </div>
+            </div>
+        </div>
+        @if(isset($feedback_status) && $feedback_status==1)
+        <script>
+             $.notify({message: "Feedback send successfully"},{type:'success'});
+        </script>
+        
+        @endif
         <script>
             $(document).ready(function () {
                 $('#basic').popup({blur: false});
@@ -268,7 +331,7 @@
                 });
                 var modalGlass = $('.modal-glass');
 
-// Populate and show modal
+                // Populate and show modal
                 $('[data-modal').click(function () {
                     var modalData = $('[data-modal-content="' + $(this).attr('data-modal') + '"]');
 
@@ -281,7 +344,7 @@
                     }, 10);
                 });
 
-// Close modal
+                // Close modal
                 modalGlass.find('.modal-close').click(closeModal);
                 modalGlass.click(function (event) {
                     if ($(event.target).hasClass('modal-glass')) {
