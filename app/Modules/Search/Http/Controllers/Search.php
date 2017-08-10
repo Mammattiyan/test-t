@@ -23,10 +23,11 @@ class Search extends Controller {
 
         $name = Input::get('name');
         $users = User::select()
+                ->join('user_profile', 'user_profile.user_id', 'users.id')
                 ->where(function($sql) use ($name) {
-                    $sql->where('name', 'like', $name . '%');
+                    $sql->where('users.name', 'like', $name . '%');
                 })
-                ->where('id','<>',$userId)
+                ->where('users.id','<>',$userId)
                 ->get();
         $data = [];
         $data['result'] = $users;
