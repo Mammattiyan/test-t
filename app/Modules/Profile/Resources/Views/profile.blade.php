@@ -111,4 +111,13 @@
         </div>-->
     </div>
 </div>
+
+<div class="hide" data-modal-contents-wrap>
+            <div data-modal-content="trusted">
+                <div data-modal-heading>Trusted</div>
+                <div data-modal-body>
+                   <div class="thick-text"></div>Itweetup verifies users credibility based on the documents user/member provide us and its matched and checked with external document verification service providers and users on the itweetup; who has CV highlighted on their profiles are the members who have verified their Citizenship with itweetup and this makes them more authentic/true members. <br><br>
+                </div>
+            </div>
+        </div>
 @endsection

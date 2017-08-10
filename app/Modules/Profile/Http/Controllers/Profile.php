@@ -41,6 +41,7 @@ use App\Modules\Profile\Models\Module_documents;
 use App\Modules\Profile\Models\Drink;
 use App\Modules\Profile\Models\Countries;
 use App\Modules\Profile\Models\States;
+use App\Modules\Profile\Models\Family_members;
 
 class Profile extends Controller {
     /*
@@ -83,22 +84,10 @@ class Profile extends Controller {
         $user = User::find($userId)->toArray();
         $user['id'] = Core::encodeIdAction($userId);
         $gallery = [];
-        $fullData = User_profile::select('user_profile.*', 'gender_preference.gender_preference_name', 'marital_status.marital_status', 'ethnic_origin.ethnic_origin_name', 'qualification.qualification_name', 'job_category.category_name', 'smoke.name as smoke_status', 'drink.name as drink_status'
-                                , 'pet_lover.name as pet_lover', 'users.name as full_name', 'users.place as location', 'users.profileimage')
-                        ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
-                        ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')
-                        ->leftJoin('ethnic_origin', 'ethnic_origin.id', 'user_profile.ethnic_origin_id')
-                        ->leftJoin('qualification', 'qualification.id', 'user_profile.qualification_id')
-                        ->leftJoin('job_category', 'job_category.id', 'user_profile.job_category_id')
-                        ->leftJoin('smoke', 'smoke.id', 'user_profile.smoke_id')
-                        ->leftJoin('drink', 'drink.id', 'user_profile.drink_id')
-                        ->leftJoin('pet_lover', 'pet_lover.id', 'user_profile.pet_lover_id')
-                        ->join('users', 'users.id', 'user_profile.user_id')
-                        ->where('user_profile.user_id', $userId)
-                        ->first()->toArray();
-        $gallery['images'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_images')->get()->toArray();
-        $gallery['videos'] = Module_documents::select('id', 'path')->where('parent_id', $user['id'])->where('module_name', 'user_videos')->get()->toArray();
-        return view('profile::user_profile')->with(['user' => $user, 'fullData' => $fullData, 'token' => Core::encodeIdAction($userId), 'gallery' => $gallery]);
+        $gallery['images'] = $allData['images'];
+        $gallery['videos'] = $allData['videos'];
+        $user['family_members'] = $this->selectData(Family_members::all(), 'name');
+        return view('profile::user_profile')->with(['user' => $user, 'fullData' => $allData['datas'], 'token' => Core::encodeIdAction($userId), 'gallery' => $gallery]);
     }
 
     /*
@@ -396,22 +385,22 @@ class Profile extends Controller {
         $data['traits'] = Traits::select('category')
                         ->with(['traits' => function($sql) {
                                 $sql->select('traits.id', 'traits.category', 'traits.name', 'traits_selected.trait_id')
-                                        ->leftJoin('traits_selected', 'traits_selected.trait_id', '=', 'traits.id')
-                                        ->whereNull('traits_selected.trait_id')
-                                        ->where('status', 1);
+                                ->leftJoin('traits_selected', 'traits_selected.trait_id', '=', 'traits.id')
+                                ->whereNull('traits_selected.trait_id')
+                                ->where('status', 1);
                             }])
                         ->distinct()
                         ->get()->toArray();
         $data['traits_selected'] = Traits::select('category')
                         ->with(['traits' => function($sql) {
                                 $sql->select('traits.id', 'traits.category', 'traits.name', 'traits_selected.trait_id')
-                                        ->join('traits_selected', 'traits_selected.trait_id', '=', 'traits.id')
-                                        ->whereNotNull('traits_selected.trait_id')
-                                        ->where('status', 1);
+                                ->join('traits_selected', 'traits_selected.trait_id', '=', 'traits.id')
+                                ->whereNotNull('traits_selected.trait_id')
+                                ->where('status', 1);
                             }])
                         ->distinct()
                         ->get()->toArray();
-                            
+
 //                            dd($data['traits_selected']);
         return view('profile::editprofile')->with('data', $data);
     }

@@ -4,7 +4,7 @@
 Itweetup :: Activities
 @endsection
 @section('content')
-
+<?php // dd($user); ?>
 <div class="main-section">
     <div class="container flex-box fd-col fd-lg-row equisized-lg-items">
         @include('profile::profile_side')
@@ -99,4 +99,111 @@ Itweetup :: Activities
         <div class="pv-control next"></div>
     </div>
 </div>
+<div class="hide" data-modal-contents-wrap>
+    <div data-modal-content="hangoutSent">
+        <div data-modal-heading>Send Hangout Request</div>
+        <div data-modal-body>
+
+            {{ Form::open(array('url' => 'hangout/sent'.'/'.$token)) }}
+            <div class="accordion-group">
+                <div class="accordion">
+                    <div class="row">
+                        <label>Event <span class="text text-danger">*</span></label>
+                        <input type="text" name="event" value="{{ $data['event']  or "" }}" required >                        
+                    </div>
+                    <div class="row">
+                        <label>Location <span class="text text-danger">*</span></label>
+                        <input type="text" name="location" value="{{ $data['location']  or "" }}" required >                      
+                    </div>
+
+                    <div class="row">
+                        <label>Date <span class="text text-danger">*</span></label>
+                        <input type="text" name="date"  value="{{ $data['date']  or "" }}" id="hangoutDate" required >
+                    </div>
+                    <div class="row">
+                        <label>Time <span class="text text-danger">*</span></label>
+                        <input type="text" name="time" value="{{ $data['time']  or "" }}" id="hangoutTime" required>
+                    </div>
+                    <div class="row">
+                        <label>Private <span class="text text-danger">*</span></label>
+                        <div class="radioRow"><input type="radio" name="private_hangout" value="yes" checked><label>Yes</label>
+                            <input type="radio" name="private_hangout" value="no"><label>No</label>
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <label>Accompany <span class="text text-danger">*</span></label>
+                        <div class="radioRow"><input type="radio" name="accompany_hangout" value="yes" checked><label>Yes</label>
+                            <input type="radio" name="accompany_hangout" value="no"><label>No</label>
+                        </div> 
+                    </div>
+                    <div class="formRow">
+                        <label>Family Member <span class="text text-danger">*</span></label>
+                        <div class="radioRow">{!! Form::select('family_member[]', $user['family_members'], [], ['class' => 'dropdown', 'required','id'=>'family_member','multiple'=>'multiple']) !!}</div> 
+                    </div>
+
+
+                    <div class="flex-item text-right">
+                        <input type="submit" name="submit" class="button" value="Submit">
+                    </div>
+                    {{ Form::close() }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="hide" data-modal-contents-wrap>
+    <div data-modal-content="dineSent">
+        <div data-modal-heading>Send Dine Request</div>
+        <div data-modal-body>
+
+            {{ Form::open(array('url' => 'dine/sent'.'/'.$token)) }}
+            <div class="accordion-group">
+                <div class="accordion">
+                    <div class="row">
+                        <label>Event <span class="text text-danger">*</span></label>
+                        <input type="text" name="event" value="" required >                        
+                    </div>
+                    <div class="row">
+                        <label>Location <span class="text text-danger">*</span></label>
+                        <input type="text" name="location" value="" required >                      
+                    </div>
+
+                    <div class="row">
+                        <label>Date <span class="text text-danger">*</span></label>
+                        <input type="text" name="date"  value="" id="dineDate" required >
+                    </div>
+                    <div class="row">
+                        <label>Time <span class="text text-danger">*</span></label>
+                        <input type="text" name="time" value="" id="dineTime" required>
+                    </div>
+                    <div class="row">
+                        <label>Private <span class="text text-danger">*</span></label>
+                        <input type="text" name="private" value="" required>
+                    </div>
+                    <div class="row">
+                        <label>Accompany <span class="text text-danger">*</span></label>
+                        <input type="text" name="accompany" value="" required >
+                    </div>
+                    <div class="row">
+                        <label>Family Member <span class="text text-danger">*</span></label>
+                        <input type="text" name="family_member" value="{{ $data['family_member']  or "" }}" required>
+                    </div>
+                    <div class="flex-item text-right">
+                        <input type="submit" name="submit" class="button" value="Submit">
+                    </div>
+                    {{ Form::close() }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@endsection
+@section('js')
+
+
+
+
 @endsection
