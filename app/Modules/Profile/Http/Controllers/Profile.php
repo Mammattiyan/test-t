@@ -575,7 +575,7 @@ class Profile extends Controller {
     }
 
     /*
-     * 
+     *   
      * function otherProfileViewAction
      * 
      * return hangoutRequestDetailsview
