@@ -10,6 +10,7 @@ Itweetup :: Activities
         @include('profile::profile_side')
         <div class="flex-item updates-block">
             @include('search::search_form')
+
             <div class="box pad">
                 <div class="thick-text">About Me</div>
                 <span class="user-info">Name: {{ucfirst($fullData['full_name'])}}</span><br>
@@ -99,15 +100,15 @@ Itweetup :: Activities
         <div class="pv-control next"></div>
     </div>
 </div>
-<div class="hide" data-modal-contents-wrap>
+<div class="hide" data-modal-contents-wrap >
     <div data-modal-content="hangoutSent">
         <div data-modal-heading>Send Hangout Request</div>
-        <div data-modal-body>
+        <div data-modal-body class="imageBg dinner">
 
-            {{ Form::open(array('url' => 'hangout/sent'.'/'.$token)) }}
+            {{ Form::open(array('id'=>'hangoutForm')) }}
             <div class="accordion-group">
-                <div class="accordion">
-                    <div class="row">
+                <div class="col col-lg-6 col-md-offset-3">
+                    <div class="row">                        
                         <label>Event <span class="text text-danger">*</span></label>
                         <input type="text" name="event" value="{{ $data['event']  or "" }}" required >                        
                     </div>
@@ -125,85 +126,126 @@ Itweetup :: Activities
                         <input type="text" name="time" value="{{ $data['time']  or "" }}" id="hangoutTime" required>
                     </div>
                     <div class="row">
-                        <label>Private <span class="text text-danger">*</span></label>
-                        <div class="radioRow"><input type="radio" name="private_hangout" value="yes" checked><label>Yes</label>
-                            <input type="radio" name="private_hangout" value="no"><label>No</label>
-                        </div> 
-                    </div>
-                    <div class="row">
-                        <label>Accompany <span class="text text-danger">*</span></label>
-                        <div class="radioRow"><input type="radio" name="accompany_hangout" value="yes" checked><label>Yes</label>
-                            <input type="radio" name="accompany_hangout" value="no"><label>No</label>
-                        </div> 
-                    </div>
-                    <div class="formRow">
+                        <label>Private </label>
+                        <input type="radio" name="private_accompany" value="1" required>
+                        <label>Accompany </label>
+                        <input type="radio" name="private_accompany" value="0" required >
+                    </div> 
+                    <div class="">
                         <label>Family Member <span class="text text-danger">*</span></label>
-                        <div class="radioRow">{!! Form::select('family_member[]', $user['family_members'], [], ['class' => 'dropdown', 'required','id'=>'family_member','multiple'=>'multiple']) !!}</div> 
+                        <div class="radioRow">{!! Form::select('family_member[]',['mother'=>'Mother','father'=>'Father','sister'=>'sister','brother'=>'Brother'], null, ['class' => 'dropdown family_member_dropdown', 'id'=>'hangout_family_member_dropdown', 'required']) !!}</div> 
                     </div>
 
 
                     <div class="flex-item text-right">
-                        <input type="submit" name="submit" class="button" value="Submit">
+                        <input type="button" name="submit" onclick="sendHangout()" class="button" value="Submit">
                     </div>
-                    {{ Form::close() }}
                 </div>
+                {{ Form::close() }}
             </div>
 
         </div>
     </div>
-</div>
-<div class="hide" data-modal-contents-wrap>
-    <div data-modal-content="dineSent">
-        <div data-modal-heading>Send Dine Request</div>
-        <div data-modal-body>
 
-            {{ Form::open(array('url' => 'dine/sent'.'/'.$token)) }}
-            <div class="accordion-group">
-                <div class="accordion">
-                    <div class="row">
-                        <label>Event <span class="text text-danger">*</span></label>
-                        <input type="text" name="event" value="" required >                        
-                    </div>
-                    <div class="row">
-                        <label>Location <span class="text text-danger">*</span></label>
-                        <input type="text" name="location" value="" required >                      
-                    </div>
+    <div class="hide" data-modal-contents-wrap>
+        <div data-modal-content="dinningSent">
+            <div data-modal-heading>Send Dine Request</div>
+            <div data-modal-body>
 
-                    <div class="row">
-                        <label>Date <span class="text text-danger">*</span></label>
-                        <input type="text" name="date"  value="" id="dineDate" required >
+                {{ Form::open(array('id'=>'dinningForm')) }}
+                <div class="accordion-group">
+                    <div class="col col-md-6 col-md-offset-3">
+                        <div class="row">
+                            <!--$token-->
+                            <label>Event <span class="text text-danger">*</span></label>
+                            <input type="text" name="event" value="" required >                        
+                        </div>
+                        <div class="row">
+                            <label>Location <span class="text text-danger">*</span></label>
+                            <input type="text" name="location" value="" required >                      
+                        </div>
+
+                        <div class="row">
+                            <label>Date <span class="text text-danger">*</span></label>
+                            <input type="text" name="date"  value="" id="dineDate" required >
+                        </div>
+                        <div class="row">
+                            <label>Time <span class="text text-danger">*</span></label>
+                            <input type="text" name="time" value="" id="dineTime" required>
+                        </div>
+                        <div class="row">
+                            <label>Private </label>
+                            <input type="radio" name="private_accompany" value="1" required>
+                            <label>Accompany </label>
+                            <input type="radio" name="private_accompany" value="0" required >
+                        </div>                        
+                        <div class="row">
+                            <label>Family Member <span class="text text-danger">*</span></label>
+                            <div class="radioRow">{!! Form::select('family_member[]',['mother'=>'Mother','father'=>'Father','sister'=>'sister','brother'=>'Brother'], null, ['class' => 'dropdown family_member_dropdown', 'id'=>'dinning_family_member_dropdown','required']) !!}</div> 
+                        </div>
+                        <div class="flex-item text-right">
+                            <input type="button" name="submit" id="dinningButton" onclick="sendDinning()" class="button" value="Submit">
+                        </div>
+                        {{ Form::close() }}
                     </div>
-                    <div class="row">
-                        <label>Time <span class="text text-danger">*</span></label>
-                        <input type="text" name="time" value="" id="dineTime" required>
-                    </div>
-                    <div class="row">
-                        <label>Private <span class="text text-danger">*</span></label>
-                        <input type="text" name="private" value="" required>
-                    </div>
-                    <div class="row">
-                        <label>Accompany <span class="text text-danger">*</span></label>
-                        <input type="text" name="accompany" value="" required >
-                    </div>
-                    <div class="row">
-                        <label>Family Member <span class="text text-danger">*</span></label>
-                        <input type="text" name="family_member" value="{{ $data['family_member']  or "" }}" required>
-                    </div>
-                    <div class="flex-item text-right">
-                        <input type="submit" name="submit" class="button" value="Submit">
-                    </div>
-                    {{ Form::close() }}
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
-</div>
 
-@endsection
-@section('js')
+    @endsection
+    @section('js')
+    <script>
+        $(function () {
+//            $('.family_member_dropdown').select2();
+        });
+        function sendDinning() {
+            $('#dinningForm').parsley().validate();
+            if ($('#dinningForm').parsley().isValid()) {
+                $.ajax({
+                    url: "{{URL::to('dine/sent').'/'.$token}}",
+                    type: "POST",
+                    dataType: "json",
+                    data: $('#dinningForm').serialize(),
+                    success: function (data) {
+                        closeModal()
+                        if (data.status = 1) {
+                            $.notify({message: "Dinning request send successfully"}, {type: 'success'});
+                        } else {
+                            $.notify({message: data.msg}, {type: 'danger'});
+                        }
+                    }, error: function () {
+                        closeModal();
+                    }
+                });
+            }
+        }
+        function sendHangout() {
+            $('#hangoutForm').parsley().validate();
+            if ($('#hangoutForm').parsley().isValid()) {
+                $.ajax({
+                    url: "{{URL::to('hangout/sent').'/'.$token}}",
+                    type: "POST",
+                    dataType: "json",
+                    data: $('#hangoutForm').serialize(),
+                    success: function (data) {
+                        closeModal()
+                        if (data.status = 1) {
+                            $.notify({message: "Hanghout request send successfully"}, {type: 'success'});
+                        } else {
+                            $.notify({message: data.msg}, {type: 'danger'});
+                        }
+                    }, error: function () {
+                        closeModal();
+                    }
+                });
+            }
+        }
+        function closeModal() {
+            $('.modal-glass').addClass('hide').find('.modal').removeClass('show-modal').children().empty();
+        }
+    </script>
 
 
-
-
-@endsection
+    @endsection

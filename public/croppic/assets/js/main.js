@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	var optionsFloating = $('#optionsFloating');
+        if(optionsFloating.length === 1){
 	var defaultOptionsTop = optionsFloating.offset().top;
 	var defaultOptionsBottom = $('#downloadTarget').offset().top - $(window).height();
 	var defaultOptionsWidth = optionsFloating.width();
@@ -32,5 +33,5 @@ $('#web_by').hover(function(){
 });
 $('#web_by').click(function(){ window.location.href = 'http://www.steinlinconsulting.com';});
 		
-	
+}	
 })

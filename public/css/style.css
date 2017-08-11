@@ -1004,7 +1004,7 @@ input[type='submit'], button {
         text-align: right; }
 
     .modal {
-        width: 75%; }
+        width: 60%; }
     .modal .modal-body {
         padding: 0 20px;
         border-top-width: 20px;
@@ -1968,4 +1968,31 @@ input[type='submit'], button {
 }
 .affix {
   position: fixed;
+}
+.modal .modal-body.imageBg.dinner{
+    background: url(../images/dinner.jpg) no-repeat center;
+    background-size: cover;
+}
+.modal .modal-body.imageBg.dating{
+    background: url(../images/dating.jpg) no-repeat center;
+    background-size: cover;
+}
+.modal-body.imageBg{
+    color: #fff;
+}
+.imageBg input[type='text'], .imageBg textarea, .imageBg select{
+    background: rgba(255,255,255,.6);
+}
+.imageBg input[type='text']:focus, .imageBg textarea:focus,.imageBg select:focus{
+    background: rgba(255,255,255,1);
+}
+.modal .modal-body {
+        padding: 20px;
+        border-top-width: 0;
+        border-bottom-width: 0; }
+.small-modal{
+    width: 65%;
+}
+.parsley-required{
+    color:#ff826e !important;
 }
