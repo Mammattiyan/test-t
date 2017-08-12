@@ -24,11 +24,11 @@
             <div class="container flex-box">
                 <a href="{{ url('/') }}" class="header-logo"><img src="{{ URL::to('images/itweetup2.png') }}"/></a>
                 <div class="user-thumbnail">
-                    <img src="{{ asset('assets/user1.jpg')}}" class="menu-icon">
+                    <img src="{{ URL::to(Auth::user()->profileimage) }}" class="menu-icon">
                     <div class="box pad menu hide">
                         <a href="{{ url('/activity') }}">Home</a>
                         <a href="{{ url('/edit-profile') }}">Edit Profile</a>
-                        <a href="{{ url('/logout') }}"  onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                        <a href="{{ url('/logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
                         </a>
                         <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
@@ -39,34 +39,25 @@
             </div>
         </div>     
         @yield('content')
-
         <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/picker.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/picker.date.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/picker.time.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/parsley.js') }}"></script>
-
-
-<!--         <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/picker.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/picker.date.js') }}"></script>
-
-<script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
-
-
-<script src="{{ asset('js/picker.time.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
-<script src=" https://code.jquery.com/jquery-2.1.3.min.js"></script>
-<script src="{{ asset('croppic/assets/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('croppic/assets/js/jquery.mousewheel.min.js') }}"></script>
-<script src="{{ asset('croppic/croppic.min.js') }}"></script>
-<script src="{{ asset('croppic/assets/js/main.js') }}"></script>
-
-<script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>-->
         <script type="text/javascript" src="{{ asset('js/parsley.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/bootstrap-notify.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>
-        @yield('js')
+        <!--@yield('js')-->
+
+        <script>
+                            $(document).ready(function () {
+                                console.log("ready!");
+                                $('#dinning_family_member_dropdown').select2();
+//            $('.family_member_dropdown').select2();
+
+
+                            });
+        </script>
     </body>
 </html>

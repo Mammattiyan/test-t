@@ -22,7 +22,7 @@ class Search extends Controller {
         $userId = Auth::user()->id;
 
         $name = Input::get('name');
-        $users = User::select()
+        $users = User::select('users.*')
                 ->join('user_profile', 'user_profile.user_id', 'users.id')
                 ->leftJoin('gender_preference', 'gender_preference.id', 'user_profile.gender_preference_id')
                 ->leftJoin('marital_status', 'marital_status.id', 'user_profile.marital_status_id')

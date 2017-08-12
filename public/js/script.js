@@ -45,7 +45,7 @@ $(function () {
         var modalData = $('[data-modal-content="' + $(this).attr('data-modal') + '"]');
 
         modalGlass.find('.modal-heading').text(modalData.find('[data-modal-heading]').text());
-        modalGlass.find('.modal-body').html(modalData.find('[data-modal-body]').html()).addClass($(this).data('class'));
+        modalGlass.find('.modal-body').html(modalData.find('[data-modal-body]').html()).removeClass('dating dinner').addClass($(this).data('class'));
         var smallmodal = this;
         modalGlass.removeClass('hide');
         setTimeout(function () {
@@ -74,11 +74,13 @@ $(function () {
 
         if ($('#dinning_family_member_dropdown').length == 1) {
             if (!$('#dinning_family_member_dropdown').hasClass('select2-hidden-accessible')) {
+                $('#dinning_family_member_dropdown').select2('destroy');
                 $('#dinning_family_member_dropdown').select2();
             }
         }
         if ($('#hangout_family_member_dropdown').length == 1) {
             if (!$('#hangout_family_member_dropdown').hasClass('select2-hidden-accessible')) {
+                $('#hangout_family_member_dropdown').select2('destroy');
                 $('#hangout_family_member_dropdown').select2();
             }
         }

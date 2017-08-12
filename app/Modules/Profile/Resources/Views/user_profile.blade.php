@@ -193,59 +193,58 @@ Itweetup :: Activities
             </div>
         </div>
     </div>
+</div>
 
-    @endsection
-    @section('js')
-    <script>
-        $(function () {
-//            $('.family_member_dropdown').select2();
-        });
-        function sendDinning() {
-            $('#dinningForm').parsley().validate();
-            if ($('#dinningForm').parsley().isValid()) {
-                $.ajax({
-                    url: "{{URL::to('dine/sent').'/'.$token}}",
-                    type: "POST",
-                    dataType: "json",
-                    data: $('#dinningForm').serialize(),
-                    success: function (data) {
-                        closeModal()
-                        if (data.status = 1) {
-                            $.notify({message: "Dinning request send successfully"}, {type: 'success'});
-                        } else {
-                            $.notify({message: data.msg}, {type: 'danger'});
-                        }
-                    }, error: function () {
-                        closeModal();
+@endsection
+@section('js')
+<script>
+
+    function sendDinning() {
+        $('#dinningForm').parsley().validate();
+        if ($('#dinningForm').parsley().isValid()) {
+            $.ajax({
+                url: "{{URL::to('dine/sent').'/'.$token}}",
+                type: "POST",
+                dataType: "json",
+                data: $('#dinningForm').serialize(),
+                success: function (data) {
+                    closeModal()
+                    if (data.status = 1) {
+                        $.notify({message: "Dinning request send successfully"}, {type: 'success'});
+                    } else {
+                        $.notify({message: data.msg}, {type: 'danger'});
                     }
-                });
-            }
+                }, error: function () {
+                    closeModal();
+                }
+            });
         }
-        function sendHangout() {
-            $('#hangoutForm').parsley().validate();
-            if ($('#hangoutForm').parsley().isValid()) {
-                $.ajax({
-                    url: "{{URL::to('hangout/sent').'/'.$token}}",
-                    type: "POST",
-                    dataType: "json",
-                    data: $('#hangoutForm').serialize(),
-                    success: function (data) {
-                        closeModal()
-                        if (data.status = 1) {
-                            $.notify({message: "Hanghout request send successfully"}, {type: 'success'});
-                        } else {
-                            $.notify({message: data.msg}, {type: 'danger'});
-                        }
-                    }, error: function () {
-                        closeModal();
+    }
+    function sendHangout() {
+        $('#hangoutForm').parsley().validate();
+        if ($('#hangoutForm').parsley().isValid()) {
+            $.ajax({
+                url: "{{URL::to('hangout/sent').'/'.$token}}",
+                type: "POST",
+                dataType: "json",
+                data: $('#hangoutForm').serialize(),
+                success: function (data) {
+                    closeModal()
+                    if (data.status = 1) {
+                        $.notify({message: "Hanghout request send successfully"}, {type: 'success'});
+                    } else {
+                        $.notify({message: data.msg}, {type: 'danger'});
                     }
-                });
-            }
+                }, error: function () {
+                    closeModal();
+                }
+            });
         }
-        function closeModal() {
-            $('.modal-glass').addClass('hide').find('.modal').removeClass('show-modal').children().empty();
-        }
-    </script>
+    }
+    function closeModal() {
+        $('.modal-glass').addClass('hide').find('.modal').removeClass('show-modal').children().empty();
+    }
+</script>
 
 
-    @endsection
+@endsection

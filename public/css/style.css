@@ -1996,3 +1996,7 @@ input[type='submit'], button {
 .parsley-required{
     color:#ff826e !important;
 }
+.traits-selected > div{
+    background-color: #00aff0;
+    color: #fff;
+}
