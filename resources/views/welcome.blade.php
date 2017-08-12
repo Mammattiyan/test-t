@@ -315,6 +315,8 @@
                 </div>
             </div>
         </div>
+        
+        <script type="text/javascript" src="{{ asset('js/bootstrap-notify.min.js') }}"></script>
         @if(isset($feedback_status) && $feedback_status==1)
         <script>
             $.notify({message: "Feedback send successfully"}, {type: 'success'});

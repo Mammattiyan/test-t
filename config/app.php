@@ -211,5 +211,6 @@ return [
         'Module' => Caffeinated\Modules\Facades\Module::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Core' => App\Modules\Core\Http\Controllers\Core::class,
     ],
 ];
