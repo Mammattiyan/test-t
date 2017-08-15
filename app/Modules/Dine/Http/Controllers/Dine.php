@@ -55,7 +55,7 @@ class Dine extends Controller {
             'time' => input::get('time'),
             'private' => input::get('private'),
             'accompany' => input::get('accompany'),
-            'family_member' => input::get('family_member'),
+            'family_member' => implode(',', input::get('family_member')),
         );
         $validator = Validator::make($data, [
                     'event' => 'required',
@@ -72,23 +72,23 @@ class Dine extends Controller {
             foreach (array_values($validator->messages()->toArray()) as $msg) {
                 $error = implode(' ', $msg) . '<br>';
             }
-            return view('dine::index')->with(['token' => $token, 'user' => $user, 'data' => $data, 'errors' => $validator->errors()->all()]);
+            return response()->json(['status' => 0, 'msg' => $error]);
         } else {
 
             $query = DineModel::create($data);
             if (!empty($query)) {
                 Recent_activity::create(['user_id' => $data['sender_id'], 'receiver_id' => $data['receiver_id'], 'module_name' => 'dine', 'display_message' => 'You have a dining  request to']);
-                return view('dine::index')->with(['token' => $token, 'user' => $user, 'status' => '1']);
+                return response()->json(['status' => 1]);
             }
             try {
                 
             } catch (\PDOException $e) {
 
-                $error[0] = "Not sent dine message!";
-                return view('dine::index')->with(['token' => $token, 'errors' => $error]);
+                $error = "Not sent dine message!";
+                return response()->json(['status' => 0, 'msg' => $error]);
             } catch (\Exception $e) {
-                $error[0] = "Not sent dine message!";
-                return view('dine::index')->with(['token' => $token, 'errors' => $error]);
+                $error = "Not sent dine message!";
+                return response()->json(['status' => 0, 'msg' => $error]);
             }
         }
     }

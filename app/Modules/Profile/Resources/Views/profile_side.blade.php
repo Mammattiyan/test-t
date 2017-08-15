@@ -12,10 +12,15 @@
             <li class="nav nav-activity"><a href="{{ URL::to('profile/user').'/'.$token}}">Profile</a></li>
             <li class="nav nav-message"><a href="{{ URL::to('profile/message').'/'.$token}}">Message</a></li>
             <!--<li class="nav nav-hangout"><a href="{{URL::to('hangout').'/'.$token}}">Hangout</a></li>-->
-              <li class="nav nav-hangout"><a href='#' data-modal="hangoutSent">Hangout</a></li>
+            <li class="nav nav-hangout"><a href='#' data-modal="hangoutSent" data-class="imageBg dating" data-smallwidth="small-modal">Hangout</a></li>
             <li class="nav nav-chat"><a href="#">Chat</a></li>
             <!--<li class="nav nav-dining"><a href="{{URL::to('dine').'/'.$token}}">Dine</a></li>-->
-            <li class="nav nav-dining"><a href='#' data-modal="dineSent">Dine</a></li>
+            <li class="nav nav-hangout"><a href='#' data-modal="dinningSent" data-class="imageBg dinner" data-smallwidth="small-modal">Dine</a></li>
+
         </ul>
     </div>
 </div>
+
+
+
+

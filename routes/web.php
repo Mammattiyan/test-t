@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 Route::post('/feedback', 'HomeController@sendFeedbackAction'); 
+Route::post('/contacts', 'HomeController@contactsAction'); 
 Auth::routes();
 
 Route::get('register/verify/{token}', 'Auth\RegisterController@verify'); 

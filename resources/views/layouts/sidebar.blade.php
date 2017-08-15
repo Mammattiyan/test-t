@@ -5,8 +5,15 @@
         <div class="pad">
             <div class="thick-text">{{ ucfirst(Auth::user()->name )}} </div>
             <div class="user-motto">Live and let live</div>
+
+            <div class="thick-text">Profile Completion</div>
+            <div class="progress-bar">
+                <div class="perc-text">70%</div>
+                <div class="perc-bar"></div>
+            </div>
             <br>
             <a href="#">Verify Profile</a>
+
         </div>
     </div>
     <div class="box pad nav-tile">

@@ -165,6 +165,67 @@
             </div>
         </div>
         <div class="hide" data-modal-contents-wrap>
+            <div data-modal-content="contact-us">
+                <div data-modal-heading> Contact Us</div>
+                <div data-modal-body>
+
+                    {{ Form::open(array('url' => 'contacts')) }}
+                    <div class="col col-md-6">
+                        <div class="row">
+                            <label>Full name <span class="text text-danger">*</span></label>
+                            <input type="text" name="full_name" value="" required >                        
+                        </div>
+                        <div class="row">
+                            <label>Email <span class="text text-danger">*</span></label>
+                            <input type="email" name="email" value="" required >                      
+                        </div>
+
+                        <div class="row">
+                            <label>Phone Number <span class="text text-danger">*</span></label>
+                            <input type="number" name="phone_number"  value=""  required >
+                        </div>  
+                        <div class="row">                    
+                            <label>Address <span class="text text-danger">*</span></label>
+                            <textarea type="text" name="address" rows="7" value="" required ></textarea>                       
+                        </div>  
+                        <div class="row">
+                            <label>City <span class="text text-danger">*</span></label>
+                            <input type="text" name="city"   value=""  required >
+                        </div> 
+                        <div class="row">
+                            <label>State <span class="text text-danger">*</span></label>
+                            <input type="text" name="state"  value=""  required >
+                        </div> 
+                        <div class="row">
+                            <label>Zip code <span class="text text-danger">*</span></label>
+                            <input type="text" name="zip_code"  value=""  required >
+                        </div> 
+                        <div class="row right">
+                            <input type="submit" name="submit" class="button" value="Submit">
+                        </div> 
+
+                    </div>
+                    <div class="col-md-6" >
+                        <div class="form-control">
+                            <label> Email :</label>
+                            <label>help@itweetup.com</label>
+
+                        </div>                                 
+                        <div class="form-control">
+                            <label> Contact :</label>
+                            <label>12345678</label>
+
+                        </div>                                 
+
+
+                    </div>
+                    {{ Form::close() }}
+
+
+                </div>
+            </div>
+        </div>
+        <div class="hide" data-modal-contents-wrap>
             <div data-modal-content="about-us">
                 <div data-modal-heading>About Us</div>
                 <div data-modal-body>
@@ -254,11 +315,13 @@
                 </div>
             </div>
         </div>
+        
+        <script type="text/javascript" src="{{ asset('js/bootstrap-notify.min.js') }}"></script>
         @if(isset($feedback_status) && $feedback_status==1)
         <script>
-             $.notify({message: "Feedback send successfully"},{type:'success'});
+            $.notify({message: "Feedback send successfully"}, {type: 'success'});
         </script>
-        
+
         @endif
         <script>
             $(document).ready(function () {
