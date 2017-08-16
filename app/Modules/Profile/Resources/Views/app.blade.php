@@ -53,8 +53,6 @@
         <script>
                             $(document).ready(function () {
                                 console.log("ready!");
-                              //  $('#dinning_family_member_dropdown').select2();
-//            $('.family_member_dropdown').select2();
 
 
                             });

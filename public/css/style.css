@@ -2000,3 +2000,33 @@ input[type='submit'], button {
     background-color: #00aff0;
     color: #fff;
 }
+.thick-text.pro{
+    font-size: 16px;
+}
+.personalInfo strong{
+    font-size: 13px;
+    width:30%;
+    box-sizing: border-box;
+    padding: 5px 10px 5px 5px ;
+    display: block;
+    float:left;
+    font-weight: normal;
+    text-align: right;
+    background: #f1f1f1;    
+}
+.user-info{
+    display: block;
+    float: left;
+    clear: both;
+    width: 100%;
+    padding: 0 0 5px 0;
+}
+.personalInfo i{
+    font-size: 15px;
+    float: left;
+    width:70%;
+    font-size: normal;
+    padding: 5px 5px 5px 10px ;
+    display: block;
+    font-style: normal;
+}

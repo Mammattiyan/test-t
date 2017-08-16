@@ -72,12 +72,8 @@ $(function () {
             });
         }
 
-        if ($('#dinning_family_member_dropdown').length == 1) {
-              $('#dinning_family_member_dropdown').select2();
-        }
-        if ($('#hangout_family_member_dropdown').length == 1) {
-              $('#hangout_family_member_dropdown').select2();
-        }
+              $('.modal select').select2();
+ 
 
     });
 
