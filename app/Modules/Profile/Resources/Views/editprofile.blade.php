@@ -404,9 +404,9 @@ $profile = $data['user_profiles'];
         $('#traits_selected').val(JSON.stringify(traits));
     }
     
-    $('select').select2({
+    /*$('select').select2({
         minimumResultsForSearch: -1
-    });
+    });*/
     $('#ethnic_origin').select2({
     });
     $('#smoking_habits').select2({
