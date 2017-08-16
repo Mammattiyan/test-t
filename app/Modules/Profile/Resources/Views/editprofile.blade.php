@@ -436,6 +436,8 @@ $profile = $data['user_profiles'];
                     $.notify({message: data.msg},{type:'success'});
                 }
             });
+        }else{
+            $('.parsley-required').parent().parent().parent().parent().prev().trigger('click');
         }
     }
     
