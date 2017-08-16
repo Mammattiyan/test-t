@@ -49,17 +49,15 @@ class Hangouts extends Controller {
             'location' => strip_tags(input::get('location')),
             'date' => strip_tags(input::get('date')),
             'time' => input::get('time'),
-            'private' => input::get('private'),
-            'accompany' => input::get('accompany'),
-            'family_member' => implode(',',input::get('family_member')),
+            'private_or_accompany' => input::get('private_accompany'),
+            'family_member' => implode(',', input::get('family_member')),
         );
         $validator = Validator::make($data, [
                     'event' => 'required',
                     'location' => 'required',
                     'date' => 'required',
                     'time' => 'required',
-                    'private' => 'required',
-                    'accompany' => 'required',
+                    'private_or_accompany' => 'required',
                     'family_member' => 'required',
         ]);
 
@@ -80,9 +78,9 @@ class Hangouts extends Controller {
             } catch (\PDOException $e) {
 
                 $error = "Not sent hangout message!";
-                return response()->json(['status' => 0, 'msg' => $error]);                
+                return response()->json(['status' => 0, 'msg' => $error]);
             } catch (\Exception $e) {
-                 $error = "Not sent hangout message!";
+                $error = "Not sent hangout message!";
                 return response()->json(['status' => 0, 'msg' => $error]);
             }
         }

@@ -48,7 +48,7 @@
         <script type="text/javascript" src="{{ asset('js/parsley.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/bootstrap-notify.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>
-        <!--@yield('js')-->
+        @yield('js')
 
         <script>
                             $(document).ready(function () {

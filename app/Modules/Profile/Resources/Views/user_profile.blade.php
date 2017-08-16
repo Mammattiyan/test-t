@@ -127,13 +127,13 @@ Itweetup :: Activities
                     </div>
                     <div class="row">
                         <label>Private </label>
-                        <input type="radio" name="private_accompany" value="1" required>
+                        <input type="radio" name="private_accompany" value="private" required>
                         <label>Accompany </label>
-                        <input type="radio" name="private_accompany" value="0" required >
+                        <input type="radio" name="private_accompany" value="accompany" required >
                     </div> 
                     <div class="">
                         <label>Family Member <span class="text text-danger">*</span></label>
-                        <div class="radioRow">{!! Form::select('family_member[]',['mother'=>'Mother','father'=>'Father','sister'=>'sister','brother'=>'Brother'], null, ['class' => 'dropdown family_member_dropdown', 'id'=>'hangout_family_member_dropdown', 'required']) !!}</div> 
+                        <div class="radioRow">{!! Form::select('family_member[]',['mother'=>'Mother','father'=>'Father','sister'=>'sister','brother'=>'Brother'], null, ['class' => 'dropdown family_member_dropdown', 'id'=>'hangout_family_member_dropdown', 'required','multiple']) !!}</div> 
                     </div>
 
 
@@ -175,13 +175,13 @@ Itweetup :: Activities
                         </div>
                         <div class="row">
                             <label>Private </label>
-                            <input type="radio" name="private_accompany" value="1" required>
+                            <input type="radio" name="private_accompany" value="private" required>
                             <label>Accompany </label>
-                            <input type="radio" name="private_accompany" value="0" required >
+                            <input type="radio" name="private_accompany" value="accompany" required >
                         </div>                        
                         <div class="row">
                             <label>Family Member <span class="text text-danger">*</span></label>
-                            <div class="radioRow">{!! Form::select('family_member[]',['mother'=>'Mother','father'=>'Father','sister'=>'sister','brother'=>'Brother'], null, ['class' => 'dropdown family_member_dropdown', 'id'=>'dinning_family_member_dropdown','required']) !!}</div> 
+                            <div class="radioRow">{!! Form::select('family_member[]',['mother'=>'Mother','father'=>'Father','sister'=>'sister','brother'=>'Brother'], null, ['class' => 'dropdown family_member_dropdown', 'id'=>'dinning_family_member_dropdown','required','multiple']) !!}</div> 
                         </div>
                         <div class="flex-item text-right">
                             <input type="button" name="submit" id="dinningButton" onclick="sendDinning()" class="button" value="Submit">
@@ -198,6 +198,7 @@ Itweetup :: Activities
 @endsection
 @section('js')
 <script>
+
 
     function sendDinning() {
         $('#dinningForm').parsley().validate();

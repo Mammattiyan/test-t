@@ -53,8 +53,7 @@ class Dine extends Controller {
             'location' => strip_tags(input::get('location')),
             'date' => strip_tags(input::get('date')),
             'time' => input::get('time'),
-            'private' => input::get('private'),
-            'accompany' => input::get('accompany'),
+            'private_or_accompany' => input::get('private_accompany'),
             'family_member' => implode(',', input::get('family_member')),
         );
         $validator = Validator::make($data, [
@@ -62,8 +61,7 @@ class Dine extends Controller {
                     'location' => 'required',
                     'date' => 'required',
                     'time' => 'required',
-                    'private' => 'required',
-                    'accompany' => 'required',
+                    'private_or_accompany' => 'required',
                     'family_member' => 'required',
         ]);
         $user = User::find(Auth::user()->id)->toArray();
