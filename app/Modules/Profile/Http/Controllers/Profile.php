@@ -458,6 +458,7 @@ class Profile extends Controller {
         }
 
         User_profile::where('user_id', $user)->update($values);
+        Recent_activity::create(['user_id' =>$user, 'module_name' => 'profile_update', 'display_message' => 'Your profile updated']);
 
         echo json_encode(['response' => 1, 'msg' => 'Profile updated successfully']);
     }
