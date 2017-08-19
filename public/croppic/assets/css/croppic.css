@@ -87,9 +87,9 @@
 			.cropControls i.cropControlZoomMuchOut{ content:"\f010"; display: none;}
 			.cropControls i.cropControlRotateLeft:after{ content:"\f0e2"; }
 			.cropControls i.cropControlRotateRight:after{ content:"\f01e"; }
-			.cropControls i.cropControlCrop:after{ content:"\f125"; }
+			.cropControls i.cropControlCrop:after{ content:"\f0c7"; }
 			.cropControls i.cropControlUpload:after{ content:"\f093";}
-			.cropControls i.cropControlReset:after{ content:"\f021";}
+			.cropControls i.cropControlReset:after{ content:"\f00d";}
 			.cropControls i.cropControlRemoveCroppedImage:after{ content:"\f010"; }
 			
 			.cropControls i:last-child{

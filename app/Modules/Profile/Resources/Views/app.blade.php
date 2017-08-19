@@ -27,7 +27,7 @@
                     <img src="{{ URL::to(Auth::user()->profileimage) }}" class="menu-icon">
                     <div class="box pad menu hide">
                         <a href="{{ url('/activity') }}">Home</a>
-                        <a href="{{ url('/edit-profile') }}">Edit Profile</a>
+                        <a href="{{ url('/edit') }}">Edit Profile</a>
                         <a href="{{ url('/logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
                         </a>
@@ -48,13 +48,11 @@
         <script type="text/javascript" src="{{ asset('js/parsley.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/bootstrap-notify.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('select2/js/select2.js') }}"></script>
-        <!--@yield('js')-->
+        @yield('js')
 
         <script>
                             $(document).ready(function () {
                                 console.log("ready!");
-                                $('#dinning_family_member_dropdown').select2();
-//            $('.family_member_dropdown').select2();
 
 
                             });

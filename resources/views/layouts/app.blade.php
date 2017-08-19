@@ -32,7 +32,11 @@
             <div class="container flex-box">
                 <a href="{{ url('/') }}" class="header-logo"><img src="{{ URL::to('images/itweetup2.png') }}"/></a>
                 <div class="user-thumbnail">
+                    @if(Auth::user()->profileimage)
                     <img src="{{ URL::to(Auth::user()->profileimage) }}" class="menu-icon">
+                    @else
+                    <img src="{{ URL::to(Auth::user()->profileimage) }}" class="menu-icon">
+                    @endif
                     <div class="box pad menu hide">
                         <a href="{{ url('/activity') }}">Home</a>
                         <a href="{{ url('/profile/edit') }}">Edit Profile</a>

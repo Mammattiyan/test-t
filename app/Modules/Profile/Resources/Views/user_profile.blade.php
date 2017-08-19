@@ -1,7 +1,7 @@
 
 @extends('profile::app')
 @section('title')
-Itweetup :: Activities
+Itweetup :: Profile
 @endsection
 @section('content')
 <?php // dd($user); ?>
@@ -11,23 +11,30 @@ Itweetup :: Activities
         <div class="flex-item updates-block">
             @include('search::search_form')
 
-            <div class="box pad">
+            <div class="box pad personalInfo">
                 <div class="thick-text">About Me</div>
-                <span class="user-info">Name: {{ucfirst($fullData['full_name'])}}</span><br>
-                <span class="user-info">Age: 28</span><br>
-                <span class="user-info">Height: {{$fullData['height']}}</span><br>
-                <span class="user-info">Gender preference: {{$fullData['gender_preference_name']}}</span><br>
-                <span class="user-info">Ethnic origin: {{$fullData['ethnic_origin_name']}}</span><br>
-                <span class="user-info">Qualification: {{$fullData['qualification_name']}}</span><br>
-                <span class="user-info">Job Category: {{$fullData['category_name']}}</span><br>
-                <span class="user-info">Smokeing Status: {{$fullData['smoke_status']}}</span><br>
-                <span class="user-info">Drink Status: {{$fullData['drink_status']}}</span><br>
-                <span class="user-info">Pet lover: {{$fullData['pet_lover']}}</span><br>
-                <span class="user-info">Relationship story: {{$fullData['marital_status']}}</span><br>
-                <span class="user-info">Location: {{$fullData['location']}}</span><br><br>
-                <span class="user-info"> Zodiac name: {{$fullData['zodiac_name']}}</span><br><br>
-                <?php $url = asset("images/zodiac-signs/" . $fullData['sign_image_url']); ?>
-                <span class="user-info">Zodiac sign: <img style=" width: 89px;" src=<?php echo $url ?>></span><br><br>
+                <span class="user-info"><strong>Name:</strong> <i>{{ucfirst($fullData['full_name'])}}</i></span><br>
+                <span class="user-info"><strong>Age:</strong> <i>28</i></span><br>
+                <span class="user-info"><strong>Height:</strong> <i> {{$fullData['height']}}</i></span><br>
+                <span class="user-info"><strong>Gender preference:</strong> <i> {{$fullData['gender_preference_name']}}</i></span><br>
+                <span class="user-info"><strong>Ethnic origin:</strong> <i>{{$fullData['ethnic_origin_name']}}</i></span><br>
+                <span class="user-info"><strong>Qualification: </strong> <i>{{$fullData['qualification_name']}}</i></span><br>
+                <span class="user-info"><strong>Job Category: </strong> <i>{{$fullData['category_name']}}</i></span><br>
+                <span class="user-info"><strong>Smokeing Status: </strong> <i>{{$fullData['smoke_status']}}</i></span><br>
+                <span class="user-info"><strong>Drink Status: </strong> <i>{{$fullData['drink_status']}}</i></span><br>
+                <span class="user-info"><strong>Pet lover: </strong> <i>{{$fullData['pet_lover']}}</i></span><br>
+                <span class="user-info"><strong>Relationship story: </strong> <i>{{$fullData['marital_status']}}</i></span><br>
+                <span class="user-info"><strong>Location: </strong> <i>{{$fullData['location']}}</i></span><br><br>
+                <span class="user-info"><strong> Zodiac name: </strong> <i>{{$fullData['zodiac_name']}}</i></span><br><br>
+                <?php
+                $url = asset("images/zodiac-signs/" . $fullData['sign_image_url']);
+
+                if ($fullData['sign_image_url'] != "" && $fullData['sign_image_url'] != null) {
+                    ?>
+                    <span class="user-info">Zodiac sign: <img style=" width: 89px;" src=<?php echo $url ?>></span><br><br>
+                    <?php
+                }
+                ?>
                 <span>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.<br><br> Enim ad minim veniam, quis nostrud exercitation love.</span>
             </div>
             <div class="box pad photo-gallery">
@@ -125,15 +132,15 @@ Itweetup :: Activities
                         <label>Time <span class="text text-danger">*</span></label>
                         <input type="text" name="time" value="{{ $data['time']  or "" }}" id="hangoutTime" required>
                     </div>
-                    <div class="row">
+                    <div class="row padding-class">
                         <label>Private </label>
-                        <input type="radio" name="private_accompany" value="1" required>
+                        <input type="radio" name="private_accompany" value="private" required>
                         <label>Accompany </label>
-                        <input type="radio" name="private_accompany" value="0" required >
+                        <input type="radio" name="private_accompany" value="accompany" required >
                     </div> 
                     <div class="">
                         <label>Family Member <span class="text text-danger">*</span></label>
-                        <div class="radioRow">{!! Form::select('family_member[]',['mother'=>'Mother','father'=>'Father','sister'=>'sister','brother'=>'Brother'], null, ['class' => 'dropdown family_member_dropdown', 'id'=>'hangout_family_member_dropdown', 'required']) !!}</div> 
+                        <div class="radioRow">{!! Form::select('family_member[]',['mother'=>'Mother','father'=>'Father','sister'=>'sister','brother'=>'Brother'], null, ['class' => 'dropdown family_member_dropdown', 'id'=>'hangout_family_member_dropdown', 'required','multiple']) !!}</div> 
                     </div>
 
 
@@ -173,15 +180,15 @@ Itweetup :: Activities
                             <label>Time <span class="text text-danger">*</span></label>
                             <input type="text" name="time" value="" id="dineTime" required>
                         </div>
-                        <div class="row">
+                        <div class="row padding-class" >
                             <label>Private </label>
-                            <input type="radio" name="private_accompany" value="1" required>
+                            <input type="radio" name="private_accompany" value="private" required>
                             <label>Accompany </label>
-                            <input type="radio" name="private_accompany" value="0" required >
+                            <input type="radio" name="private_accompany" value="accompany" required >
                         </div>                        
                         <div class="row">
                             <label>Family Member <span class="text text-danger">*</span></label>
-                            <div class="radioRow">{!! Form::select('family_member[]',['mother'=>'Mother','father'=>'Father','sister'=>'sister','brother'=>'Brother'], null, ['class' => 'dropdown family_member_dropdown', 'id'=>'dinning_family_member_dropdown','required']) !!}</div> 
+                            <div class="radioRow">{!! Form::select('family_member[]',['mother'=>'Mother','father'=>'Father','sister'=>'sister','brother'=>'Brother'], null, ['class' => 'dropdown family_member_dropdown', 'id'=>'dinning_family_member_dropdown','required','multiple']) !!}</div> 
                         </div>
                         <div class="flex-item text-right">
                             <input type="button" name="submit" id="dinningButton" onclick="sendDinning()" class="button" value="Submit">
@@ -198,6 +205,7 @@ Itweetup :: Activities
 @endsection
 @section('js')
 <script>
+
 
     function sendDinning() {
         $('#dinningForm').parsley().validate();
@@ -245,6 +253,4 @@ Itweetup :: Activities
         $('.modal-glass').addClass('hide').find('.modal').removeClass('show-modal').children().empty();
     }
 </script>
-
-
 @endsection

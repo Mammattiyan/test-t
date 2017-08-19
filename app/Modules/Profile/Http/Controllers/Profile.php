@@ -54,11 +54,12 @@ class Profile extends Controller {
 
     public function indexAction() {
         $userId = Auth::User()->id;
-
         $data = [];
-        $data['hangoutCount'] = count(Hangouts::select('sender_id')->where('hangouts.receiver_id', $userId)->groupBy('sender_id')->get());
-        $data['dineCount'] = count(Dine::select('sender_id')->where('dines.receiver_id', $userId)->groupBy('sender_id')->get());
-        $data['messageCount'] = count(Messages::select('sender')->where('messages.receiver', $userId)->groupBy('sender')->get());
+        $data['hangoutCount'] = Hangouts::select('sender_id')->where('hangouts.receiver_id', $userId)->count();
+        $data['dineCount'] = Dine::select('sender_id')->where('dines.receiver_id', $userId)->count();
+        $data['messageCount'] = Messages::select('sender')->where('messages.receiver', $userId)->count();
+        $data['notification']=$data['hangoutCount']+$data['dineCount']+$data['messageCount'];
+        $data['recentActivityCount'] = Recent_activity::select('sender')->where('recent_activities.user_id', $userId)->count();
         $recentData = Recent_activity::select('recent_activities.*', 'users.name AS user_name', 'users.profileimage AS user_profile_pic', DB::raw('(SELECT name FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_name'), DB::raw('(SELECT profileimage FROM users WHERE users.id= recent_activities.receiver_id) AS receiver_profile_pic'))
                 ->join('users', 'users.id', 'recent_activities.user_id')
                 ->where('recent_activities.user_id', $userId)
@@ -458,6 +459,7 @@ class Profile extends Controller {
         }
 
         User_profile::where('user_id', $user)->update($values);
+        Recent_activity::create(['user_id' => $user, 'module_name' => 'profile_update', 'display_message' => 'You updated your profile data']);
 
         echo json_encode(['response' => 1, 'msg' => 'Profile updated successfully']);
     }

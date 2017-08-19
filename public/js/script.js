@@ -72,18 +72,8 @@ $(function () {
             });
         }
 
-        if ($('#dinning_family_member_dropdown').length == 1) {
-            if (!$('#dinning_family_member_dropdown').hasClass('select2-hidden-accessible')) {
-                $('#dinning_family_member_dropdown').select2('destroy');
-                $('#dinning_family_member_dropdown').select2();
-            }
-        }
-        if ($('#hangout_family_member_dropdown').length == 1) {
-            if (!$('#hangout_family_member_dropdown').hasClass('select2-hidden-accessible')) {
-                $('#hangout_family_member_dropdown').select2('destroy');
-                $('#hangout_family_member_dropdown').select2();
-            }
-        }
+              $('.modal select').select2();
+ 
 
     });
 
