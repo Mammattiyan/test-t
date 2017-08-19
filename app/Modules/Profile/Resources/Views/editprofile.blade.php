@@ -14,7 +14,11 @@ Itweetup :: Activities
         color: red;
     }
     
+    #triatsArea .traits-box{
+        cursor: pointer;
+    }
     
+  /*  
     .cc-selector input{
     margin:0;padding:0;
     -webkit-appearance:none;
@@ -51,7 +55,7 @@ Itweetup :: Activities
        -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
             filter: brightness(1.2) grayscale(.5) opacity(.9);
 }
-    
+    */
 </style>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   
@@ -199,7 +203,7 @@ $profile = $data['user_profiles'];
             <div class="accordion">
                 <div class="accordion-title">Personality Traits</div>
                 
-                <div class="accordion-content" style="display: none;">
+                <div class="accordion-content" style="display: none;" id="triatsArea">
                     @if(count($data['traits'])>0)
                         @foreach($data['traits'] as $key => $value)
                             <label><b>{{ucwords(str_replace('_', ' ', $value['category']))}}</b></label>
@@ -437,7 +441,9 @@ $profile = $data['user_profiles'];
                 }
             });
         }else{
-            $('.parsley-required').parent().parent().parent().parent().prev().trigger('click');
+            if(!$('.parsley-required').parent().parent().parent().parent().parent().hasClass('accordion-expanded')){
+                $('.parsley-required').parent().parent().parent().parent().prev().trigger('click');
+            }
         }
     }
     

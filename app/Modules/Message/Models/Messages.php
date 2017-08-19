@@ -16,5 +16,12 @@ class Messages extends Model {
     public function users() {
 //        return $this->belongsTo('App\Modules\Baskets\Models\Predefined_basket_items', 'predefined_basket_id', 'id');
     }
+    
+    public function message_details() {
+        return $this->hasOne('App\Modules\Message\Models\Messages', 'id', 'max_id');
+    }
 
+    public function user_details() {
+        return $this->hasOne('App\User', 'id', 'user_id');
+    }
 }
