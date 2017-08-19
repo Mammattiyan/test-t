@@ -95,13 +95,13 @@ class Hangouts extends Controller {
 
     public function hangoutRequestListAction(Request $request) {
         $userId = Auth::User()->id;
-        $hangouts = HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage')
+        $hangouts = HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage','users.gender')
                         ->join('users', function($sql) use($userId) {
                             $sql->on('users.id', 'hangouts.receiver_id');
                             $sql->where('hangouts.sender_id', $userId);
                         })
                         ->distinct('id')
-                        ->union(HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage')
+                        ->union(HangoutsModel::select("hangouts.*", "users.name", 'users.profileimage','users.gender')
                                 ->join('users', function($sql) use($userId) {
                                     $sql->on('users.id', 'hangouts.sender_id');
                                     $sql->where('hangouts.receiver_id', $userId);

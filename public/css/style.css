@@ -2030,3 +2030,10 @@ input[type='submit'], button {
     display: block;
     font-style: normal;
 }
+.select2-container--default .select2-selection--multiple .select2-selection__rendered{
+    color: #433535;
+}
+.padding-class{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

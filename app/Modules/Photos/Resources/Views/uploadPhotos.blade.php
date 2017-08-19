@@ -16,14 +16,7 @@ Itweetup :: Activities
 <div class="flex-item updates-block">
     <div class="box">
         @include('search::search_form')
-        <hr>
-        <div class="pad">
-            <div class="thick-text">Profile Completion</div>
-            <div class="progress-bar">
-                <div class="perc-text">70%</div>
-                <div class="perc-bar"></div>
-            </div>
-        </div>
+        <hr>        
         <div class="card-block">                      
             {{ Form::open(array('url' => '', 'id' => 'photosForm','class'=>'m-t-40', 'enctype'=>"multipart/form-data")) }}
             <div class="row">

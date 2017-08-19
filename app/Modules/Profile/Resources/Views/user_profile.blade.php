@@ -1,7 +1,7 @@
 
 @extends('profile::app')
 @section('title')
-Itweetup :: Activities
+Itweetup :: Profile
 @endsection
 @section('content')
 <?php // dd($user); ?>
@@ -26,8 +26,15 @@ Itweetup :: Activities
                 <span class="user-info"><strong>Relationship story: </strong> <i>{{$fullData['marital_status']}}</i></span><br>
                 <span class="user-info"><strong>Location: </strong> <i>{{$fullData['location']}}</i></span><br><br>
                 <span class="user-info"><strong> Zodiac name: </strong> <i>{{$fullData['zodiac_name']}}</i></span><br><br>
-                <?php $url = asset("images/zodiac-signs/" . $fullData['sign_image_url']); ?>
-                <span class="user-info">Zodiac sign: <img style=" width: 89px;" src=<?php echo $url ?>></span><br><br>
+                <?php
+                $url = asset("images/zodiac-signs/" . $fullData['sign_image_url']);
+
+                if ($fullData['sign_image_url'] != "" && $fullData['sign_image_url'] != null) {
+                    ?>
+                    <span class="user-info">Zodiac sign: <img style=" width: 89px;" src=<?php echo $url ?>></span><br><br>
+                    <?php
+                }
+                ?>
                 <span>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.<br><br> Enim ad minim veniam, quis nostrud exercitation love.</span>
             </div>
             <div class="box pad photo-gallery">
@@ -125,7 +132,7 @@ Itweetup :: Activities
                         <label>Time <span class="text text-danger">*</span></label>
                         <input type="text" name="time" value="{{ $data['time']  or "" }}" id="hangoutTime" required>
                     </div>
-                    <div class="row">
+                    <div class="row padding-class">
                         <label>Private </label>
                         <input type="radio" name="private_accompany" value="private" required>
                         <label>Accompany </label>
@@ -173,7 +180,7 @@ Itweetup :: Activities
                             <label>Time <span class="text text-danger">*</span></label>
                             <input type="text" name="time" value="" id="dineTime" required>
                         </div>
-                        <div class="row">
+                        <div class="row padding-class" >
                             <label>Private </label>
                             <input type="radio" name="private_accompany" value="private" required>
                             <label>Accompany </label>
@@ -246,6 +253,4 @@ Itweetup :: Activities
         $('.modal-glass').addClass('hide').find('.modal').removeClass('show-modal').children().empty();
     }
 </script>
-
-
 @endsection
